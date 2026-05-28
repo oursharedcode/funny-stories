@@ -1,0 +1,23 @@
+# Funny Stories — Render blueprint (spec §14). Canonical hosted-deploy config.
+services:
+  - type: web
+    name: funny-stories
+    runtime: node
+    plan: free
+    buildCommand: npm install --include=dev && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: NODE_ENV
+        value: production
+      - key: CLOUDFLARE_WORKER_URL
+        sync: false # set in Render dashboard after deploying the Worker
+      - key: CLOUDFLARE_WORKER_SECRET
+        sync: false # set in both Render dashboard and Cloudflare Worker env
+      - key: DEPLOYER_DONATE_URL
+        sync: false # optional; set to show a "Support this server" button
+      - key: MAX_ROOMS
+        sync: false # optional; default 500 if unset
+      - key: MAX_IMAGES_PER_DAY
+        sync: false # optional; default 25 if unset — daily AI image ceiling (§11, §17)

@@ -1,0 +1,13 @@
+{
+  "questions": [
+    "Who?",
+    "With whom?",
+    "Where?",
+    "When?",
+    "What did they do?",
+    "What for?",
+    "What was at the end?"
+  ],
+  "prose": "{0} and {1} were {2} {3}. They {4} {5}. In the end, {6}.",
+  "imagePrompt": "{0} {1} {4}, {2}, {3}"
+}

@@ -1,0 +1,46 @@
+{
+  "name": "funny-stories",
+  "version": "0.0.1",
+  "private": true,
+  "description": "A party game where 3-7 friends write absurd stories together and AI illustrates them.",
+  "license": "AGPL-3.0-only",
+  "author": "michaelm",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oursharedcode/funny-stories.git"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "workspaces": [
+    "client",
+    "server",
+    "shared"
+  ],
+  "scripts": {
+    "predev": "npm run build -w shared",
+    "dev": "concurrently -n client,server -c blue,green \"npm:dev -w client\" \"npm:dev -w server\"",
+    "prebuild": "npm run build -w shared",
+    "build": "npm run build -w client && npm run build -w server",
+    "start": "npm run start -w server",
+    "pretest": "npm run build -w shared",
+    "test": "npm run test -ws --if-present",
+    "test:watch": "npm run test:watch -ws --if-present",
+    "lint": "eslint . --ext .ts,.tsx",
+    "format": "prettier --write .",
+    "pretypecheck": "npm run build -w shared",
+    "typecheck": "npm run typecheck -ws --if-present"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.3.3",
+    "socket.io-client": "^4.8.3",
+    "tsx": "^4.19.2",
+    "typescript": "^5.5.4",
+    "vitest": "^1.6.0"
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "home": {
+    "title": "Funny Stories",
+    "subtitle": "Write absurd stories together. Phone-friendly.",
+    "nicknamePlaceholder": "Pick a nickname",
+    "create": "Create room",
+    "join": "Join room",
+    "joining": "Joining room",
+    "roomGone": "That room no longer exists — it may have ended, or the link is old.",
+    "createNew": "Create a new room",
+    "openRooms": "Open rooms: {{count}}",
+    "imagesToday": "Images today: {{count}} / {{total}}"
+  },
+  "lobby": {
+    "roomCodeLabel": "Room code",
+    "copyLink": "Copy link",
+    "copied": "Copied!",
+    "qrCaption": "Scan to join",
+    "waitingForHost": "Waiting for host to start…",
+    "startGame": "Start Game",
+    "startDisabled": "Need at least 3 players to start",
+    "leave": "Leave",
+    "host": "Host",
+    "capReached": "Picture generation is unavailable for the next ~{{hours}} hours. You can still play — players will see story text in place of cartoons.",
+    "capReachedHost": "Tap Start Game when ready, or wait until the daily cartoon allowance resets."
+  },
+  "round": {
+    "progress": "Round {{current}} of {{total}}",
+    "placeholder": "Type your answer…",
+    "submit": "Submit",
+    "submitted": "Submitted"
+  },
+  "waiting": {
+    "title": "Waiting on others",
+    "progress": "{{submitted}} / {{total}} submitted",
+    "ellipsis": "Hold tight."
+  },
+  "reveal": {
+    "title": "Here's your story",
+    "spinner": "Summoning chaos…",
+    "retry": "Try again",
+    "error": "Generation failed. Try again.",
+    "capReached": "The cartoon oven is full. New cartoons in ~{{hours}} hours.",
+    "pictureAlt": "AI-generated cartoon of your story",
+    "continue": "Continue"
+  },
+  "end": {
+    "title": "Game is over",
+    "roundsOver": "Rounds are over",
+    "oneMoreGame": "One more game",
+    "finishGame": "Finish Game",
+    "ready": "I'm ready for a new game",
+    "readyActive": "Ready ✓",
+    "waitingForHost": "Waiting for host…",
+    "needPlayers": "Need at least 3 players for another game",
+    "waitingForReady": "Waiting for everyone to be ready"
+  },
+  "endScreen": {
+    "supportServer": "Support this server"
+  },
+  "gallery": {
+    "share": "Share the room's pictures",
+    "title": "Room gallery",
+    "storyBy": "{{nickname}}'s story",
+    "noPicture": "No picture for this story",
+    "pictureAlt": "Cartoon for {{nickname}}'s story",
+    "counter": "{{index}} / {{total}}",
+    "prev": "Previous story",
+    "next": "Next story",
+    "download": "Download story and picture",
+    "downloadStoryOnly": "Download story"
+  },
+  "playerLost": {
+    "label": "{{nickname}} exited",
+    "ignore": "Ignore, continue the game",
+    "newRoom": "Create a new room"
+  },
+  "footer": {
+    "source": "Source on GitHub",
+    "contentNotice": "Player answers and AI pictures are the responsibility of the operator of this server, not of the upstream project."
+  },
+  "errors": {
+    "ROOM_NOT_FOUND": "Room not found",
+    "ROOM_LOCKED": "Game already started",
+    "ROOM_FULL": "Room is full",
+    "NOT_HOST": "Only the host can do that",
+    "NOT_ENOUGH_PLAYERS": "Need at least 3 players",
+    "INVALID_NICKNAME": "Invalid nickname",
+    "RATE_LIMITED": "Slow down a moment",
+    "SERVER_BUSY": "Server is busy"
+  }
+}

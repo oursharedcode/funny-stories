@@ -1,0 +1,38 @@
+name = "funny-stories-image"
+main = "worker.js"
+# Mirrors the remote config previously set via the Cloudflare dashboard.
+# Bumped from 2025-01-01 → 2026-05-21 so `wrangler deploy` doesn't roll it
+# back; bump further when adopting newer Workers runtime features.
+compatibility_date = "2026-05-21"
+# Disable the auto-generated *.workers.dev preview URL. The Worker is only
+# reached by the Render server via the shared-secret check (spec §15);
+# exposing a preview URL is unnecessary surface area.
+preview_urls = false
+
+[observability]
+enabled = true
+
+[observability.logs]
+enabled = true
+
+[ai]
+binding = "AI"
+
+# Workers KV — persists the daily image counter across Render free-tier
+# spin-downs (vol02 follow-up to BUGS_AND_IMPROVEMENTS_01.md item 22). The
+# Render server's in-memory counter resets to 0 on each cold start; this KV
+# namespace is the cross-process source of truth.
+#
+# One-time setup:
+#   wrangler kv namespace create STATS_KV
+#   wrangler kv namespace create STATS_KV --preview
+# then paste the returned IDs into the placeholders below. The free tier
+# (1 000 writes/day per key, 100 000 reads/day) is far above our usage
+# (~25 writes/day, ~300 reads/day).
+[[kv_namespaces]]
+binding = "STATS_KV"
+id = "b884878707724f2ca8a3f5fec2a4140f"
+preview_id = "743e90df81564bbbb54f557412eccdb6"
+
+# Set WORKER_SECRET via: wrangler secret put WORKER_SECRET
+# Then set the same value as CLOUDFLARE_WORKER_SECRET in the Render dashboard.

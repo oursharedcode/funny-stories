@@ -1,0 +1,13 @@
+{
+  "name": "shared",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "license": "AGPL-3.0-only",
+  "main": "./dist/events.js",
+  "types": "./dist/events.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  }
+}

@@ -1,0 +1,18 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import App from './App';
+import { installSwReloadListener } from './swReload';
+import './i18n';
+import './styles/index.css';
+
+installSwReloadListener();
+
+const root = document.getElementById('root');
+if (!root) throw new Error('No #root element');
+createRoot(root).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+);

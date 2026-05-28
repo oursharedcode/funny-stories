@@ -1,0 +1,14 @@
+# Funny Stories — self-hosted Docker Compose (spec §16 step 14).
+# Reads the same env vars as the Render service from a .env file at the repo
+# root. Copy .env.example to .env and fill it in before `docker compose up`.
+services:
+  funny-stories:
+    build: .
+    image: funny-stories:latest
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+    restart: unless-stopped

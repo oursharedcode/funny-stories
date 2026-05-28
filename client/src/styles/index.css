@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  font-family:
+    system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  background-color: #fef3c7; /* spec design system §2 brand-cream */
+  color: #1f2937; /* brand-ink */
+}
+
+/* ── Mascot idle animations (DESIGN_SYSTEM §5) ──────────────────────────
+   All applied to inner <g> elements so they don't fight Framer Motion's
+   transforms on outer elements. */
+
+@keyframes mascot-blink {
+  0%, 92%, 100% { transform: scaleY(1); }
+  96% { transform: scaleY(0.12); }
+}
+@keyframes mascot-wobble {
+  0%, 100% { transform: rotate(-4deg); }
+  50% { transform: rotate(4deg); }
+}
+@keyframes mascot-tap {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+@keyframes mascot-wave {
+  0%, 100% { transform: rotate(-14deg); }
+  50% { transform: rotate(20deg); }
+}
+@keyframes mascot-shrug {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50% { transform: translateY(-3px) rotate(1deg); }
+}
+@keyframes timer-panic {
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  25% { transform: translateX(-2px) rotate(-6deg); }
+  75% { transform: translateX(2px) rotate(6deg); }
+}
+
+.bot-blink,
+.mascot-wobble,
+.mascot-tap,
+.mascot-wave,
+.mascot-shrug {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.bot-blink { animation: mascot-blink 5s ease-in-out infinite; }
+.mascot-wobble { animation: mascot-wobble 2.4s ease-in-out infinite; }
+.mascot-tap { animation: mascot-tap 0.55s ease-in-out infinite; }
+.mascot-wave { animation: mascot-wave 0.9s ease-in-out infinite; }
+.mascot-shrug { animation: mascot-shrug 5s ease-in-out infinite; }
+.timer-panic { animation: timer-panic 0.16s linear infinite; }
+
+/* Reduced motion: idle loops stop; color cues stay (DESIGN_SYSTEM §4). */
+@media (prefers-reduced-motion: reduce) {
+  .bot-blink,
+  .mascot-wobble,
+  .mascot-tap,
+  .mascot-wave,
+  .mascot-shrug,
+  .timer-panic {
+    animation: none;
+  }
+}
