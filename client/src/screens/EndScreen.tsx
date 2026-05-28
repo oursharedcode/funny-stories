@@ -4,7 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { socket } from '../socket';
 import EndMascots from '../components/art/EndMascots';
 import RoomGallery from '../components/RoomGallery';
-import SourceFooter from '../components/SourceFooter';
+import QRCode from '../components/QRCode';
+import { SOURCE_URL } from '../sourceUrl';
+import { APP_VERSION, BUILD_DATE } from '../version';
 import type { LobbyState } from '../App';
 import type { GalleryReadyPayload } from 'shared';
 
@@ -127,7 +129,30 @@ export default function EndScreen({ lobby, readyIds, gameOver, gallery }: Props)
           </a>
         )}
 
-        <SourceFooter />
+        {/* Mirrors the downloadable picture's footer (downloadStory.ts):
+            content-responsibility notice, then QR + source label + URL. */}
+        <footer className="mt-6 flex w-full flex-col items-center gap-3 text-center text-xs text-gray-500">
+          <p className="px-2 italic text-gray-600">{t('footer.contentNotice')}</p>
+          <div className="flex items-center gap-3">
+            <QRCode value={SOURCE_URL} size={96} />
+            <div className="flex flex-col items-start text-left">
+              <span className="text-sm font-semibold text-gray-700">
+                {t('footer.source')}
+              </span>
+              <a
+                href={SOURCE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="break-all font-mono text-xs text-gray-700 underline"
+              >
+                {SOURCE_URL}
+              </a>
+            </div>
+          </div>
+          <p className="text-gray-400">
+            v{APP_VERSION} · {BUILD_DATE}
+          </p>
+        </footer>
       </div>
     </div>
   );

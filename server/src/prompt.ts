@@ -1,6 +1,25 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import type { Language, Story } from './types.js';
+import { IMAGE_PROMPT_TEMPLATES } from './i18n/index.js';
+
+// Simplified buildPrompt — substitute slots {0}-{6} from the per-language
+// `imagePrompt` template in `server/src/i18n/<lang>.json` and return as-is.
+// All previous handling (style suffix, length cap, duplicate-subject anchor,
+// distinct-pair anchor, EN/RU connective fixes, RU action hints) is
+// commented out below for reference.
+export function buildPrompt(story: Story, language: Language): string {
+  const template = IMAGE_PROMPT_TEMPLATES[language];
+  return template.replace(
+    /\{([0-6])\}/g,
+    (_, digit: string) => story.answers[Number(digit)] ?? '',
+  );
+}
+
+/* ============================================================================
+ * PREVIOUS IMPLEMENTATION — commented out, not removed.
+ * ============================================================================
+
 import { IMAGE_PROMPT_TEMPLATES, ruSlot1NeedsAndPrefix } from './i18n/index.js';
 import { ruActionHint } from './promptHints.js';
 
@@ -176,3 +195,6 @@ export function buildPrompt(story: Story, language: Language): string {
   const bodyBudget = MAX_PROMPT_LENGTH - STYLE_SUFFIX.length;
   return body.slice(0, bodyBudget) + STYLE_SUFFIX;
 }
+
+ * ============================================================================
+ */
