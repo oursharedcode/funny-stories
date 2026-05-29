@@ -3,17 +3,24 @@
 import type { Language, Story } from './types.js';
 import { IMAGE_PROMPT_TEMPLATES } from './i18n/index.js';
 
+// Locked style suffix — appended to every image prompt so the Worker AI
+// model renders in a consistent goofy-cartoon look.
+export const STYLE_SUFFIX =
+  ', in a goofy cartoon style, googly eyes, exaggerated expressions, ' +
+  'bright colors, hand-drawn doodle illustration';
+
 // Simplified buildPrompt — substitute slots {0}-{6} from the per-language
-// `imagePrompt` template in `server/src/i18n/<lang>.json` and return as-is.
-// All previous handling (style suffix, length cap, duplicate-subject anchor,
-// distinct-pair anchor, EN/RU connective fixes, RU action hints) is
-// commented out below for reference.
+// `imagePrompt` template in `server/src/i18n/<lang>.json`, then append the
+// locked STYLE_SUFFIX. All other previous handling (length cap, duplicate-
+// subject anchor, distinct-pair anchor, EN/RU connective fixes, RU action
+// hints) is commented out below for reference.
 export function buildPrompt(story: Story, language: Language): string {
   const template = IMAGE_PROMPT_TEMPLATES[language];
-  return template.replace(
+  const body = template.replace(
     /\{([0-6])\}/g,
     (_, digit: string) => story.answers[Number(digit)] ?? '',
   );
+  return body + STYLE_SUFFIX;
 }
 
 /* ============================================================================
