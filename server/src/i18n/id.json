@@ -1,0 +1,14 @@
+{
+  "_note": "needs-id-review — machine-translated stub awaiting native Indonesian review per CONTRIBUTING.md.",
+  "questions": [
+    "Siapa?",
+    "Bersama siapa?",
+    "Di mana?",
+    "Kapan?",
+    "Mereka melakukan apa?",
+    "Untuk apa?",
+    "Bagaimana akhirnya?"
+  ],
+  "prose": "{0} bersama {1} {3} {2} {4} {5}. Akhirnya, semuanya berakhir dengan {6}.",
+  "imagePrompt": "Di kiri {0}, di kanan {1}, di {2}, {3}, {4}"
+}

@@ -1,0 +1,100 @@
+{
+  "_note": "needs-de-review — machine-translated stub awaiting native German review per CONTRIBUTING.md.",
+  "home": {
+    "title": "Lustige Geschichten",
+    "subtitle": "Schreibt zusammen absurde Geschichten. Handy-freundlich.",
+    "nicknamePlaceholder": "Wähle einen Namen",
+    "create": "Raum erstellen",
+    "join": "Beitreten",
+    "joining": "Tritt dem Raum bei",
+    "roomGone": "Diesen Raum gibt es nicht mehr — das Spiel ist vielleicht zu Ende, oder der Link ist veraltet.",
+    "createNew": "Einen neuen Raum erstellen",
+    "openRooms": "Offene Räume: {{count}}",
+    "imagesToday": "Bilder heute: {{count}} / {{total}}",
+    "wobbleEngine": "Engine für geteiltes Video",
+    "engine": {
+      "css": "CSS (leicht)",
+      "lottie": "Lottie (reichhaltig)"
+    }
+  },
+  "lobby": {
+    "roomCodeLabel": "Raumcode",
+    "copyLink": "Link kopieren",
+    "copied": "Kopiert!",
+    "qrCaption": "Scannen zum Beitreten",
+    "waitingForHost": "Warten auf den Host…",
+    "startGame": "Spiel starten",
+    "startDisabled": "Mindestens 3 Spieler nötig",
+    "leave": "Verlassen",
+    "host": "Host",
+    "capReached": "Bildgenerierung ist für die nächsten ~{{hours}} Stunden nicht verfügbar. Ihr könnt trotzdem spielen — die Spieler sehen Story-Text statt Zeichnungen.",
+    "capReachedHost": "Tippe auf Spiel starten, wenn du bereit bist, oder warte, bis das Tageslimit für Bilder zurückgesetzt wird."
+  },
+  "round": {
+    "progress": "Runde {{current}} von {{total}}",
+    "placeholder": "Tippe deine Antwort…",
+    "submit": "Senden",
+    "submitted": "Gesendet"
+  },
+  "waiting": {
+    "title": "Warten auf die anderen",
+    "progress": "{{submitted}} / {{total}} gesendet",
+    "ellipsis": "Halt durch."
+  },
+  "reveal": {
+    "title": "Hier ist eure Geschichte",
+    "spinner": "Beschwöre Chaos…",
+    "retry": "Erneut versuchen",
+    "error": "Generierung fehlgeschlagen. Versuch es nochmal.",
+    "capReached": "Der Zeichen-Ofen ist voll. Neue Zeichnungen in ~{{hours}} Stunden.",
+    "pictureAlt": "KI-generierte Zeichnung eurer Geschichte",
+    "continue": "Weiter"
+  },
+  "end": {
+    "title": "Spiel zu Ende",
+    "roundsOver": "Die Runden sind vorbei",
+    "oneMoreGame": "Noch eine Runde",
+    "finishGame": "Spiel beenden",
+    "ready": "Ich bin bereit für ein neues Spiel",
+    "readyActive": "Bereit ✓",
+    "waitingForHost": "Warten auf den Host…",
+    "needPlayers": "Mindestens 3 Spieler für ein neues Spiel nötig",
+    "waitingForReady": "Warten, bis alle bereit sind"
+  },
+  "endScreen": {
+    "supportServer": "Diesen Server unterstützen"
+  },
+  "gallery": {
+    "share": "Die Bilder des Raums teilen",
+    "title": "Raum-Galerie",
+    "storyBy": "Geschichte von {{nickname}}",
+    "noPicture": "Kein Bild für diese Geschichte",
+    "pictureAlt": "Zeichnung zur Geschichte von {{nickname}}",
+    "counter": "{{index}} / {{total}}",
+    "prev": "Vorherige Geschichte",
+    "next": "Nächste Geschichte",
+    "download": "Geschichte und Standbild herunterladen",
+    "downloadStoryOnly": "Geschichte herunterladen",
+    "shareVideo": "Als 5-Sek-Video teilen",
+    "recording": "Aufnahme läuft…"
+  },
+  "playerLost": {
+    "label": "{{nickname}} hat das Spiel verlassen",
+    "ignore": "Ignorieren, weiterspielen",
+    "newRoom": "Einen neuen Raum erstellen"
+  },
+  "footer": {
+    "source": "Quelle auf GitHub",
+    "contentNotice": "Spielerantworten und KI-Bilder liegen in der Verantwortung des Betreibers dieses Servers, nicht des Upstream-Projekts."
+  },
+  "errors": {
+    "ROOM_NOT_FOUND": "Raum nicht gefunden",
+    "ROOM_LOCKED": "Spiel hat schon begonnen",
+    "ROOM_FULL": "Raum ist voll",
+    "NOT_HOST": "Nur der Host kann das tun",
+    "NOT_ENOUGH_PLAYERS": "Mindestens 3 Spieler nötig",
+    "INVALID_NICKNAME": "Ungültiger Name",
+    "RATE_LIMITED": "Mal kurz langsamer",
+    "SERVER_BUSY": "Server ist beschäftigt"
+  }
+}

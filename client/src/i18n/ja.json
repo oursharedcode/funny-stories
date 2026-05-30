@@ -1,0 +1,100 @@
+{
+  "_note": "needs-ja-review — machine-translated stub awaiting native Japanese review per CONTRIBUTING.md.",
+  "home": {
+    "title": "おもしろストーリー",
+    "subtitle": "みんなで馬鹿げた物語を書こう。スマホ向け。",
+    "nicknamePlaceholder": "ニックネームを入力",
+    "create": "ルームを作成",
+    "join": "参加する",
+    "joining": "ルームに参加中",
+    "roomGone": "このルームはもう存在しません — 終了したか、リンクが古い可能性があります。",
+    "createNew": "新しいルームを作成",
+    "openRooms": "公開中のルーム: {{count}}",
+    "imagesToday": "今日の画像: {{count}} / {{total}}",
+    "wobbleEngine": "共有動画エンジン",
+    "engine": {
+      "css": "CSS(軽量)",
+      "lottie": "Lottie(高品質)"
+    }
+  },
+  "lobby": {
+    "roomCodeLabel": "ルームコード",
+    "copyLink": "リンクをコピー",
+    "copied": "コピーしました!",
+    "qrCaption": "スキャンして参加",
+    "waitingForHost": "ホストを待っています…",
+    "startGame": "ゲーム開始",
+    "startDisabled": "最低3人のプレイヤーが必要です",
+    "leave": "退出",
+    "host": "ホスト",
+    "capReached": "画像生成は今後約{{hours}}時間使えません。プレイは続けられますが、絵の代わりに物語のテキストが表示されます。",
+    "capReachedHost": "準備ができたらゲーム開始を押すか、1日の画像枠が回復するまで待ってください。"
+  },
+  "round": {
+    "progress": "ラウンド {{current}} / {{total}}",
+    "placeholder": "答えを入力…",
+    "submit": "送信",
+    "submitted": "送信済み"
+  },
+  "waiting": {
+    "title": "他の人を待っています",
+    "progress": "{{submitted}} / {{total}} 送信済み",
+    "ellipsis": "お待ちを。"
+  },
+  "reveal": {
+    "title": "あなたの物語です",
+    "spinner": "カオスを召喚中…",
+    "retry": "もう一度",
+    "error": "生成に失敗しました。もう一度試してください。",
+    "capReached": "絵のオーブンが満杯です。新しい絵は約{{hours}}時間後に。",
+    "pictureAlt": "AI生成のあなたの物語の絵",
+    "continue": "続ける"
+  },
+  "end": {
+    "title": "ゲーム終了",
+    "roundsOver": "ラウンドが終わりました",
+    "oneMoreGame": "もう一度遊ぶ",
+    "finishGame": "ゲームを終了",
+    "ready": "新しいゲームの準備ができました",
+    "readyActive": "準備完了 ✓",
+    "waitingForHost": "ホストを待っています…",
+    "needPlayers": "新しいゲームには最低3人のプレイヤーが必要です",
+    "waitingForReady": "全員の準備を待っています"
+  },
+  "endScreen": {
+    "supportServer": "このサーバーを応援する"
+  },
+  "gallery": {
+    "share": "ルームの絵を共有",
+    "title": "ルームギャラリー",
+    "storyBy": "{{nickname}}の物語",
+    "noPicture": "この物語の絵はありません",
+    "pictureAlt": "{{nickname}}の物語の絵",
+    "counter": "{{index}} / {{total}}",
+    "prev": "前の物語",
+    "next": "次の物語",
+    "download": "物語と静止画をダウンロード",
+    "downloadStoryOnly": "物語をダウンロード",
+    "shareVideo": "5秒動画として共有",
+    "recording": "録画中…"
+  },
+  "playerLost": {
+    "label": "{{nickname}}が退出しました",
+    "ignore": "無視してゲームを続ける",
+    "newRoom": "新しいルームを作成"
+  },
+  "footer": {
+    "source": "GitHub のソース",
+    "contentNotice": "プレイヤーの回答とAI画像は、上流プロジェクトではなく、このサーバーの運営者の責任です。"
+  },
+  "errors": {
+    "ROOM_NOT_FOUND": "ルームが見つかりません",
+    "ROOM_LOCKED": "ゲームはすでに始まっています",
+    "ROOM_FULL": "ルームが満員です",
+    "NOT_HOST": "ホストのみが実行できます",
+    "NOT_ENOUGH_PLAYERS": "最低3人のプレイヤーが必要です",
+    "INVALID_NICKNAME": "無効なニックネーム",
+    "RATE_LIMITED": "少しゆっくりお願いします",
+    "SERVER_BUSY": "サーバーが混み合っています"
+  }
+}

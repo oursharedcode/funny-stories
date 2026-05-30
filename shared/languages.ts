@@ -23,9 +23,24 @@ export interface LanguageOption {
 // below derives a string-literal union instead of `string`. The
 // `LANGUAGES_EXHAUSTIVE` sentinel at the bottom of this file refuses to
 // compile if the union silently widens (e.g. someone strips `as const`).
+// Ordering follows the standard native-script + region pattern used by
+// Google/Apple/Netflix language pickers. English is the upstream default
+// (#1); Russian sits at #4 as the second first-class shipped language.
+// Slots 2-3 and 5-11 are stubs: registry + i18n JSON + stand-ins ship in
+// each language at machine-translation quality with a `needs-<code>-review`
+// header in every file, awaiting native-speaker review per CONTRIBUTING.md.
 export const LANGUAGES = [
-  { code: 'en', name: 'English', flag: '🇬🇧' },
-  { code: 'ru', name: 'Русский', flag: '🇷🇺' },
+  { code: 'en', name: 'English (United Kingdom)', flag: '🇬🇧' },
+  { code: 'fr', name: 'Français (France)', flag: '🇫🇷' },
+  { code: 'de', name: 'Deutsch (Deutschland)', flag: '🇩🇪' },
+  { code: 'ru', name: 'Русский (Россия)', flag: '🇷🇺' },
+  { code: 'id', name: 'Indonesia (Indonesia)', flag: '🇮🇩' },
+  { code: 'it', name: 'Italiano (Italia)', flag: '🇮🇹' },
+  { code: 'ja', name: '日本語 (日本)', flag: '🇯🇵' },
+  { code: 'ko', name: '한국어 (대한민국)', flag: '🇰🇷' },
+  { code: 'pt-br', name: 'Português (Brasil)', flag: '🇧🇷' },
+  { code: 'es-419', name: 'Español (Latinoamérica)', flag: '🌎' },
+  { code: 'es-es', name: 'Español (España)', flag: '🇪🇸' },
 ] as const satisfies readonly LanguageOption[];
 
 export type Language = (typeof LANGUAGES)[number]['code'];

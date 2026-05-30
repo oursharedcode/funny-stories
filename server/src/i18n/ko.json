@@ -1,0 +1,14 @@
+{
+  "_note": "needs-ko-review — machine-translated stub awaiting native Korean review per CONTRIBUTING.md.",
+  "questions": [
+    "누가?",
+    "누구와?",
+    "어디서?",
+    "언제?",
+    "무엇을 했나?",
+    "무엇 때문에?",
+    "어떻게 끝났나?"
+  ],
+  "prose": "{3} {2}에서 {0}이(가) {1}와(과) {4} {5}. 결국, {6}(으)로 끝났다.",
+  "imagePrompt": "왼쪽에 {0}, 오른쪽에 {1}, {2}에서, {3}, {4}"
+}

@@ -1,0 +1,14 @@
+{
+  "_note": "needs-pt-br-review — machine-translated stub awaiting native Brazilian Portuguese review per CONTRIBUTING.md.",
+  "questions": [
+    "Quem?",
+    "Com quem?",
+    "Onde?",
+    "Quando?",
+    "O que eles fizeram?",
+    "Para quê?",
+    "Como terminou?"
+  ],
+  "prose": "{0} com {1} {3} {2} {4} {5}. No final, terminou com {6}.",
+  "imagePrompt": "À esquerda {0}, à direita {1}, em {2}, {3}, {4}"
+}

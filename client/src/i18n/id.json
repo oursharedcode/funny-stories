@@ -1,0 +1,100 @@
+{
+  "_note": "needs-id-review — machine-translated stub awaiting native Indonesian review per CONTRIBUTING.md.",
+  "home": {
+    "title": "Cerita Lucu",
+    "subtitle": "Tulis cerita absurd bersama. Cocok untuk ponsel.",
+    "nicknamePlaceholder": "Pilih nama panggilan",
+    "create": "Buat ruangan",
+    "join": "Gabung",
+    "joining": "Bergabung ke ruangan",
+    "roomGone": "Ruangan ini sudah tidak ada — mungkin sudah berakhir atau tautannya sudah kedaluwarsa.",
+    "createNew": "Buat ruangan baru",
+    "openRooms": "Ruangan terbuka: {{count}}",
+    "imagesToday": "Gambar hari ini: {{count}} / {{total}}",
+    "wobbleEngine": "Mesin video berbagi",
+    "engine": {
+      "css": "CSS (ringan)",
+      "lottie": "Lottie (kaya)"
+    }
+  },
+  "lobby": {
+    "roomCodeLabel": "Kode ruangan",
+    "copyLink": "Salin tautan",
+    "copied": "Tersalin!",
+    "qrCaption": "Pindai untuk bergabung",
+    "waitingForHost": "Menunggu tuan rumah…",
+    "startGame": "Mulai permainan",
+    "startDisabled": "Butuh minimal 3 pemain",
+    "leave": "Keluar",
+    "host": "Tuan rumah",
+    "capReached": "Pembuatan gambar tidak tersedia selama ~{{hours}} jam ke depan. Kalian masih bisa bermain — pemain akan melihat teks cerita tanpa gambar.",
+    "capReachedHost": "Tekan Mulai permainan kalau siap, atau tunggu kuota gambar harian kembali."
+  },
+  "round": {
+    "progress": "Ronde {{current}} dari {{total}}",
+    "placeholder": "Ketik jawabanmu…",
+    "submit": "Kirim",
+    "submitted": "Terkirim"
+  },
+  "waiting": {
+    "title": "Menunggu yang lain",
+    "progress": "{{submitted}} / {{total}} terkirim",
+    "ellipsis": "Tunggu sebentar."
+  },
+  "reveal": {
+    "title": "Ini ceritamu",
+    "spinner": "Memanggil kekacauan…",
+    "retry": "Coba lagi",
+    "error": "Pembuatan gagal. Coba lagi.",
+    "capReached": "Oven gambar sedang penuh. Gambar baru sekitar ~{{hours}} jam lagi.",
+    "pictureAlt": "Gambar kartun ceritamu yang dibuat AI",
+    "continue": "Lanjut"
+  },
+  "end": {
+    "title": "Permainan selesai",
+    "roundsOver": "Ronde sudah selesai",
+    "oneMoreGame": "Satu permainan lagi",
+    "finishGame": "Akhiri permainan",
+    "ready": "Aku siap untuk permainan baru",
+    "readyActive": "Siap ✓",
+    "waitingForHost": "Menunggu tuan rumah…",
+    "needPlayers": "Butuh minimal 3 pemain untuk permainan lagi",
+    "waitingForReady": "Menunggu semua orang siap"
+  },
+  "endScreen": {
+    "supportServer": "Dukung server ini"
+  },
+  "gallery": {
+    "share": "Bagikan gambar-gambar ruangan",
+    "title": "Galeri ruangan",
+    "storyBy": "Cerita {{nickname}}",
+    "noPicture": "Tidak ada gambar untuk cerita ini",
+    "pictureAlt": "Gambar untuk cerita {{nickname}}",
+    "counter": "{{index}} / {{total}}",
+    "prev": "Cerita sebelumnya",
+    "next": "Cerita berikutnya",
+    "download": "Unduh cerita dan gambar diam",
+    "downloadStoryOnly": "Unduh cerita",
+    "shareVideo": "Bagikan sebagai video 5 detik",
+    "recording": "Merekam…"
+  },
+  "playerLost": {
+    "label": "{{nickname}} keluar",
+    "ignore": "Abaikan, lanjutkan permainan",
+    "newRoom": "Buat ruangan baru"
+  },
+  "footer": {
+    "source": "Sumber di GitHub",
+    "contentNotice": "Jawaban pemain dan gambar AI adalah tanggung jawab operator server ini, bukan proyek hulu."
+  },
+  "errors": {
+    "ROOM_NOT_FOUND": "Ruangan tidak ditemukan",
+    "ROOM_LOCKED": "Permainan sudah dimulai",
+    "ROOM_FULL": "Ruangan penuh",
+    "NOT_HOST": "Hanya tuan rumah yang bisa melakukan itu",
+    "NOT_ENOUGH_PLAYERS": "Butuh minimal 3 pemain",
+    "INVALID_NICKNAME": "Nama panggilan tidak valid",
+    "RATE_LIMITED": "Pelan-pelan sebentar",
+    "SERVER_BUSY": "Server sibuk"
+  }
+}

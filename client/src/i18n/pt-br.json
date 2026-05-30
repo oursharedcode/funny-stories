@@ -1,0 +1,100 @@
+{
+  "_note": "needs-pt-br-review — machine-translated stub awaiting native Brazilian Portuguese review per CONTRIBUTING.md.",
+  "home": {
+    "title": "Histórias Engraçadas",
+    "subtitle": "Escrevam histórias absurdas juntos. Feito para celular.",
+    "nicknamePlaceholder": "Escolha um apelido",
+    "create": "Criar sala",
+    "join": "Entrar",
+    "joining": "Entrando na sala",
+    "roomGone": "Esta sala não existe mais — talvez tenha terminado ou o link esteja velho.",
+    "createNew": "Criar uma nova sala",
+    "openRooms": "Salas abertas: {{count}}",
+    "imagesToday": "Imagens hoje: {{count}} / {{total}}",
+    "wobbleEngine": "Motor de vídeo compartilhado",
+    "engine": {
+      "css": "CSS (leve)",
+      "lottie": "Lottie (rico)"
+    }
+  },
+  "lobby": {
+    "roomCodeLabel": "Código da sala",
+    "copyLink": "Copiar link",
+    "copied": "Copiado!",
+    "qrCaption": "Escaneie para entrar",
+    "waitingForHost": "Esperando o anfitrião…",
+    "startGame": "Começar o jogo",
+    "startDisabled": "Precisa de pelo menos 3 jogadores",
+    "leave": "Sair",
+    "host": "Anfitrião",
+    "capReached": "A geração de imagens não estará disponível pelas próximas ~{{hours}} horas. Vocês podem jogar mesmo assim — os jogadores verão o texto da história no lugar dos desenhos.",
+    "capReachedHost": "Toque em Começar o jogo quando estiver pronto, ou espere a cota diária de imagens ser redefinida."
+  },
+  "round": {
+    "progress": "Rodada {{current}} de {{total}}",
+    "placeholder": "Digite sua resposta…",
+    "submit": "Enviar",
+    "submitted": "Enviado"
+  },
+  "waiting": {
+    "title": "Esperando os outros",
+    "progress": "{{submitted}} / {{total}} enviadas",
+    "ellipsis": "Segura aí."
+  },
+  "reveal": {
+    "title": "Aqui está a história de vocês",
+    "spinner": "Invocando o caos…",
+    "retry": "Tentar de novo",
+    "error": "Geração falhou. Tente de novo.",
+    "capReached": "O forno de desenhos está cheio. Novos desenhos em ~{{hours}} horas.",
+    "pictureAlt": "Desenho gerado por IA da sua história",
+    "continue": "Continuar"
+  },
+  "end": {
+    "title": "Jogo encerrado",
+    "roundsOver": "As rodadas acabaram",
+    "oneMoreGame": "Mais um jogo",
+    "finishGame": "Encerrar o jogo",
+    "ready": "Estou pronto para um novo jogo",
+    "readyActive": "Pronto ✓",
+    "waitingForHost": "Esperando o anfitrião…",
+    "needPlayers": "Precisa de pelo menos 3 jogadores para outro jogo",
+    "waitingForReady": "Esperando todo mundo ficar pronto"
+  },
+  "endScreen": {
+    "supportServer": "Apoie este servidor"
+  },
+  "gallery": {
+    "share": "Compartilhar as imagens da sala",
+    "title": "Galeria da sala",
+    "storyBy": "História de {{nickname}}",
+    "noPicture": "Sem imagem para esta história",
+    "pictureAlt": "Desenho para a história de {{nickname}}",
+    "counter": "{{index}} / {{total}}",
+    "prev": "História anterior",
+    "next": "Próxima história",
+    "download": "Baixar história e imagem fixa",
+    "downloadStoryOnly": "Baixar história",
+    "shareVideo": "Compartilhar como vídeo de 5 s",
+    "recording": "Gravando…"
+  },
+  "playerLost": {
+    "label": "{{nickname}} saiu",
+    "ignore": "Ignorar, continuar o jogo",
+    "newRoom": "Criar uma nova sala"
+  },
+  "footer": {
+    "source": "Fonte no GitHub",
+    "contentNotice": "As respostas dos jogadores e as imagens de IA são responsabilidade do operador deste servidor, não do projeto upstream."
+  },
+  "errors": {
+    "ROOM_NOT_FOUND": "Sala não encontrada",
+    "ROOM_LOCKED": "O jogo já começou",
+    "ROOM_FULL": "Sala cheia",
+    "NOT_HOST": "Só o anfitrião pode fazer isso",
+    "NOT_ENOUGH_PLAYERS": "Precisa de pelo menos 3 jogadores",
+    "INVALID_NICKNAME": "Apelido inválido",
+    "RATE_LIMITED": "Calma um instante",
+    "SERVER_BUSY": "O servidor está ocupado"
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "_note": "needs-ko-review — machine-translated stub awaiting native Korean review per CONTRIBUTING.md.",
+  "home": {
+    "title": "재미있는 이야기",
+    "subtitle": "친구들과 함께 엉뚱한 이야기를 써보세요. 휴대폰 친화적.",
+    "nicknamePlaceholder": "닉네임을 입력하세요",
+    "create": "방 만들기",
+    "join": "참가하기",
+    "joining": "방에 참가 중",
+    "roomGone": "이 방은 더 이상 존재하지 않습니다 — 끝났거나 링크가 오래됐을 수 있어요.",
+    "createNew": "새 방 만들기",
+    "openRooms": "열린 방: {{count}}",
+    "imagesToday": "오늘 생성된 이미지: {{count}} / {{total}}",
+    "wobbleEngine": "공유 동영상 엔진",
+    "engine": {
+      "css": "CSS (가볍게)",
+      "lottie": "Lottie (풍부하게)"
+    }
+  },
+  "lobby": {
+    "roomCodeLabel": "방 코드",
+    "copyLink": "링크 복사",
+    "copied": "복사됨!",
+    "qrCaption": "스캔해서 참가",
+    "waitingForHost": "호스트를 기다리는 중…",
+    "startGame": "게임 시작",
+    "startDisabled": "최소 3명이 필요합니다",
+    "leave": "나가기",
+    "host": "호스트",
+    "capReached": "약 {{hours}}시간 동안 이미지 생성이 불가능합니다. 그래도 플레이는 가능하며, 그림 대신 이야기 텍스트만 보입니다.",
+    "capReachedHost": "준비되면 게임 시작을 누르거나, 일일 이미지 할당량이 초기화될 때까지 기다리세요."
+  },
+  "round": {
+    "progress": "{{total}} 중 {{current}} 라운드",
+    "placeholder": "답을 입력하세요…",
+    "submit": "제출",
+    "submitted": "제출됨"
+  },
+  "waiting": {
+    "title": "다른 플레이어를 기다리는 중",
+    "progress": "{{submitted}} / {{total}} 제출됨",
+    "ellipsis": "잠시만요."
+  },
+  "reveal": {
+    "title": "여러분의 이야기입니다",
+    "spinner": "혼돈을 소환하는 중…",
+    "retry": "다시 시도",
+    "error": "생성 실패. 다시 시도하세요.",
+    "capReached": "그림 오븐이 가득 찼습니다. 새 그림은 약 {{hours}}시간 후에.",
+    "pictureAlt": "AI로 생성된 여러분 이야기의 그림",
+    "continue": "계속"
+  },
+  "end": {
+    "title": "게임 종료",
+    "roundsOver": "라운드가 끝났습니다",
+    "oneMoreGame": "한 게임 더",
+    "finishGame": "게임 끝내기",
+    "ready": "새 게임 준비됨",
+    "readyActive": "준비 ✓",
+    "waitingForHost": "호스트를 기다리는 중…",
+    "needPlayers": "새 게임에는 최소 3명이 필요합니다",
+    "waitingForReady": "모두 준비될 때까지 기다리는 중"
+  },
+  "endScreen": {
+    "supportServer": "이 서버 후원하기"
+  },
+  "gallery": {
+    "share": "방의 그림 공유",
+    "title": "방 갤러리",
+    "storyBy": "{{nickname}}의 이야기",
+    "noPicture": "이 이야기에는 그림이 없습니다",
+    "pictureAlt": "{{nickname}}의 이야기에 대한 그림",
+    "counter": "{{index}} / {{total}}",
+    "prev": "이전 이야기",
+    "next": "다음 이야기",
+    "download": "이야기와 정지 이미지 다운로드",
+    "downloadStoryOnly": "이야기 다운로드",
+    "shareVideo": "5초 동영상으로 공유",
+    "recording": "녹화 중…"
+  },
+  "playerLost": {
+    "label": "{{nickname}}이(가) 나갔습니다",
+    "ignore": "무시하고 게임 계속",
+    "newRoom": "새 방 만들기"
+  },
+  "footer": {
+    "source": "GitHub 소스",
+    "contentNotice": "플레이어의 답변과 AI 그림은 상위 프로젝트가 아니라 이 서버 운영자의 책임입니다."
+  },
+  "errors": {
+    "ROOM_NOT_FOUND": "방을 찾을 수 없습니다",
+    "ROOM_LOCKED": "이미 게임이 시작되었습니다",
+    "ROOM_FULL": "방이 가득 찼습니다",
+    "NOT_HOST": "호스트만 할 수 있습니다",
+    "NOT_ENOUGH_PLAYERS": "최소 3명이 필요합니다",
+    "INVALID_NICKNAME": "잘못된 닉네임",
+    "RATE_LIMITED": "잠깐 천천히",
+    "SERVER_BUSY": "서버가 바쁩니다"
+  }
+}

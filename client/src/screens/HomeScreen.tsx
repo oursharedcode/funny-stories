@@ -131,12 +131,21 @@ export default function HomeScreen({ onJoined }: Props) {
 
       {mode === 'create' && (
         <>
-          <div className="w-full flex flex-col gap-2" role="group" aria-label="Language">
+          {/* Scrollable language list. With 11+ options the static list ran the
+              page off-screen on a phone; clamp the visible height so 2.5 rows
+              show at once and the cut-off third row hints at more below. Each
+              row is ~64px (px-4 + py-3 around a text-base label + text-2xl
+              flag), so max-h-40 (160px) lands the third row at ~50%. */}
+          <div
+            className="w-full flex flex-col gap-2 max-h-40 overflow-y-auto pr-1"
+            role="group"
+            aria-label="Language"
+          >
             {LANGUAGES.map((opt) => (
               <button
                 key={opt.code}
                 aria-pressed={language === opt.code}
-                className={`flex items-center gap-3 rounded px-4 py-3 font-semibold ${
+                className={`flex items-center gap-3 rounded px-4 py-3 font-semibold flex-shrink-0 ${
                   language === opt.code
                     ? 'bg-pink-500 text-white'
                     : 'bg-white border border-amber-300 text-gray-800'

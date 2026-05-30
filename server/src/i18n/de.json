@@ -1,0 +1,14 @@
+{
+  "_note": "needs-de-review — machine-translated stub awaiting native German review per CONTRIBUTING.md.",
+  "questions": [
+    "Wer?",
+    "Mit wem?",
+    "Wo?",
+    "Wann?",
+    "Was haben sie getan?",
+    "Wozu?",
+    "Wie endete es?"
+  ],
+  "prose": "{0} mit {1} {3} {2} {4} {5}. Am Ende endete es mit {6}.",
+  "imagePrompt": "Links {0}, rechts {1}, in {2}, {3}, {4}"
+}

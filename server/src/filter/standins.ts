@@ -4,6 +4,11 @@
 // Used by:
 //   - the profanity filter (step 7): replaces matched words silently
 //   - the round runner (step 6): bot/timer-expiry auto-fill source
+//
+// English and Russian pools have 10 entries per slot (spec §6). Other
+// languages ship at machine-translation quality with 5 entries per slot,
+// marked `needs-<code>-review` for native-speaker tightening per
+// CONTRIBUTING.md. `pickStandin` doesn't care about pool size.
 
 import type { Language } from '../types.js';
 
@@ -179,6 +184,96 @@ export const STANDINS: Record<Language, Record<number, string[]>> = {
       'облако, которое наблюдало, наконец отвернулось',
       'все согласились никогда больше не говорить об этом',
     ],
+  },
+  // needs-fr-review — machine-translated stub.
+  fr: {
+    0: ['un lama somnolent', 'le jumeau maléfique du bibliothécaire', 'un pingouin perdu', 'un raton-laveur trop sûr de lui', 'un comptable voyageur du temps'],
+    1: ['avec un grille-pain hanté', 'avec trois oies fâchées', 'avec un poisson rouge philosophe', 'avec un touriste très perdu', 'avec leur comptable imaginaire'],
+    2: ['dans une fromagerie', 'au fond de l\'océan', 'sur le toit d\'un bus en marche', 'derrière le canapé', 'dans un nuage'],
+    3: ['pendant un petit tremblement de terre', 'à 3 h du matin sans raison', 'quand tous les horloges se sont arrêtées', 'pendant le festival annuel des chapeaux', 'quand internet est tombé'],
+    4: ['ont inventé un nouveau type de tristesse', 'ont essayé de cuire une émotion', 'ont réorganisé les nuages par taille', 'ont déclaré la guerre aux lundis', 'ont oublié comment fonctionnent les escaliers'],
+    5: ['pour des raisons sensées sur le moment', 'pour impressionner un pigeon', 'parce que la garantie l\'interdisait', 'en échange d\'un seul raisin', 'par dépit'],
+    6: ['un canard a déposé une plainte officielle', 'plusieurs pigeons ont reçu des certificats', 'le maire a envoyé un panier de fruits', 'tout le monde a convenu de n\'en plus parler', 'ce fut déclaré jour férié dans trois pays'],
+  },
+  // needs-de-review — machine-translated stub.
+  de: {
+    0: ['ein schläfriges Lama', 'der böse Zwilling der Bibliothekarin', 'ein verwirrter Pinguin', 'ein selbstsicherer Waschbär', 'ein zeitreisender Buchhalter'],
+    1: ['mit einem verfluchten Toaster', 'mit drei wütenden Gänsen', 'mit einem philosophischen Goldfisch', 'mit einem völlig verirrten Touristen', 'mit ihrem imaginären Buchhalter'],
+    2: ['in einer Käsefabrik', 'auf dem Meeresboden', 'auf einem fahrenden Bus', 'hinter dem Sofa', 'in einer Wolke'],
+    3: ['während eines kleinen Erdbebens', 'um 3 Uhr morgens ohne guten Grund', 'als alle Uhren stehen blieben', 'während des jährlichen Hutfestivals', 'als das Internet ausfiel'],
+    4: ['erfanden eine neue Art von Traurigkeit', 'versuchten eine Emotion zu backen', 'sortierten die Wolken nach Größe', 'erklärten den Montagen den Krieg', 'vergaßen, wie Treppen funktionieren'],
+    5: ['aus Gründen, die damals Sinn ergaben', 'um eine Taube zu beeindrucken', 'weil die Garantie es verbot', 'im Tausch gegen eine einzelne Weintraube', 'aus Trotz'],
+    6: ['eine Ente reichte eine offizielle Beschwerde ein', 'mehrere Tauben erhielten Urkunden', 'der Bürgermeister schickte einen Obstkorb', 'alle vereinbarten, nie wieder darüber zu sprechen', 'es wurde in drei Ländern zum Feiertag erklärt'],
+  },
+  // needs-id-review — machine-translated stub.
+  id: {
+    0: ['seekor llama yang mengantuk', 'kembaran jahat pustakawan', 'pinguin yang bingung', 'rakun yang terlalu percaya diri', 'akuntan penjelajah waktu'],
+    1: ['dengan pemanggang roti berhantu', 'dengan tiga angsa marah', 'dengan ikan mas yang filosofis', 'dengan turis yang sangat tersesat', 'dengan akuntan khayalan mereka'],
+    2: ['di dalam pabrik keju', 'di dasar laut', 'di atas bus yang sedang berjalan', 'di belakang sofa', 'di dalam awan'],
+    3: ['saat gempa kecil', 'pukul 3 pagi tanpa alasan jelas', 'ketika semua jam berhenti', 'selama festival topi tahunan', 'ketika internet putus'],
+    4: ['menciptakan jenis kesedihan baru', 'mencoba memanggang sebuah emosi', 'menyusun ulang awan berdasarkan ukuran', 'menyatakan perang terhadap hari Senin', 'lupa cara kerja tangga'],
+    5: ['karena alasan yang masuk akal saat itu', 'untuk membuat seekor merpati terkesan', 'karena garansinya melarang', 'sebagai imbalan satu butir anggur', 'karena dendam'],
+    6: ['seekor bebek mengajukan keluhan resmi', 'beberapa merpati menerima sertifikat', 'wali kota mengirim keranjang buah', 'semua orang sepakat untuk tidak membahasnya lagi', 'itu dijadikan hari libur di tiga negara'],
+  },
+  // needs-it-review — machine-translated stub.
+  it: {
+    0: ['un lama assonnato', 'il gemello malvagio della bibliotecaria', 'un pinguino confuso', 'un procione troppo sicuro di sé', 'un commercialista viaggiatore del tempo'],
+    1: ['con un tostapane infestato', 'con tre oche arrabbiate', 'con un pesce rosso filosofico', 'con un turista molto perso', 'con il loro commercialista immaginario'],
+    2: ['dentro una fabbrica di formaggio', 'in fondo all\'oceano', 'sul tetto di un autobus in movimento', 'dietro al divano', 'dentro una nuvola'],
+    3: ['durante un piccolo terremoto', 'alle 3 di notte senza motivo', 'quando tutti gli orologi si sono fermati', 'durante il festival annuale dei cappelli', 'quando è caduta internet'],
+    4: ['hanno inventato un nuovo tipo di tristezza', 'hanno provato a cuocere un\'emozione', 'hanno riordinato le nuvole per dimensione', 'hanno dichiarato guerra ai lunedì', 'hanno dimenticato come funzionano le scale'],
+    5: ['per ragioni che avevano senso lì per lì', 'per impressionare un piccione', 'perché la garanzia lo vietava', 'in cambio di un singolo acino', 'per dispetto'],
+    6: ['un\'anatra ha sporto formale denuncia', 'diversi piccioni hanno ricevuto un attestato', 'il sindaco ha mandato un cesto di frutta', 'tutti hanno deciso di non parlarne mai più', 'è stato dichiarato festivo in tre paesi'],
+  },
+  // needs-ja-review — machine-translated stub.
+  ja: {
+    0: ['眠そうなラマ', '司書の邪悪な双子', '混乱したペンギン', '自信過剰なアライグマ', '時を超える会計士'],
+    1: ['呪われたトースターと', '三羽の怒ったガチョウと', '哲学的な金魚と', 'とても道に迷った観光客と', '想像上の会計士と'],
+    2: ['チーズ工場の中で', '海の底で', '走るバスの屋根で', 'ソファの後ろで', '雲の中で'],
+    3: ['小さな地震の最中に', '深夜3時に理由もなく', 'すべての時計が止まった時', '毎年恒例の帽子祭りの間', 'インターネットが落ちた時'],
+    4: ['新しい種類の悲しみを発明した', '感情を焼こうとした', '雲をサイズ順に並べ直した', '月曜日に宣戦布告した', '階段の使い方を忘れた'],
+    5: ['その時は理にかなった理由で', 'ハトに感銘を与えるために', '保証書が禁じていたから', 'ぶどう一粒と引き換えに', '腹いせに'],
+    6: ['アヒルが正式に苦情を申し立てた', '何羽かのハトが表彰状を受け取った', '市長が果物かごを送った', '誰もが二度と話さないことに同意した', '三か国で祝日に指定された'],
+  },
+  // needs-ko-review — machine-translated stub.
+  ko: {
+    0: ['졸린 라마', '사서의 사악한 쌍둥이', '혼란스러운 펭귄', '자만한 너구리', '시간 여행하는 회계사'],
+    1: ['저주받은 토스터와', '화난 거위 세 마리와', '철학적인 금붕어와', '아주 길을 잃은 관광객과', '상상 속 회계사와'],
+    2: ['치즈 공장 안에서', '바다 밑바닥에서', '움직이는 버스 지붕 위에서', '소파 뒤에서', '구름 속에서'],
+    3: ['작은 지진이 일어났을 때', '이유 없이 새벽 3시에', '모든 시계가 멈췄을 때', '연례 모자 축제 동안', '인터넷이 끊겼을 때'],
+    4: ['새로운 종류의 슬픔을 발명했다', '감정을 굽는 시도를 했다', '구름을 크기별로 정리했다', '월요일에 선전포고를 했다', '계단이 어떻게 작동하는지 잊었다'],
+    5: ['그 당시에는 말이 되던 이유로', '비둘기에게 깊은 인상을 주려고', '보증서가 금지했기 때문에', '포도 한 알을 받고', '심술로'],
+    6: ['오리 한 마리가 공식 항의를 제기했다', '비둘기 몇 마리가 표창장을 받았다', '시장이 과일 바구니를 보냈다', '모두가 다시는 이 이야기를 하지 않기로 했다', '세 나라에서 공휴일로 선언되었다'],
+  },
+  // needs-pt-br-review — machine-translated stub.
+  'pt-br': {
+    0: ['uma lhama sonolenta', 'o gêmeo maligno da bibliotecária', 'um pinguim confuso', 'um guaxinim confiante demais', 'um contador viajante do tempo'],
+    1: ['com uma torradeira mal-assombrada', 'com três gansos bravos', 'com um peixinho dourado filosófico', 'com um turista muito perdido', 'com o contador imaginário deles'],
+    2: ['dentro de uma fábrica de queijos', 'no fundo do oceano', 'em cima de um ônibus em movimento', 'atrás do sofá', 'dentro de uma nuvem'],
+    3: ['durante um pequeno terremoto', 'às 3 da manhã sem motivo', 'quando todos os relógios pararam', 'durante o festival anual de chapéus', 'quando a internet caiu'],
+    4: ['inventaram um novo tipo de tristeza', 'tentaram assar uma emoção', 'reorganizaram as nuvens por tamanho', 'declararam guerra às segundas-feiras', 'esqueceram como escadas funcionam'],
+    5: ['por motivos que faziam sentido na hora', 'para impressionar um pombo', 'porque a garantia proibia', 'em troca de uma única uva', 'por implicância'],
+    6: ['um pato registrou uma reclamação formal', 'vários pombos receberam certificados', 'o prefeito enviou uma cesta de frutas', 'todo mundo concordou em nunca mais falar disso', 'foi declarado feriado em três países'],
+  },
+  // needs-es-419-review — machine-translated stub.
+  'es-419': {
+    0: ['una llama dormilona', 'la gemela malvada de la bibliotecaria', 'un pingüino confundido', 'un mapache demasiado confiado', 'un contador viajero del tiempo'],
+    1: ['con una tostadora embrujada', 'con tres gansos enojados', 'con un pez dorado filosófico', 'con un turista muy perdido', 'con su contador imaginario'],
+    2: ['adentro de una fábrica de queso', 'en el fondo del océano', 'arriba de un colectivo en movimiento', 'atrás del sillón', 'adentro de una nube'],
+    3: ['durante un pequeño temblor', 'a las 3 de la mañana sin razón', 'cuando se pararon todos los relojes', 'durante el festival anual de sombreros', 'cuando se cayó el internet'],
+    4: ['inventaron un nuevo tipo de tristeza', 'intentaron hornear una emoción', 'reorganizaron las nubes por tamaño', 'le declararon la guerra a los lunes', 'se olvidaron cómo funcionan las escaleras'],
+    5: ['por razones que tenían sentido en ese momento', 'para impresionar a una paloma', 'porque la garantía lo prohibía', 'a cambio de una sola uva', 'por despecho'],
+    6: ['un pato presentó una queja formal', 'varias palomas recibieron certificados', 'el intendente mandó una canasta de frutas', 'todos acordaron no volver a hablar del tema', 'lo declararon feriado en tres países'],
+  },
+  // needs-es-es-review — machine-translated stub.
+  'es-es': {
+    0: ['una llama somnolienta', 'la gemela malvada de la bibliotecaria', 'un pingüino confundido', 'un mapache demasiado confiado', 'un contable viajero del tiempo'],
+    1: ['con una tostadora encantada', 'con tres gansos enfadados', 'con un pececillo filosófico', 'con un turista muy perdido', 'con su contable imaginario'],
+    2: ['dentro de una fábrica de queso', 'en el fondo del océano', 'encima de un autobús en marcha', 'detrás del sofá', 'dentro de una nube'],
+    3: ['durante un pequeño terremoto', 'a las 3 de la madrugada sin razón', 'cuando se pararon todos los relojes', 'durante el festival anual de sombreros', 'cuando se cayó internet'],
+    4: ['inventaron un nuevo tipo de tristeza', 'intentaron hornear una emoción', 'reorganizaron las nubes por tamaño', 'le declararon la guerra a los lunes', 'olvidaron cómo funcionan las escaleras'],
+    5: ['por razones que tenían sentido en ese momento', 'para impresionar a una paloma', 'porque la garantía lo prohibía', 'a cambio de una sola uva', 'por despecho'],
+    6: ['un pato presentó una queja formal', 'varias palomas recibieron certificados', 'el alcalde envió una cesta de fruta', 'todos acordaron no volver a hablar del tema', 'se declaró festivo en tres países'],
   },
 };
 

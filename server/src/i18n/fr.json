@@ -1,0 +1,14 @@
+{
+  "_note": "needs-fr-review — machine-translated stub awaiting native French review per CONTRIBUTING.md.",
+  "questions": [
+    "Qui ?",
+    "Avec qui ?",
+    "Où ?",
+    "Quand ?",
+    "Qu'ont-ils fait ?",
+    "Pourquoi ?",
+    "Comment ça s'est terminé ?"
+  ],
+  "prose": "{0} avec {1} {3} {2} a/ont {4} {5}. Finalement, ça s'est terminé par {6}.",
+  "imagePrompt": "À gauche {0}, à droite {1}, à {2}, {3}, {4}"
+}
