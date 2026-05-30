@@ -6,6 +6,7 @@ import ProseText from './ProseText';
 import LogoStamp from './LogoStamp';
 import { downloadStoryImage } from '../downloadStory';
 import { isVideoRecordingSupported, recordWobbleVideo } from '../recordWobble';
+import { getWobbleEngine } from '../wobblePreference';
 import type { GalleryEntry } from 'shared';
 
 interface Props {
@@ -33,7 +34,18 @@ export default function RoomGallery({ entries }: Props) {
     if (!entry.pictureUrl || recording) return;
     setRecording(true);
     try {
-      await recordWobbleVideo({ nickname: entry.nickname, pictureUrl: entry.pictureUrl });
+      // Lottie is the opt-in path — its ~250 KB stays out of the main bundle
+      // until a user with `engine === 'lottie'` actually taps share. CSS is
+      // the default and incurs no extra import.
+      if (getWobbleEngine() === 'lottie') {
+        const { recordWobbleVideoLottie } = await import('../recordWobbleLottie');
+        await recordWobbleVideoLottie({
+          nickname: entry.nickname,
+          pictureUrl: entry.pictureUrl,
+        });
+      } else {
+        await recordWobbleVideo({ nickname: entry.nickname, pictureUrl: entry.pictureUrl });
+      }
     } finally {
       setRecording(false);
     }

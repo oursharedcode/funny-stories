@@ -6,6 +6,7 @@ import { socket } from '../socket';
 import Wordmark from '../components/art/Wordmark';
 import SourceFooter from '../components/SourceFooter';
 import { LANGUAGES, isLanguage } from '../languages';
+import { getWobbleEngine, setWobbleEngine, type WobbleEngine } from '../wobblePreference';
 import type { LobbyState } from '../App';
 import type { Language, StatsPayload } from 'shared';
 
@@ -30,6 +31,15 @@ export default function HomeScreen({ onJoined }: Props) {
   const [roomGone, setRoomGone] = useState(false);
   const [busy, setBusy] = useState(false);
   const [stats, setStats] = useState<StatsPayload | null>(null);
+  // Wobble-engine choice is a host-only Home-screen control. Joiners never see
+  // the switch — they inherit whatever their own browser has stored, defaulting
+  // to CSS keyframes for the cheap path.
+  const [wobbleEngine, setWobbleEngineState] = useState<WobbleEngine>(() => getWobbleEngine());
+
+  function switchWobbleEngine(engine: WobbleEngine): void {
+    setWobbleEngineState(engine);
+    setWobbleEngine(engine);
+  }
 
   // When the invite link carries the room language (`?room=CODE&lang=ru`),
   // render the join screen in that language immediately rather than waiting for
@@ -147,6 +157,29 @@ export default function HomeScreen({ onJoined }: Props) {
             maxLength={20}
             onChange={(e) => setNickname(e.target.value)}
           />
+
+          {/* Host-only choice: which engine renders the gallery's 5-second
+              wobble preview and the recorded share-video. CSS is the default
+              (zero bundle cost); Lottie lazy-loads its ~250 KB only on use. */}
+          <fieldset className="w-full" aria-label={t('home.wobbleEngine')}>
+            <legend className="mb-1 text-sm text-gray-600">{t('home.wobbleEngine')}</legend>
+            <div className="grid grid-cols-2 gap-2">
+              {(['css', 'lottie'] as const).map((engine) => (
+                <button
+                  key={engine}
+                  aria-pressed={wobbleEngine === engine}
+                  className={`rounded px-3 py-2 text-sm font-semibold ${
+                    wobbleEngine === engine
+                      ? 'bg-pink-500 text-white'
+                      : 'bg-white border border-amber-300 text-gray-800'
+                  }`}
+                  onClick={() => switchWobbleEngine(engine)}
+                >
+                  {t(`home.engine.${engine}`)}
+                </button>
+              ))}
+            </div>
+          </fieldset>
 
           <button
             className="w-full py-3 rounded bg-pink-500 text-white font-display font-semibold text-xl disabled:bg-gray-300 disabled:text-gray-500"

@@ -9,7 +9,12 @@
     "roomGone": "Этой комнаты больше нет — игра могла закончиться, или ссылка устарела.",
     "createNew": "Создать новую комнату",
     "openRooms": "Открыто комнат: {{count}}",
-    "imagesToday": "Картинок сегодня: {{count}} / {{total}}"
+    "imagesToday": "Картинок сегодня: {{count}} / {{total}}",
+    "wobbleEngine": "Движок видео",
+    "engine": {
+      "css": "CSS (легче)",
+      "lottie": "Lottie (богаче)"
+    }
   },
   "lobby": {
     "roomCodeLabel": "Код комнаты",

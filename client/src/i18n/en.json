@@ -9,7 +9,12 @@
     "roomGone": "That room no longer exists — it may have ended, or the link is old.",
     "createNew": "Create a new room",
     "openRooms": "Open rooms: {{count}}",
-    "imagesToday": "Images today: {{count}} / {{total}}"
+    "imagesToday": "Images today: {{count}} / {{total}}",
+    "wobbleEngine": "Share-video engine",
+    "engine": {
+      "css": "CSS (light)",
+      "lottie": "Lottie (rich)"
+    }
   },
   "lobby": {
     "roomCodeLabel": "Room code",
