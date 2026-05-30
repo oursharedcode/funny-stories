@@ -95,42 +95,44 @@ function monkeyAt(ms: number): MonkeyFrame | null {
   // Off-screen for the first 1.5 s.
   if (ms < 1500) return null;
 
-  let torsoX = W * 0.78;
+  let torsoX = W * 0.22;
   let torsoY = GROUND_Y;
   let torsoRot = 0;
   let legLeftRot = 0;
   let legRightRot = 0;
-  let armPointRot = degToRad(10);
-  let armFreeRot = degToRad(-10);
+  let armPointRot = degToRad(-10);
+  let armFreeRot = degToRad(10);
   let headRot = 0;
 
   if (ms < 3000) {
-    // 1.5–3.0 s — walking in from the right with alternating leg swings.
+    // 1.5–3.0 s — walking in from the left with alternating leg swings.
     const t = (ms - 1500) / 1500; // 0 → 1
-    torsoX = (1 - t) * (W + 60) + t * W * 0.78;
+    torsoX = (1 - t) * -60 + t * (W * 0.22);
     torsoY = GROUND_Y + Math.sin(t * Math.PI * 6) * 4;
     const swing = degToRad(28 * Math.sin(t * Math.PI * 6));
     legLeftRot = swing;
     legRightRot = -swing;
-    armPointRot = degToRad(10) + -1.5 * swing;
-    armFreeRot = degToRad(-10) + 1.5 * swing;
+    armPointRot = degToRad(-10) + 1.5 * swing;
+    armFreeRot = degToRad(10) - 1.5 * swing;
   } else if (ms < 4000) {
-    // 3.0–4.0 s — stops, raises the pointing arm at the cartoon, head tilts.
+    // 3.0–4.0 s — stops, raises the pointing arm up-right at the cartoon,
+    // head tilts toward the cartoon.
     const t = Math.min((ms - 3000) / 600, 1); // ease into the gesture within 0.6 s
-    armPointRot = degToRad(10 - 125 * t); // 10° → -115° (up-left)
-    headRot = degToRad(-12 * t);
+    armPointRot = degToRad(-10 + 125 * t); // -10° → +115° (up-right)
+    headRot = degToRad(12 * t);
   } else {
-    // 4.0–5.0 s — fall onto the back, laughing.
+    // 4.0–5.0 s — fall onto the back, laughing. Mirrors the right-side fall:
+    // torso rotates clockwise so the back hits the ground to the monkey's left
+    // (screen-right), legs and arms wiggle / kick in the same direction.
     const t = (ms - 4000) / 1000;
     const fallEase = Math.min(t * 1.4, 1);
     torsoY = GROUND_Y + 22 * fallEase;
-    torsoRot = degToRad(-78 * fallEase);
-    headRot = degToRad(-12 + 18 * Math.sin(t * Math.PI * 5));
-    // Arms and legs wiggle / kick.
-    armPointRot = degToRad(-115 + 30 * Math.sin(t * Math.PI * 8));
-    armFreeRot = degToRad(-10 - 40 * Math.sin(t * Math.PI * 6));
-    legLeftRot = degToRad(-40);
-    legRightRot = degToRad(-30);
+    torsoRot = degToRad(78 * fallEase);
+    headRot = degToRad(12 - 18 * Math.sin(t * Math.PI * 5));
+    armPointRot = degToRad(115 - 30 * Math.sin(t * Math.PI * 8));
+    armFreeRot = degToRad(10 + 40 * Math.sin(t * Math.PI * 6));
+    legLeftRot = degToRad(40);
+    legRightRot = degToRad(30);
   }
 
   return {
@@ -189,8 +191,11 @@ function drawMonkey(
   ctx.drawImage(sprites.torso, -TORSO_W / 2, -TORSO_H / 2, TORSO_W, TORSO_H);
 
   // Free arm under the body, pointing arm on top so the gesture is visible.
-  drawLimbSprite(ctx, sprites.arm, 32, -32, m.armFreeRot, ARM_W, ARM_H);
-  drawLimbSprite(ctx, sprites.arm, -32, -32, m.armPointRot, ARM_W, ARM_H);
+  // Pointing arm sits on the shoulder closer to the cartoon (screen-right
+  // when the monkey stands on the left half of the canvas) so the gesture
+  // doesn't have to reach across the body.
+  drawLimbSprite(ctx, sprites.arm, -32, -32, m.armFreeRot, ARM_W, ARM_H);
+  drawLimbSprite(ctx, sprites.arm, 32, -32, m.armPointRot, ARM_W, ARM_H);
 
   // Head — pivots around the neck. translate(0, -68) lands on the neck;
   // rotate; translate(0, -39) shifts the canvas origin up by half the head
