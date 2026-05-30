@@ -72,7 +72,7 @@
     "counter": "{{index}} / {{total}}",
     "prev": "Previous story",
     "next": "Next story",
-    "download": "Download story and picture",
+    "download": "Download story and still picture",
     "downloadStoryOnly": "Download story",
     "shareVideo": "Share as 5s video",
     "recording": "Recording…"
