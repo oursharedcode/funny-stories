@@ -10,13 +10,13 @@
 // rejects; the caller surfaces this as a button-disabled state.
 
 import { SOURCE_URL } from './sourceUrl.js';
+import { drawAttribution, renderQrCanvas } from './videoFooter.js';
 
 const W = 720;
 const H = 1280;
 const FPS = 30;
 const DURATION_MS = 5000;
 const CREAM = '#fef3c7';
-const INK = '#1f2937';
 const PINK = '#ec4899';
 
 // Half-cycle sine eased between 0 and 1 (matches CSS ease-in-out closely
@@ -115,6 +115,8 @@ export async function recordWobbleVideo(opts: {
   } catch {
     logo = null;
   }
+  // QR code rendered once, then blitted onto every recorded frame.
+  const qrCanvas = await renderQrCanvas(SOURCE_URL);
 
   const canvas = document.createElement('canvas');
   canvas.width = W;
@@ -169,21 +171,24 @@ export async function recordWobbleVideo(opts: {
     }
     ctx!.restore();
 
-    // Pulsing source badge at the bottom — the "speech bubble pulse" element.
-    const badgeY = picY + picSize + 70;
+    // Pulsing nickname badge — the "speech bubble pulse" element. URL was
+    // moved out of the pulse into the static attribution block below; the
+    // pulse now carries just the nickname to avoid duplicating the URL.
+    const badgeY = picY + picSize + 50;
     const badgeCx = W / 2;
     ctx!.save();
     ctx!.translate(badgeCx, badgeY);
     ctx!.scale(w.pulse, w.pulse);
     ctx!.fillStyle = PINK;
-    ctx!.font = 'bold 32px system-ui, sans-serif';
+    ctx!.font = 'bold 36px system-ui, sans-serif';
     ctx!.textAlign = 'center';
     ctx!.textBaseline = 'middle';
-    ctx!.fillText(nickname, 0, -22);
-    ctx!.fillStyle = INK;
-    ctx!.font = '20px ui-monospace, "SF Mono", Consolas, monospace';
-    ctx!.fillText(SOURCE_URL.replace(/^https?:\/\//, ''), 0, 18);
+    ctx!.fillText(nickname, 0, 0);
     ctx!.restore();
+
+    // Static attribution footer matching the downloadable PNG's footer:
+    // wrapped content-responsibility notice + QR + source label + URL.
+    drawAttribution(ctx!, qrCanvas, { topY: badgeY + 50, canvasWidth: W });
 
     if (elapsed >= DURATION_MS) {
       recorder.stop();

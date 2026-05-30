@@ -16,13 +16,13 @@
 // + monkey, CSS engine = cartoon only) stays the same.
 
 import { SOURCE_URL } from './sourceUrl.js';
+import { drawAttribution, renderQrCanvas } from './videoFooter.js';
 
 const W = 720;
 const H = 1280;
 const FPS = 30;
 const DURATION_MS = 5000;
 const CREAM = '#fef3c7';
-const INK = '#1f2937';
 const PINK = '#ec4899';
 
 // Monkey sprite kit. Sizes are the rendered sizes on the recording canvas;
@@ -273,9 +273,13 @@ export async function recordWobbleVideoLottie(opts: {
   const mime = pickMime();
   if (!mime) throw new Error('MediaRecorder not supported in this browser');
 
-  // Load the cartoon and the four monkey sprites in parallel so the recording
-  // can start as soon as both arrive.
-  const [picture, sprites] = await Promise.all([loadImage(pictureUrl), loadMonkeySprites()]);
+  // Load the cartoon, the four monkey sprites, and the QR in parallel so the
+  // recording can start as soon as all three arrive.
+  const [picture, sprites, qrCanvas] = await Promise.all([
+    loadImage(pictureUrl),
+    loadMonkeySprites(),
+    renderQrCanvas(SOURCE_URL),
+  ]);
 
   const canvas = document.createElement('canvas');
   canvas.width = W;
@@ -329,22 +333,24 @@ export async function recordWobbleVideoLottie(opts: {
     // 3. Monkey — walks, points, falls. Painted on top of the cartoon.
     drawMonkey(ctx!, elapsed, sprites);
 
-    // 4. Pulsing nickname + source badge at the bottom.
+    // 4. Pulsing nickname badge. URL moved out of the pulse into the static
+    //    attribution block below to avoid duplicating it next to the QR.
     const pulsePhase = ((elapsed % 600) / 600) * Math.PI * 2;
     const pulse = 1 + 0.12 * (0.5 - 0.5 * Math.cos(pulsePhase));
-    const badgeY = picCy + picRenderSize / 2 + 70;
+    const badgeY = picCy + picRenderSize / 2 + 50;
     ctx!.save();
     ctx!.translate(W / 2, badgeY);
     ctx!.scale(pulse, pulse);
     ctx!.fillStyle = PINK;
-    ctx!.font = 'bold 32px system-ui, sans-serif';
+    ctx!.font = 'bold 36px system-ui, sans-serif';
     ctx!.textAlign = 'center';
     ctx!.textBaseline = 'middle';
-    ctx!.fillText(nickname, 0, -22);
-    ctx!.fillStyle = INK;
-    ctx!.font = '20px ui-monospace, "SF Mono", Consolas, monospace';
-    ctx!.fillText(SOURCE_URL.replace(/^https?:\/\//, ''), 0, 18);
+    ctx!.fillText(nickname, 0, 0);
     ctx!.restore();
+
+    // 5. Static attribution footer (notice + QR + source label + URL).
+    //    Same content as the downloadable PNG footer.
+    drawAttribution(ctx!, qrCanvas, { topY: badgeY + 50, canvasWidth: W });
 
     if (elapsed >= DURATION_MS) {
       recorder.stop();
