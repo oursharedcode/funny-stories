@@ -344,43 +344,12 @@ function buildMonkeyLayers(startIndex: number): object[] {
   return [head, armPoint, torso, armFree, legLeft, legRight];
 }
 
-// Build a Lottie composition that wobbles a single image asset on four axes:
-// scale (zoom), position (drift), rotation (jiggle). The "speech bubble pulse"
-// is composed onto the canvas after Lottie renders each frame, since pulsing
-// text overlays are cheaper to draw than to encode as Lottie text layers.
-function buildWobbleAnimation(picDataUrl: string, picSize: number): object {
-  const picX = W / 2;
-  const picY = H / 2 - 60; // bias up to leave room for the badge
-
-  // Drift path — six waypoints around the centre over 150 frames.
-  const driftKeys = kf([
-    { t: 0, s: [picX - 6, picY + 4] },
-    { t: 37, s: [picX + 6, picY - 3] },
-    { t: 75, s: [picX + 4, picY + 5] },
-    { t: 112, s: [picX - 5, picY - 4] },
-    { t: 150, s: [picX - 6, picY + 4] },
-  ]);
-
-  // Zoom — 100 → 105 → 100 every 72 frames (≈ 2.4 s in the CSS keyframes).
-  const zoomKeys = kf([
-    { t: 0, s: [100, 100] },
-    { t: 36, s: [105, 105] },
-    { t: 72, s: [100, 100] },
-    { t: 108, s: [105, 105] },
-    { t: 150, s: [100, 100] },
-  ]);
-
-  // Jiggle — ±1.4° every 48 frames (≈ 1.6 s).
-  const jiggleKeys = kf([
-    { t: 0, s: [-1.4] },
-    { t: 24, s: [1.4] },
-    { t: 48, s: [-0.8] },
-    { t: 72, s: [1.2] },
-    { t: 96, s: [-1.0] },
-    { t: 120, s: [1.4] },
-    { t: 150, s: [-1.4] },
-  ]);
-
+// Build a Lottie composition holding only the articulated monkey. The cartoon
+// is drawn manually onto the recording canvas with the same wobble math the
+// CSS path uses — this avoids Lottie's image-asset loading machinery, which
+// is the most brittle part of the canvas renderer (embedded data URLs aren't
+// always decoded by the time DOMLoaded fires, leaving the cartoon blank).
+function buildMonkeyComposition(): object {
   return {
     v: '5.7.4',
     fr: FPS,
@@ -388,43 +357,36 @@ function buildWobbleAnimation(picDataUrl: string, picSize: number): object {
     op: FRAMES,
     w: W,
     h: H,
-    nm: 'wobble',
+    nm: 'monkey',
     ddd: 0,
-    assets: [
-      {
-        id: 'pic_0',
-        w: picSize,
-        h: picSize,
-        u: '',
-        p: picDataUrl,
-        e: 1, // embedded data URL
-      },
-    ],
-    layers: [
-      // Monkey layers come first so they render on top of the cartoon —
-      // walking *in front of* the absurd story, pointing at it.
-      ...buildMonkeyLayers(2),
-      {
-        ddd: 0,
-        ind: 1,
-        ty: 2, // image layer
-        nm: 'cartoon',
-        refId: 'pic_0',
-        sr: 1,
-        ks: {
-          o: { a: 0, k: 100 },
-          r: { a: 1, k: jiggleKeys },
-          p: { a: 1, k: driftKeys },
-          a: { a: 0, k: [picSize / 2, picSize / 2, 0] },
-          s: { a: 1, k: zoomKeys },
-        },
-        ao: 0,
-        ip: 0,
-        op: FRAMES,
-        st: 0,
-        bm: 0,
-      },
-    ],
+    assets: [],
+    layers: buildMonkeyLayers(1),
+  };
+}
+
+// Mirrors the wobbleAt() math in recordWobble.ts so the cartoon's motion is
+// identical between the two engines. Lottie's job is to add the monkey on
+// top, not to replace any of the existing wobble.
+function tri(t: number): number {
+  return 0.5 - 0.5 * Math.cos(Math.PI * 2 * t);
+}
+
+interface CartoonFrame {
+  scale: number;
+  dx: number;
+  dy: number;
+  rot: number;
+}
+
+function cartoonWobbleAt(ms: number): CartoonFrame {
+  const zoomPhase = (ms % 2400) / 2400;
+  const driftPhase = (ms % 5000) / 5000;
+  const jigglePhase = (ms % 1600) / 1600;
+  return {
+    scale: 1 + 0.05 * tri(zoomPhase),
+    dx: 12 * Math.sin(driftPhase * Math.PI * 2) - 6,
+    dy: 8 * Math.sin(driftPhase * Math.PI * 2 + Math.PI / 2) + 1,
+    rot: ((2.8 * tri(jigglePhase) - 1.4) * Math.PI) / 180,
   };
 }
 
@@ -462,18 +424,12 @@ function triggerDownload(blob: Blob, fileName: string): void {
   URL.revokeObjectURL(url);
 }
 
-async function fetchAsDataUrl(src: string): Promise<{ dataUrl: string; w: number; h: number }> {
+async function loadImage(src: string): Promise<HTMLImageElement> {
   const img = new Image();
   img.crossOrigin = 'anonymous';
   img.src = src;
   await img.decode();
-  const c = document.createElement('canvas');
-  c.width = img.naturalWidth;
-  c.height = img.naturalHeight;
-  const cx = c.getContext('2d');
-  if (!cx) throw new Error('Canvas 2D context unavailable');
-  cx.drawImage(img, 0, 0);
-  return { dataUrl: c.toDataURL('image/png'), w: img.naturalWidth, h: img.naturalHeight };
+  return img;
 }
 
 export async function recordWobbleVideoLottie(opts: {
@@ -484,16 +440,15 @@ export async function recordWobbleVideoLottie(opts: {
   const mime = pickMime();
   if (!mime) throw new Error('MediaRecorder not supported in this browser');
 
-  // Lazy-load lottie-web only when this engine is actually used.
+  // Lazy-load lottie-web only when this engine is actually used. Pre-decode
+  // the cartoon as an HTMLImageElement so it's ready for the very first
+  // drawFrame call — no race with Lottie's asset loader.
   const [{ default: lottie }, picture] = await Promise.all([
     import('lottie-web'),
-    fetchAsDataUrl(pictureUrl),
+    loadImage(pictureUrl),
   ]);
 
-  // Cartoons are square in the spec — assume so for layout. If they're not,
-  // Lottie will still render at the asset's intrinsic aspect inside the layer.
-  const picSize = picture.w;
-  const animationData = buildWobbleAnimation(picture.dataUrl, picSize);
+  const animationData = buildMonkeyComposition();
 
   const canvas = document.createElement('canvas');
   canvas.width = W;
@@ -502,22 +457,18 @@ export async function recordWobbleVideoLottie(opts: {
   if (!ctx) throw new Error('Canvas 2D context unavailable');
 
   // Lottie-web's canvas renderer sizes its draw target from the container's
-  // layout box, not from CSS width/height. Off-screen positioning
-  // (`left: -99999px`) sometimes resolves to a zero-dimension box, leaving
-  // the WebM with the cream background but no cartoon. `visibility: hidden`
-  // keeps the element laid out at full 720×1280 while staying invisible.
-  //
-  // Earlier this module tried to share our recording context via
-  // `rendererSettings.context`; that path is brittle across lottie-web
-  // versions. Instead, lottie owns its own internal canvas, and we copy
-  // from it onto the recording canvas each frame.
+  // resolved layout box. We need real dimensions to exist in layout, but the
+  // host element must not be visible to the user. `transform: translateX`
+  // moves it off-screen while keeping its layout intact and its paints
+  // running normally — `visibility: hidden` was the previous attempt and
+  // appeared to suppress canvas updates in some browser versions.
   const host = document.createElement('div');
   host.style.position = 'fixed';
   host.style.left = '0';
   host.style.top = '0';
   host.style.width = `${W}px`;
   host.style.height = `${H}px`;
-  host.style.visibility = 'hidden';
+  host.style.transform = 'translateX(-200vw)';
   host.style.pointerEvents = 'none';
   document.body.appendChild(host);
 
@@ -572,17 +523,36 @@ export async function recordWobbleVideoLottie(opts: {
   const start = performance.now();
   let raf = 0;
 
+  // Cartoon layout — matches the CSS-path recorder so the two engines'
+  // outputs are spatially identical apart from the monkey overlay.
+  const margin = 40;
+  const picRenderSize = W - margin * 2;
+  const picCx = margin + picRenderSize / 2;
+  const picCy = (H - picRenderSize) / 2 - 60;
+
   function drawFrame(now: number): void {
     const elapsed = now - start;
     const frame = Math.min(FRAMES - 1, (elapsed / 1000) * FPS);
+    const w = cartoonWobbleAt(elapsed);
 
-    // Advance the Lottie composition into its own internal canvas.
-    anim.goToAndStop(frame, true);
-
-    // Cream background, then the Lottie frame copied across. drawImage scales
-    // automatically if the source canvas resolution differs from the target.
+    // 1. Cream background.
     ctx!.fillStyle = CREAM;
     ctx!.fillRect(0, 0, W, H);
+
+    // 2. Cartoon — drawn manually with the same four-axis wobble math the
+    //    CSS path uses. No Lottie involvement here.
+    ctx!.save();
+    ctx!.translate(picCx + w.dx, picCy + w.dy);
+    ctx!.rotate(w.rot);
+    ctx!.scale(w.scale, w.scale);
+    ctx!.drawImage(picture, -picRenderSize / 2, -picRenderSize / 2, picRenderSize, picRenderSize);
+    ctx!.restore();
+
+    // 3. Monkey — Lottie advances its own canvas to the current frame, then
+    //    we copy it onto the recording canvas. Lottie's canvas has a
+    //    transparent background (clearCanvas: true), so only the monkey
+    //    pixels blit on top of the cartoon.
+    anim.goToAndStop(frame, true);
     ctx!.drawImage(lottieCanvas, 0, 0, W, H);
 
     // Pulsing source-attribution badge, mirroring the CSS .picture-wobble-pulse
