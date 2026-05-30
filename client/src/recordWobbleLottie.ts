@@ -84,17 +84,20 @@ function rect(x: number, y: number, w: number, h: number, r = 8): object {
 }
 
 // Body bob during walk — torso y oscillates ±4 px around its ground y.
+// Position keyframes must be 3D arrays (with z=0) for lottie-web's canvas
+// renderer to read them; 2D `[x, y]` arrays render as if the transform
+// were missing and the layer collapses to anchor-only.
 function walkBobY(groundY: number): Lk[] {
   return kf([
-    { t: 0, s: [W + 80, groundY] },
-    { t: 45, s: [W + 60, groundY] },
-    { t: 55, s: [W * 0.92, groundY - 4] },
-    { t: 65, s: [W * 0.86, groundY] },
-    { t: 75, s: [W * 0.82, groundY - 4] },
-    { t: 90, s: [W * 0.78, groundY] },
-    { t: 120, s: [W * 0.78, groundY] },
-    { t: 135, s: [W * 0.78, groundY + 22] }, // drops as it falls
-    { t: 150, s: [W * 0.78, groundY + 22] },
+    { t: 0, s: [W + 80, groundY, 0] },
+    { t: 45, s: [W + 60, groundY, 0] },
+    { t: 55, s: [W * 0.92, groundY - 4, 0] },
+    { t: 65, s: [W * 0.86, groundY, 0] },
+    { t: 75, s: [W * 0.82, groundY - 4, 0] },
+    { t: 90, s: [W * 0.78, groundY, 0] },
+    { t: 120, s: [W * 0.78, groundY, 0] },
+    { t: 135, s: [W * 0.78, groundY + 22, 0] }, // drops as it falls
+    { t: 150, s: [W * 0.78, groundY + 22, 0] },
   ]);
 }
 
@@ -230,8 +233,8 @@ function buildMonkeyLayers(startIndex: number): object[] {
       r: { a: 1, k: headTilt() },
       // Head sits above the torso's centre. Anchor at base of head so it
       // tilts naturally from the neck rather than swinging from the crown.
-      p: { a: 0, k: [0, -68] },
-      a: { a: 0, k: [0, 30] },
+      p: { a: 0, k: [0, -68, 0] },
+      a: { a: 0, k: [0, 30, 0] },
       s: { a: 0, k: [100, 100, 100] },
     },
     shapes: [
@@ -258,8 +261,8 @@ function buildMonkeyLayers(startIndex: number): object[] {
     ks: {
       o: { a: 0, k: 100 },
       r: { a: 1, k: pointArmRotation() },
-      p: { a: 0, k: [-32, -32] }, // left shoulder from viewer's POV — the cartoon is up-left
-      a: { a: 0, k: [0, -36] },
+      p: { a: 0, k: [-32, -32, 0] }, // left shoulder from viewer's POV — the cartoon is up-left
+      a: { a: 0, k: [0, -36, 0] },
       s: { a: 0, k: [100, 100, 100] },
     },
     shapes: [group(rect(0, 0, 18, 72, 9), FUR)],
@@ -280,8 +283,8 @@ function buildMonkeyLayers(startIndex: number): object[] {
     ks: {
       o: { a: 0, k: 100 },
       r: { a: 1, k: freeArmRotation() },
-      p: { a: 0, k: [32, -32] },
-      a: { a: 0, k: [0, -36] },
+      p: { a: 0, k: [32, -32, 0] },
+      a: { a: 0, k: [0, -36, 0] },
       s: { a: 0, k: [100, 100, 100] },
     },
     shapes: [group(rect(0, 0, 18, 72, 9), FUR)],
@@ -303,8 +306,8 @@ function buildMonkeyLayers(startIndex: number): object[] {
     ks: {
       o: { a: 0, k: 100 },
       r: { a: 1, k: legRotation(0) },
-      p: { a: 0, k: [-16, 44] },
-      a: { a: 0, k: [0, -40] },
+      p: { a: 0, k: [-16, 44, 0] },
+      a: { a: 0, k: [0, -40, 0] },
       s: { a: 0, k: [100, 100, 100] },
     },
     shapes: [group(rect(0, 0, 22, 78, 10), FUR)],
@@ -325,8 +328,8 @@ function buildMonkeyLayers(startIndex: number): object[] {
     ks: {
       o: { a: 0, k: 100 },
       r: { a: 1, k: legRotation(4) }, // out-of-phase with the other leg
-      p: { a: 0, k: [16, 44] },
-      a: { a: 0, k: [0, -40] },
+      p: { a: 0, k: [16, 44, 0] },
+      a: { a: 0, k: [0, -40, 0] },
       s: { a: 0, k: [100, 100, 100] },
     },
     shapes: [group(rect(0, 0, 22, 78, 10), FUR)],
