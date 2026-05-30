@@ -1,11 +1,12 @@
 {
   "name": "client",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": true,
   "type": "module",
   "license": "AGPL-3.0-only",
   "scripts": {
     "dev": "vite",
+    "prebuild": "node ../scripts/bump-version.mjs patch --no-git --ci-skip",
     "build": "tsc -p tsconfig.json && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit -p tsconfig.json"
