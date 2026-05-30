@@ -33,7 +33,8 @@
     "version:patch": "node scripts/bump-version.mjs patch",
     "version:minor": "node scripts/bump-version.mjs minor",
     "version:major": "node scripts/bump-version.mjs major",
-    "version:dry": "node scripts/bump-version.mjs patch --dry"
+    "version:dry": "node scripts/bump-version.mjs patch --dry",
+    "test:share": "node -e \"console.log('Run npm run dev in another terminal, then open: http://localhost:5173/?test=share')\""
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^7.18.0",
