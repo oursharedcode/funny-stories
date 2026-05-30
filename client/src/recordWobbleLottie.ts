@@ -197,12 +197,15 @@ function drawMonkey(
   drawLimbSprite(ctx, sprites.arm, -32, -32, m.armFreeRot, ARM_W, ARM_H);
   drawLimbSprite(ctx, sprites.arm, 32, -32, m.armPointRot, ARM_W, ARM_H);
 
-  // Head — pivots around the neck. translate(0, -68) lands on the neck;
-  // rotate; translate(0, -39) shifts the canvas origin up by half the head
-  // height so drawImage with top-left at (-w/2, -h/2) puts the head's
-  // geometric centre directly above the neck pivot.
+  // Head — pivots around the neck. Pulled 80% of the head's height (≈62 px)
+  // closer to the torso than the previous spec called for, so the head
+  // overlaps the torso instead of floating 20 px above it. translate(0, -6)
+  // lands on the new neck pivot (just above torso centre); rotate; then
+  // translate(0, -39) shifts the canvas origin up by half the head height
+  // so drawImage with top-left at (-w/2, -h/2) puts the head's geometric
+  // centre directly above the pivot.
   ctx.save();
-  ctx.translate(0, -68);
+  ctx.translate(0, -6);
   ctx.rotate(m.headRot);
   ctx.translate(0, -39);
   ctx.drawImage(sprites.head, -HEAD_W / 2, -HEAD_H / 2, HEAD_W, HEAD_H);
