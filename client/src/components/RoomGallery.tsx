@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import ProseText from './ProseText';
 import LogoStamp from './LogoStamp';
 import { downloadStoryImage } from '../downloadStory';
+import { isVideoRecordingSupported, recordWobbleVideo } from '../recordWobble';
 import type { GalleryEntry } from 'shared';
 
 interface Props {
@@ -16,6 +17,8 @@ interface Props {
 export default function RoomGallery({ entries }: Props) {
   const { t } = useTranslation();
   const [index, setIndex] = useState(0);
+  const [recording, setRecording] = useState(false);
+  const videoSupported = isVideoRecordingSupported();
 
   if (entries.length === 0) return null;
   // entries can be re-broadcast as late pictures arrive; keep the index valid.
@@ -24,6 +27,16 @@ export default function RoomGallery({ entries }: Props) {
 
   function step(delta: number): void {
     setIndex((safeIndex + delta + entries.length) % entries.length);
+  }
+
+  async function shareVideo(): Promise<void> {
+    if (!entry.pictureUrl || recording) return;
+    setRecording(true);
+    try {
+      await recordWobbleVideo({ nickname: entry.nickname, pictureUrl: entry.pictureUrl });
+    } finally {
+      setRecording(false);
+    }
   }
 
   return (
@@ -37,12 +50,21 @@ export default function RoomGallery({ entries }: Props) {
       </p>
 
       {entry.pictureUrl ? (
+        // Three stacked wrappers each carry one of the four CSS-keyframe
+        // wobble axes; the innermost img carries the pulse-free transform.
+        // The recorded WebM mirrors this composition in recordWobble.ts.
         <div className="relative">
-          <img
-            src={entry.pictureUrl}
-            alt={t('gallery.pictureAlt', { nickname: entry.nickname })}
-            className="w-full rounded-lg shadow"
-          />
+          <div className="picture-wobble-drift">
+            <div className="picture-wobble-jiggle">
+              <div className="picture-wobble-zoom">
+                <img
+                  src={entry.pictureUrl}
+                  alt={t('gallery.pictureAlt', { nickname: entry.nickname })}
+                  className="w-full rounded-lg shadow"
+                />
+              </div>
+            </div>
+          </div>
           <LogoStamp />
         </div>
       ) : (
@@ -65,6 +87,16 @@ export default function RoomGallery({ entries }: Props) {
       >
         {entry.pictureUrl ? t('gallery.download') : t('gallery.downloadStoryOnly')}
       </button>
+
+      {entry.pictureUrl && videoSupported && (
+        <button
+          className="w-full rounded border border-amber-300 bg-white px-4 py-3 font-semibold text-pink-500 disabled:cursor-wait disabled:opacity-60"
+          disabled={recording}
+          onClick={() => void shareVideo()}
+        >
+          {recording ? t('gallery.recording') : t('gallery.shareVideo')}
+        </button>
+      )}
 
       <div className="flex items-center justify-between pt-1">
         <button

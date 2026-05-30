@@ -68,7 +68,9 @@
     "prev": "Предыдущая история",
     "next": "Следующая история",
     "download": "Скачать историю и картинку",
-    "downloadStoryOnly": "Скачать историю"
+    "downloadStoryOnly": "Скачать историю",
+    "shareVideo": "Поделиться видео (5 сек)",
+    "recording": "Запись…"
   },
   "playerLost": {
     "label": "{{nickname}} больше не в игре",

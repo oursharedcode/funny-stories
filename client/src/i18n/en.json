@@ -68,7 +68,9 @@
     "prev": "Previous story",
     "next": "Next story",
     "download": "Download story and picture",
-    "downloadStoryOnly": "Download story"
+    "downloadStoryOnly": "Download story",
+    "shareVideo": "Share as 5s video",
+    "recording": "Recording…"
   },
   "playerLost": {
     "label": "{{nickname}} exited",
