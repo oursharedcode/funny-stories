@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { socket } from '../socket';
 import Wordmark from '../components/art/Wordmark';
+import QRCode from '../components/QRCode';
 import SourceFooter from '../components/SourceFooter';
 import { LANGUAGES, isLanguage } from '../languages';
 import { getWobbleEngine, setWobbleEngine, type WobbleEngine } from '../wobblePreference';
@@ -222,6 +223,20 @@ export default function HomeScreen({ onJoined }: Props) {
             <p className="font-display font-bold text-4xl text-pink-500 tracking-widest">
               {urlRoom}
             </p>
+          </div>
+
+          {/* Mirror the lobby's QR pattern: show the same join link as a QR
+              so a joiner can pass their phone to nearby friends instead of
+              re-typing the room code or chasing a fresh link. The encoded
+              URL preserves `?lang=` when present, matching LobbyScreen. */}
+          <div className="flex flex-col items-center gap-2 bg-white p-4 rounded">
+            <QRCode
+              value={`${window.location.origin}/?room=${urlRoom}${
+                urlLang ? `&lang=${urlLang}` : ''
+              }`}
+              size={160}
+            />
+            <p className="text-xs text-gray-600">{t('lobby.qrCaption')}</p>
           </div>
 
           <input
