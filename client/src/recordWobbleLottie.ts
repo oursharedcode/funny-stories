@@ -99,7 +99,7 @@ function monkeyAt(ms: number): MonkeyFrame | null {
   // Off-screen for the first 1.5 s.
   if (ms < 1500) return null;
 
-  let torsoX = W * 0.22;
+  let torsoX = W * 0.78;
   let torsoY = GROUND_Y;
   let torsoRot = 0;
   let legLeftRot = 0;
@@ -109,9 +109,9 @@ function monkeyAt(ms: number): MonkeyFrame | null {
   let headRot = 0;
 
   if (ms < 3000) {
-    // 1.5–3.0 s — walking in from the left with alternating leg swings.
+    // 1.5–3.0 s — walking in from the right with alternating leg swings.
     const t = (ms - 1500) / 1500; // 0 → 1
-    torsoX = (1 - t) * -60 + t * (W * 0.22);
+    torsoX = (1 - t) * (W + 60) + t * (W * 0.78);
     torsoY = GROUND_Y + Math.sin(t * Math.PI * 6) * 4;
     const swing = degToRad(28 * Math.sin(t * Math.PI * 6));
     legLeftRot = swing;
