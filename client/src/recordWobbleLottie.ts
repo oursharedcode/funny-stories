@@ -89,7 +89,11 @@ interface MonkeyFrame {
   headRot: number;
 }
 
-const GROUND_Y = 1180;
+// Torso-centre y where the monkey stands. Was 1180; shifted up by 206 px
+// (the monkey's full head-to-foot height: 84 px above torso centre for the
+// head + 122 px below for the legs) so the whole figure sits higher in the
+// frame and stops overlapping the QR attribution footer at the bottom.
+const GROUND_Y = 974;
 
 function monkeyAt(ms: number): MonkeyFrame | null {
   // Off-screen for the first 1.5 s.
@@ -190,12 +194,14 @@ function drawMonkey(
   // the rotation pivot at this point in the transform stack).
   ctx.drawImage(sprites.torso, -TORSO_W / 2, -TORSO_H / 2, TORSO_W, TORSO_H);
 
-  // Free arm under the body, pointing arm on top so the gesture is visible.
-  // Pointing arm sits on the shoulder closer to the cartoon (screen-right
-  // when the monkey stands on the left half of the canvas) so the gesture
-  // doesn't have to reach across the body.
-  drawLimbSprite(ctx, sprites.arm, -32, -32, m.armFreeRot, ARM_W, ARM_H);
-  drawLimbSprite(ctx, sprites.arm, 32, -32, m.armPointRot, ARM_W, ARM_H);
+  // The pointing arm now sits on the screen-LEFT shoulder (attachX = -32 =
+  // monkey's own right arm — the monkey faces the viewer). Free arm moved to
+  // the screen-RIGHT shoulder. Animation values are unchanged so the gesture
+  // keeps its existing direction; only the arm doing it switches.
+  // Render order keeps the pointing arm last so it stays on top of the torso
+  // and the free arm during the dramatic point.
+  drawLimbSprite(ctx, sprites.arm, 32, -32, m.armFreeRot, ARM_W, ARM_H);
+  drawLimbSprite(ctx, sprites.arm, -32, -32, m.armPointRot, ARM_W, ARM_H);
 
   // Head — pivots around the neck. Pulled 80% of the head's height (≈62 px)
   // closer to the torso than the previous spec called for, so the head
@@ -205,7 +211,7 @@ function drawMonkey(
   // so drawImage with top-left at (-w/2, -h/2) puts the head's geometric
   // centre directly above the pivot.
   ctx.save();
-  ctx.translate(0, -6);
+  ctx.translate(0, -4);
   ctx.rotate(m.headRot);
   ctx.translate(0, -39);
   ctx.drawImage(sprites.head, -HEAD_W / 2, -HEAD_H / 2, HEAD_W, HEAD_H);
