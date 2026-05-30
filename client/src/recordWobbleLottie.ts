@@ -24,9 +24,25 @@ const DURATION_MS = 5000;
 const CREAM = '#fef3c7';
 const INK = '#1f2937';
 const PINK = '#ec4899';
-const FUR = '#8c5b33';
-const SKIN = '#e9c78c';
-const EYE = '#1f1f1f';
+
+// Monkey sprite kit. Sizes are the rendered sizes on the recording canvas;
+// each source PNG ships at 2× for crisp downscaling under the per-frame
+// rotation. See client/public/monkey/ for the source files.
+const TORSO_W = 70;
+const TORSO_H = 95;
+const HEAD_W = 78;
+const HEAD_H = 78;
+const ARM_W = 18;
+const ARM_H = 72;
+const LEG_W = 22;
+const LEG_H = 78;
+
+interface MonkeySprites {
+  torso: HTMLImageElement;
+  head: HTMLImageElement;
+  arm: HTMLImageElement;
+  leg: HTMLImageElement;
+}
 
 // Half-cycle sine eased between 0 and 1 — matches the CSS ease-in-out curve
 // closely enough for visual parity at 30 fps.
@@ -133,62 +149,30 @@ function degToRad(deg: number): number {
   return (deg * Math.PI) / 180;
 }
 
-function drawEllipse(
+// Draw a sprite-based limb (arm or leg) attached at (attachX, attachY) on its
+// parent and rotated around that attachment point. The sprite's top-centre
+// pixel becomes the pivot; the limb extends downward.
+function drawLimbSprite(
   ctx: CanvasRenderingContext2D,
-  cx: number,
-  cy: number,
-  w: number,
-  h: number,
-  color: string,
-): void {
-  ctx.fillStyle = color;
-  ctx.beginPath();
-  ctx.ellipse(cx, cy, w / 2, h / 2, 0, 0, Math.PI * 2);
-  ctx.fill();
-}
-
-function drawRoundedRect(
-  ctx: CanvasRenderingContext2D,
-  x: number,
-  y: number,
-  w: number,
-  h: number,
-  r: number,
-): void {
-  ctx.beginPath();
-  ctx.moveTo(x + r, y);
-  ctx.lineTo(x + w - r, y);
-  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-  ctx.lineTo(x + w, y + h - r);
-  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-  ctx.lineTo(x + r, y + h);
-  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-  ctx.lineTo(x, y + r);
-  ctx.quadraticCurveTo(x, y, x + r, y);
-  ctx.closePath();
-  ctx.fill();
-}
-
-// Draw a limb (rounded rect) attached at (attachX, attachY) on its parent and
-// rotated around that attachment point. The limb hangs down (positive y).
-function drawLimb(
-  ctx: CanvasRenderingContext2D,
+  sprite: HTMLImageElement,
   attachX: number,
   attachY: number,
   rotation: number,
   w: number,
   h: number,
-  radius: number,
 ): void {
   ctx.save();
   ctx.translate(attachX, attachY);
   ctx.rotate(rotation);
-  ctx.fillStyle = FUR;
-  drawRoundedRect(ctx, -w / 2, 0, w, h, radius);
+  ctx.drawImage(sprite, -w / 2, 0, w, h);
   ctx.restore();
 }
 
-function drawMonkey(ctx: CanvasRenderingContext2D, ms: number): void {
+function drawMonkey(
+  ctx: CanvasRenderingContext2D,
+  ms: number,
+  sprites: MonkeySprites,
+): void {
   const m = monkeyAt(ms);
   if (!m) return;
 
@@ -197,26 +181,26 @@ function drawMonkey(ctx: CanvasRenderingContext2D, ms: number): void {
   ctx.rotate(m.torsoRot);
 
   // Legs first so the torso paints on top of their hip attachments.
-  drawLimb(ctx, -16, 44, m.legLeftRot, 22, 78, 10);
-  drawLimb(ctx, 16, 44, m.legRightRot, 22, 78, 10);
+  drawLimbSprite(ctx, sprites.leg, -16, 44, m.legLeftRot, LEG_W, LEG_H);
+  drawLimbSprite(ctx, sprites.leg, 16, 44, m.legRightRot, LEG_W, LEG_H);
 
-  // Torso.
-  drawEllipse(ctx, 0, 0, 70, 95, FUR);
-  drawEllipse(ctx, 0, 12, 45, 55, SKIN);
+  // Torso — image centred on the torso's geometric centre (which is also
+  // the rotation pivot at this point in the transform stack).
+  ctx.drawImage(sprites.torso, -TORSO_W / 2, -TORSO_H / 2, TORSO_W, TORSO_H);
 
   // Free arm under the body, pointing arm on top so the gesture is visible.
-  drawLimb(ctx, 32, -32, m.armFreeRot, 18, 72, 9);
-  drawLimb(ctx, -32, -32, m.armPointRot, 18, 72, 9);
+  drawLimbSprite(ctx, sprites.arm, 32, -32, m.armFreeRot, ARM_W, ARM_H);
+  drawLimbSprite(ctx, sprites.arm, -32, -32, m.armPointRot, ARM_W, ARM_H);
 
-  // Head — pivots around the neck (where it meets the torso).
+  // Head — pivots around the neck. translate(0, -68) lands on the neck;
+  // rotate; translate(0, -39) shifts the canvas origin up by half the head
+  // height so drawImage with top-left at (-w/2, -h/2) puts the head's
+  // geometric centre directly above the neck pivot.
   ctx.save();
   ctx.translate(0, -68);
   ctx.rotate(m.headRot);
   ctx.translate(0, -39);
-  drawEllipse(ctx, 0, 0, 78, 78, FUR);
-  drawEllipse(ctx, 0, 8, 50, 40, SKIN);
-  drawEllipse(ctx, -16, -10, 10, 14, EYE);
-  drawEllipse(ctx, 16, -10, 10, 14, EYE);
+  ctx.drawImage(sprites.head, -HEAD_W / 2, -HEAD_H / 2, HEAD_W, HEAD_H);
   ctx.restore();
 
   ctx.restore();
@@ -266,6 +250,16 @@ async function loadImage(src: string): Promise<HTMLImageElement> {
   return img;
 }
 
+async function loadMonkeySprites(): Promise<MonkeySprites> {
+  const [torso, head, arm, leg] = await Promise.all([
+    loadImage('/monkey/torso.png'),
+    loadImage('/monkey/head.png'),
+    loadImage('/monkey/arm.png'),
+    loadImage('/monkey/leg.png'),
+  ]);
+  return { torso, head, arm, leg };
+}
+
 export async function recordWobbleVideoLottie(opts: {
   nickname: string;
   pictureUrl: string;
@@ -274,7 +268,9 @@ export async function recordWobbleVideoLottie(opts: {
   const mime = pickMime();
   if (!mime) throw new Error('MediaRecorder not supported in this browser');
 
-  const picture = await loadImage(pictureUrl);
+  // Load the cartoon and the four monkey sprites in parallel so the recording
+  // can start as soon as both arrive.
+  const [picture, sprites] = await Promise.all([loadImage(pictureUrl), loadMonkeySprites()]);
 
   const canvas = document.createElement('canvas');
   canvas.width = W;
@@ -326,7 +322,7 @@ export async function recordWobbleVideoLottie(opts: {
     ctx!.restore();
 
     // 3. Monkey — walks, points, falls. Painted on top of the cartoon.
-    drawMonkey(ctx!, elapsed);
+    drawMonkey(ctx!, elapsed, sprites);
 
     // 4. Pulsing nickname + source badge at the bottom.
     const pulsePhase = ((elapsed % 600) / 600) * Math.PI * 2;
