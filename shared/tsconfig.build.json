@@ -8,6 +8,6 @@
     "declaration": true,
     "noEmit": false
   },
-  "include": ["events.ts"],
+  "include": ["events.ts", "languages.ts"],
   "exclude": ["dist", "node_modules"]
 }

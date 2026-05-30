@@ -5,7 +5,13 @@
 // ============================================================================
 
 export type RoomPhase = 'lobby' | 'playing' | 'reveal' | 'ended';
-export type Language = 'en' | 'ru';
+
+// Language identity (the union) and the human-facing registry both live in
+// shared/languages.ts so adding a language is a one-file edit. Re-exported
+// here for consumers that already import everything from 'shared'.
+export { LANGUAGES, isLanguage } from './languages.js';
+export type { Language, LanguageOption } from './languages.js';
+import type { Language } from './languages.js';
 
 export interface Player {
   // socket.id — rotates on each connection; no stable identity across reconnects.

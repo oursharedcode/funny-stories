@@ -5,6 +5,22 @@ import { isEnglishProfane } from './en.js';
 import { isRussianProfane } from './ru.js';
 import { pickStandin } from './standins.js';
 
+// Language → profanity matcher map. Adding a new language with profanity
+// coverage means writing a `<code>.ts` matcher in this folder and adding a
+// row here. Missing entries are fine — that language simply has no native
+// matcher, and `filterAnswer` falls back to the OR over every registered
+// matcher (load-bearing for the silent-stand-in brand asset: an English-room
+// player typing Russian profanity is still caught, and vice-versa).
+//
+// Type is `Partial<Record<Language, …>>` because the i18n strings ship ahead
+// of native-speaker profanity work — a stub language registers in shared/
+// without yet having a matcher here.
+type ProfanityMatcher = (text: string) => boolean;
+const MATCHERS: Partial<Record<Language, ProfanityMatcher>> = {
+  en: isEnglishProfane,
+  ru: isRussianProfane,
+};
+
 // Light pre-normalisation (spec §6):
 //  - lowercase
 //  - strip diacritics (é -> e) via NFKD decomposition + combining-mark removal
@@ -18,7 +34,7 @@ function normalize(s: string): string {
     .replace(/[̀-ͯ]/g, '');
 }
 
-// Aggressive variant for Russian matching: also collapses non-letter
+// Aggressive variant for Russian-style matching: also collapses non-letter
 // separators (s.h.i.t -> shit).
 function aggressiveNormalize(s: string): string {
   return normalize(s).replace(/[^\p{L}\p{N}\s]/gu, '');
@@ -37,13 +53,11 @@ export function filterAnswer(
   const normalized = normalize(answer);
   const aggressive = aggressiveNormalize(answer);
 
-  if (
-    isEnglishProfane(normalized) ||
-    isEnglishProfane(aggressive) ||
-    isRussianProfane(normalized) ||
-    isRussianProfane(aggressive)
-  ) {
-    return pickStandin(language, questionIndex);
+  for (const matcher of Object.values(MATCHERS)) {
+    if (!matcher) continue;
+    if (matcher(normalized) || matcher(aggressive)) {
+      return pickStandin(language, questionIndex);
+    }
   }
   return answer;
 }

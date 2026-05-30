@@ -1,34 +1,54 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { createRequire } from 'node:module';
+import { readdirSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
+import { LANGUAGES, isLanguage } from 'shared';
 import type { Language } from '../types.js';
 
 // createRequire works under both tsx (dev) and compiled Node (prod, once the
-// build script copies the .json files into dist/i18n — see step 14).
+// build script copies the .json files into dist/i18n — see scripts/copy-i18n).
 const require = createRequire(import.meta.url);
 type ServerI18n = { questions: string[]; prose: string; imagePrompt: string };
-const en = require('./en.json') as ServerI18n;
-const ru = require('./ru.json') as ServerI18n;
 
-export const QUESTIONS: Record<Language, readonly string[]> = {
-  en: en.questions,
-  ru: ru.questions,
-};
+// Auto-discover every `<code>.json` next to this module and load it into a
+// `Language → ServerI18n` map. Adding a language stops requiring an edit to
+// this bootstrap.
+const i18nDir = dirname(fileURLToPath(import.meta.url));
+const data = {} as Record<Language, ServerI18n>;
+for (const file of readdirSync(i18nDir)) {
+  if (!file.endsWith('.json')) continue;
+  const code = file.slice(0, -5);
+  if (!isLanguage(code)) continue;
+  data[code] = require(`./${file}`) as ServerI18n;
+}
 
-export const PROSE_TEMPLATES: Record<Language, string> = {
-  en: en.prose,
-  ru: ru.prose,
-};
+// Exhaustiveness check: every language in the canonical registry must have a
+// server-side translation file. Throws on boot if any are missing rather than
+// 500-ing mid-game when a player picks the broken language.
+const missing = LANGUAGES.filter((opt) => !data[opt.code]).map((opt) => opt.code);
+if (missing.length > 0) {
+  throw new Error(`[i18n] Missing server/src/i18n/<code>.json for: ${missing.join(', ')}`);
+}
+
+function project<V>(pick: (d: ServerI18n) => V): Record<Language, V> {
+  const out = {} as Record<Language, V>;
+  for (const [code, d] of Object.entries(data) as Array<[Language, ServerI18n]>) {
+    out[code] = pick(d);
+  }
+  return out;
+}
+
+export const QUESTIONS: Record<Language, readonly string[]> = project((d) => d.questions);
+export const PROSE_TEMPLATES: Record<Language, string> = project((d) => d.prose);
 
 // Natural-sentence template for the AI image prompt (spec §10). Uses
 // slots 0-4 only — slots 5 ("what for") and 6 ("what was at the end")
 // produce abstract content that rarely translates into pixels, so they
 // are kept in the prose but excluded from the image prompt (item 18 of
 // BUGS_AND_IMPROVEMENTS_01.md).
-export const IMAGE_PROMPT_TEMPLATES: Record<Language, string> = {
-  en: en.imagePrompt,
-  ru: ru.imagePrompt,
-};
+export const IMAGE_PROMPT_TEMPLATES: Record<Language, string> = project((d) => d.imagePrompt);
 
 // Matches an answer that already begins with a connective that would
 // collide with a hardcoded "for " prefix. Item 20 of
