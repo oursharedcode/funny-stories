@@ -182,15 +182,24 @@ export async function recordWobbleVideoLottie(opts: {
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error('Canvas 2D context unavailable');
 
-  // Hidden container — lottie-web's canvas renderer still needs a DOM mount
-  // even when we tell it to draw into our context. Off-screen positioning
-  // keeps it out of layout / paint.
+  // Lottie-web's canvas renderer sizes its draw target from the container's
+  // layout box, not from CSS width/height. Off-screen positioning
+  // (`left: -99999px`) sometimes resolves to a zero-dimension box, leaving
+  // the WebM with the cream background but no cartoon. `visibility: hidden`
+  // keeps the element laid out at full 720×1280 while staying invisible.
+  //
+  // Earlier this module tried to share our recording context via
+  // `rendererSettings.context`; that path is brittle across lottie-web
+  // versions. Instead, lottie owns its own internal canvas, and we copy
+  // from it onto the recording canvas each frame.
   const host = document.createElement('div');
   host.style.position = 'fixed';
-  host.style.left = '-99999px';
+  host.style.left = '0';
   host.style.top = '0';
   host.style.width = `${W}px`;
   host.style.height = `${H}px`;
+  host.style.visibility = 'hidden';
+  host.style.pointerEvents = 'none';
   document.body.appendChild(host);
 
   const anim = lottie.loadAnimation({
@@ -200,9 +209,8 @@ export async function recordWobbleVideoLottie(opts: {
     autoplay: false,
     animationData,
     rendererSettings: {
-      context: ctx,
       preserveAspectRatio: 'xMidYMid meet',
-      clearCanvas: false,
+      clearCanvas: true,
       className: 'fs-lottie',
     },
   });
@@ -230,6 +238,16 @@ export async function recordWobbleVideoLottie(opts: {
     anim.addEventListener('DOMLoaded', () => resolve());
   });
 
+  // Lottie creates its own canvas inside `host` after DOMLoaded fires. Locate
+  // it once so we can blit from it onto the recording canvas each frame.
+  const foundCanvas = host.querySelector('canvas');
+  if (!(foundCanvas instanceof HTMLCanvasElement)) {
+    host.remove();
+    anim.destroy();
+    throw new Error('lottie-web did not create an internal canvas');
+  }
+  const lottieCanvas: HTMLCanvasElement = foundCanvas;
+
   recorder.start();
 
   const start = performance.now();
@@ -239,14 +257,14 @@ export async function recordWobbleVideoLottie(opts: {
     const elapsed = now - start;
     const frame = Math.min(FRAMES - 1, (elapsed / 1000) * FPS);
 
-    // Background — clearCanvas:false above means we paint it ourselves; this
-    // keeps the cream brand colour behind the Lottie composition.
+    // Advance the Lottie composition into its own internal canvas.
+    anim.goToAndStop(frame, true);
+
+    // Cream background, then the Lottie frame copied across. drawImage scales
+    // automatically if the source canvas resolution differs from the target.
     ctx!.fillStyle = CREAM;
     ctx!.fillRect(0, 0, W, H);
-
-    // Drive the Lottie composition to the current frame; lottie-web draws
-    // straight into our 2D context because we passed it via rendererSettings.
-    anim.goToAndStop(frame, true);
+    ctx!.drawImage(lottieCanvas, 0, 0, W, H);
 
     // Pulsing source-attribution badge, mirroring the CSS .picture-wobble-pulse
     // class. Stamped after Lottie so it sits on top of the cartoon.
