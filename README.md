@@ -1,6 +1,6 @@
 # Funny Stories
 
-A party game where 3–7 friends, on their phones, answer 7 silly questions about a shared story they can't see — then watch an AI cartoon goof of the result. Multi-lingual from day one. No accounts, no database, no analytics. Self-hostable for free.
+A party game where 3–7 friends, on their phones, answer 7 silly questions about a shared story they can't see — then watch an AI cartoon goof of the result. Multilingual from day one. No accounts, no database, no analytics. Self-hostable for free.
 
 [![Build](https://img.shields.io/github/actions/workflow/status/oursharedcode/funny-stories/ci.yml?branch=master)](https://github.com/oursharedcode/funny-stories/actions)
 [![License: AGPL-3.0](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](./LICENSE)
@@ -20,7 +20,7 @@ A party game where 3–7 friends, on their phones, answer 7 silly questions abou
 
 You deploy onto **your own** Cloudflare + Render accounts — both free, no credit card. The author hosts nothing. Two buttons, in order; carry two values between them.
 
-**1. Make a shared secret S** (32+ chars). Easiest: a password manager (Bitwarden, 1Password, KeePass) generating 40+ chars. Or pick a line:
+**1. Make a shared secret S** (32+ chars). On a phone: use a password-manager app (40+ chars, letters/digits only). On a computer, pick a line:
 
 ```bash
 openssl rand -hex 32                                                # macOS / Linux / Git Bash
@@ -52,7 +52,7 @@ When Render prompts for environment variables, paste:
 
 First build takes ~3 minutes. Open your `.onrender.com` URL on a phone and play.
 
-> **If "Generate picture" fails on every phone,** the two secrets don't match — re-check steps 2 and 3. The free Render tier also sleeps when idle, so the first visit after a quiet period is slow.
+> **If "Generate picture" fails on every phone,** the two secrets don't match — re-check steps 2 and 3. The free Render tier also sleeps when idle, so the first visit is slow.
 
 ## Documentation
 
