@@ -218,6 +218,79 @@ function drawMonkey(
   ctx.restore();
 
   ctx.restore();
+
+  drawSpeechBalloon(ctx, ms, m.torsoX, m.torsoY);
+}
+
+// Speech balloon with the laugh "ha-ha". Visible from the moment the
+// pointing arm finishes rising (t=3.0s) until 1 s before the end of the
+// 5-s clip (t=4.0s), then vanishes so the fall reads cleanly. English-only
+// text — the same in every language. Drawn in world coordinates (not
+// inside the monkey transform stack) so the balloon doesn't tilt with the
+// torso during the fall — though it disappears before the fall begins
+// anyway. Anchored to the left of the head; the monkey stands on the
+// right side of the canvas, so the balloon sits inboard rather than off
+// the canvas edge.
+const SPEECH_TEXT = 'ha-ha';
+const SPEECH_START_MS = 3000;
+const SPEECH_END_MS = 4000;
+const SPEECH_W = 160;
+const SPEECH_H = 70;
+
+function drawSpeechBalloon(
+  ctx: CanvasRenderingContext2D,
+  ms: number,
+  torsoX: number,
+  torsoY: number,
+): void {
+  if (ms < SPEECH_START_MS || ms >= SPEECH_END_MS) return;
+
+  // Anchor the balloon's tail tip near the head (top-left of head, slightly
+  // right of the figure's centreline). The body of the balloon floats up
+  // and to the left of the tail.
+  const tailX = torsoX - 30;
+  const tailY = torsoY - 70;
+  const bx = tailX - SPEECH_W + 30; // balloon left edge
+  const by = tailY - SPEECH_H - 10; // balloon top edge
+
+  ctx.save();
+  ctx.fillStyle = '#ffffff';
+  ctx.strokeStyle = '#1f2937';
+  ctx.lineWidth = 3;
+
+  // Rounded-rect body.
+  const r = 24;
+  ctx.beginPath();
+  ctx.moveTo(bx + r, by);
+  ctx.lineTo(bx + SPEECH_W - r, by);
+  ctx.quadraticCurveTo(bx + SPEECH_W, by, bx + SPEECH_W, by + r);
+  ctx.lineTo(bx + SPEECH_W, by + SPEECH_H - r);
+  ctx.quadraticCurveTo(bx + SPEECH_W, by + SPEECH_H, bx + SPEECH_W - r, by + SPEECH_H);
+  ctx.lineTo(bx + r, by + SPEECH_H);
+  ctx.quadraticCurveTo(bx, by + SPEECH_H, bx, by + SPEECH_H - r);
+  ctx.lineTo(bx, by + r);
+  ctx.quadraticCurveTo(bx, by, bx + r, by);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  // Tail — small triangle from the bottom-right of the balloon body down
+  // toward the head.
+  ctx.beginPath();
+  ctx.moveTo(bx + SPEECH_W - 50, by + SPEECH_H - 2);
+  ctx.lineTo(bx + SPEECH_W - 20, by + SPEECH_H - 2);
+  ctx.lineTo(tailX, tailY);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  // Text.
+  ctx.fillStyle = '#1f2937';
+  ctx.font = 'bold 36px system-ui, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(SPEECH_TEXT, bx + SPEECH_W / 2, by + SPEECH_H / 2);
+  ctx.restore();
 }
 
 // ── MediaRecorder setup ────────────────────────────────────────────────────
@@ -258,7 +331,16 @@ function triggerDownload(blob: Blob, fileName: string): void {
 
 async function loadImage(src: string): Promise<HTMLImageElement> {
   const img = new Image();
-  img.crossOrigin = 'anonymous';
+  // Only set crossOrigin for true cross-origin URLs. Setting it for
+  // same-origin requests can cause Android browsers to treat the image as
+  // CORS-restricted when the Workbox-cached response lacks explicit CORS
+  // headers — decode() then resolves but drawImage paints nothing,
+  // which is exactly the "no monkey on Android" symptom.
+  const isDataUrl = src.startsWith('data:');
+  const isAbsolute = /^https?:/.test(src);
+  if (!isDataUrl && isAbsolute && !src.startsWith(window.location.origin)) {
+    img.crossOrigin = 'anonymous';
+  }
   img.src = src;
   await img.decode();
   return img;
