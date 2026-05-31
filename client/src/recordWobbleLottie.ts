@@ -432,39 +432,6 @@ export async function recordWobbleVideoLottie(opts: {
     ctx!.drawImage(picture, -picRenderSize / 2, -picRenderSize / 2, picRenderSize, picRenderSize);
     ctx!.restore();
 
-    // DIAGNOSTIC overlay (top-left corner) — temporary aid for Android
-    // bug-hunt. Reports per-sprite naturalWidth × naturalHeight; 0×0 means
-    // the image never loaded (404, decoder failure, opaque SW response).
-    // Also draws each sprite directly at fixed offsets so the recorded
-    // WebM proves whether drawImage on these sprites works at all.
-    ctx!.save();
-    ctx!.fillStyle = 'rgba(0,0,0,0.55)';
-    ctx!.fillRect(0, 0, 380, 200);
-    ctx!.fillStyle = 'white';
-    ctx!.font = 'bold 18px system-ui, sans-serif';
-    ctx!.textAlign = 'left';
-    ctx!.textBaseline = 'top';
-    const lines = [
-      `torso: ${sprites.torso.naturalWidth}x${sprites.torso.naturalHeight}`,
-      `head:  ${sprites.head.naturalWidth}x${sprites.head.naturalHeight}`,
-      `arm:   ${sprites.arm.naturalWidth}x${sprites.arm.naturalHeight}`,
-      `leg:   ${sprites.leg.naturalWidth}x${sprites.leg.naturalHeight}`,
-      `t=${Math.round(elapsed)}ms`,
-    ];
-    lines.forEach((line, i) => ctx!.fillText(line, 10, 10 + i * 24));
-    // Direct sprite blit, no transforms — if this is blank too, the
-    // sprites failed to load; if present here but missing in the
-    // articulated monkey, the transform path is at fault.
-    try {
-      ctx!.drawImage(sprites.torso, 200, 10, 40, 54);
-      ctx!.drawImage(sprites.head, 250, 10, 44, 44);
-      ctx!.drawImage(sprites.arm, 300, 10, 10, 40);
-      ctx!.drawImage(sprites.leg, 320, 10, 12, 44);
-    } catch (e) {
-      ctx!.fillText(`drawImage threw: ${(e as Error).message}`, 10, 140);
-    }
-    ctx!.restore();
-
     // 3. Monkey — walks, points, falls. Painted on top of the cartoon.
     drawMonkey(ctx!, elapsed, sprites);
 
