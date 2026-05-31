@@ -29,8 +29,8 @@ No accounts, no database, no analytics. Self-hostable for free.
 
 You deploy onto **your own** Cloudflare + Render accounts — both free, no credit card. (You sign in with your Google account — just seconds)
 
-**1. Make a shared secret string (let's call it S)** (40+ chars). You will need it in steps 2 and 3.
-On a phone: use a password-manager app — or type your own random string. (important: 40+ chars, letters/digits only).
+**1. Make a shared secret string (let's call it S)** (40+ chars). You will need it in steps 2 and 3.\
+On a phone: use a password-manager app — or type your own random string. (important: 40+ chars, letters/digits only).\
 On a computer, pick a line:
 
 ```bash
