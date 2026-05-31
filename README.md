@@ -16,9 +16,16 @@ A party game where 3–7 friends, on their phones, answer 7 silly questions abou
 - **Reveal the cartoon.** After seven rounds, tap **Generate picture** to turn your story into a goofy AI cartoon.
 - **No one left behind.** Disconnect and you become a bot — no reconnect, no abandoned rooms.
 
+<p>
+  <a href="./assets/Story01.JPG"><img src="./assets/Story01.JPG" alt="A finished story" width="200"></a>
+  <a href="./client/public/monkeys-on-bus.png"><img src="./client/public/monkeys-on-bus.png" alt="Seven players" width="200" title="Seven players"></a>
+</p>
+
+*A finished story and the seven-players end screen — click to zoom.*
+
 ## Deploy your own (free, ~5 minutes)
 
-You deploy onto **your own** Cloudflare + Render accounts — both free, no credit card. The author hosts nothing. Two buttons, in order; carry two values between them.
+You deploy onto **your own** Cloudflare + Render accounts — both free, no credit card. Two buttons, in order; carry two values between them.
 
 **1. Make a shared secret S** (32+ chars). On a phone: use a password-manager app (40+ chars, letters/digits only). On a computer, pick a line:
 
