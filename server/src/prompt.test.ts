@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { it } from 'vitest';
+
 // Tests commented out: prompt.ts has been simplified to a plain slot
 // substitution from i18n's `imagePrompt`, so the assertions below
 // (STYLE_SUFFIX, length cap, duplicate/distinct-pair anchors, EN/RU
@@ -7,6 +9,11 @@
 // behaviour they covered is preserved in the commented-out block in
 // prompt.ts. Re-enable a subset (or rewrite) once the new prompt
 // design stabilises.
+//
+// The `it.todo` below keeps this a valid (non-empty) test suite so the
+// runner doesn't fail with "No test suite found", while flagging the
+// pending rewrite in the test report.
+it.todo('rewrite buildPrompt tests for the simplified prompt.ts');
 
 /* ============================================================================
 
