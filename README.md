@@ -25,9 +25,11 @@ A party game where 3–7 friends, on their phones, answer 7 silly questions abou
 
 ## Deploy your own (free, ~5 minutes)
 
-You deploy onto **your own** Cloudflare + Render accounts — both free, no credit card. The author hosts nothing. Two buttons, in order; carry two values between them.
+You deploy onto **your own** Cloudflare + Render accounts — both free, no credit card. (You sign in with your Google account — just seconds)
 
-**1. Make a shared secret S** (32+ chars). On a phone: use a password-manager app (40+ chars, letters/digits only). On a computer, pick a line:
+**1. Make a shared secret string (let's call it S)** (40+ chars). You will need it in steps 2 and 3.
+On a phone: use a password-manager app — or type your own random string. (important: 40+ chars, letters/digits only). 
+On a computer, pick a line:
 
 ```bash
 openssl rand -hex 32                                                # macOS / Linux / Git Bash
