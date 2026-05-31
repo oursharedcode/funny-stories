@@ -13,8 +13,8 @@ A party game where 3–7 friends, on their phones, answer 7 silly questions abou
 - **Friends join.** They scan the QR or enter the code, pick a nickname; the host taps **Start**.
 - **Answer seven questions.** Each round, one prompt — *Who? And who else? Where? When? What did they do? What for? What happened in the end?*
 - **Stay in the dark.** The story rotates every round, so you never see the other answers in your own story.
-- **Reveal the cartoon.** After seven rounds, tap **Generate picture** to turn your story into a goofy AI cartoon.
-- **No one left behind.** Disconnect and you become a bot — no reconnect, no abandoned rooms.
+- **Reveal the cartoon.** After seven rounds, your story will be turned into a goofy AI cartoon.
+
 
 <p>
   <a href="./assets/Story01.JPG"><img src="./assets/Story01.JPG" alt="A finished story" width="200"></a>
