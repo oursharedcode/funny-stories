@@ -207,6 +207,43 @@ When `npm run typecheck` and `npm test` both pass, you're done. See [CONTRIBUTIN
 
 ---
 
+## Image-prompt translation
+
+The image model (Flux Schnell on Cloudflare Workers AI) is anchored on
+an English-trained CLIP text encoder, so non-English answers in the
+picture prompt bind poorly to visual concepts — verbs and prepositional
+phrases especially tend to be ignored. To work around this, the server
+translates the seven slot answers to English **before** assembling the
+image prompt. The player-facing prose stays in the room's language;
+only the picture prompt is translated.
+
+- **Provider: [MyMemory](https://mymemory.translated.net).** Free, no
+  signup, no credit card, no API key. Anonymous quota is 5000 words/day
+  per IP. Set `MYMEMORY_EMAIL=you@example.com` in `.env` to raise the
+  quota to 10000 words/day (the email is sent as the `de=` attribution
+  parameter — no registration with MyMemory required).
+- **No source-language auto-detect.** Each room has an explicit
+  language; that code is passed to MyMemory directly.
+- **English skips translation entirely.** The check
+  `if (sourceLanguage === 'en') return texts;` short-circuits before any
+  HTTP call.
+- **Caching.** In-memory LRU map (2000 entries per process) so repeated
+  answers across rounds are free.
+- **Graceful degradation.** Per-slot 4 s timeout; on any failure (rate
+  limit, network, unknown language) the original answer is used and
+  the prompt is still well-formed.
+
+### Local test page
+
+A dev-only page at `http://localhost:5173/?test=image` (only available
+while `npm run dev` is running) renders the assembled `imagePrompt`
+for two hard-coded stories — one Russian, one English — without
+calling the Worker. A button per story generates one picture (consumes
+one Neuron from the daily cap). Use it to inspect translation output
+before burning quota on full game playthroughs.
+
+---
+
 ## Stamping your logo on pictures
 
 To brand the cartoons your instance generates, replace

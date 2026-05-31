@@ -149,6 +149,9 @@ export interface RevealStartPayload {
 export interface RevealPictureReadyPayload {
   // Base64 data URL.
   pictureUrl: string;
+  // The exact prompt sent to the image Worker — displayed under the
+  // picture for debugging which slots the model honored.
+  imagePrompt: string;
 }
 
 // Discriminator for the reveal:pictureError UX (item 4 of

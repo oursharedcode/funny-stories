@@ -33,6 +33,7 @@ export default function RevealScreen({ reveal, onContinue }: Props) {
   const { t } = useTranslation();
   const [status, setStatus] = useState<PictureStatus>('loading');
   const [pictureUrl, setPictureUrl] = useState<string | null>(null);
+  const [imagePrompt, setImagePrompt] = useState<string>('');
   const [errorMsg, setErrorMsg] = useState('');
   const [errorCode, setErrorCode] = useState<RevealPictureErrorCode | null>(null);
   const [imgLoaded, setImgLoaded] = useState(false);
@@ -43,6 +44,7 @@ export default function RevealScreen({ reveal, onContinue }: Props) {
   useEffect(() => {
     const onReady = (data: RevealPictureReadyPayload): void => {
       setPictureUrl(data.pictureUrl);
+      setImagePrompt(data.imagePrompt);
       setStatus('ready');
     };
     const onError = (data: RevealPictureErrorPayload): void => {
@@ -106,6 +108,11 @@ export default function RevealScreen({ reveal, onContinue }: Props) {
             <PictureFlourish className="pointer-events-none absolute inset-0 h-full w-full" />
           )}
           {imgLoaded && <LogoStamp />}
+          {imagePrompt && (
+            <p className="mt-2 text-xs text-gray-500 whitespace-pre-wrap break-words font-mono">
+              {imagePrompt}
+            </p>
+          )}
         </div>
       ) : status === 'error' ? (
         <div className="flex flex-col items-center gap-3 py-6">

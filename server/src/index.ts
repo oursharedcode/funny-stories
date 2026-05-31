@@ -34,7 +34,10 @@ import {
   submitAnswer,
 } from './game.js';
 import { broadcastStats, buildStats } from './stats.js';
-import { maybeSyncImageCounter, syncImageCounterFromWorker } from './image.js';
+import { generateImage, maybeSyncImageCounter, syncImageCounterFromWorker } from './image.js';
+import { buildPrompt } from './prompt.js';
+import { LANGUAGES } from 'shared';
+import type { Language } from 'shared';
 
 const PORT = Number(process.env.PORT ?? 3000);
 const NODE_ENV = process.env.NODE_ENV ?? 'development';
@@ -56,6 +59,47 @@ async function main(): Promise<void> {
   });
 
   fastify.get('/health', async () => ({ ok: true }));
+
+  // Dev-only one-shot image-prompt + image-generation endpoint used by the
+  // /?test=image client page. Builds the prompt deterministically; if
+  // `generate` is true, also calls the Worker (and consumes one Neuron).
+  // Body: { answers: (string|null)[7], language: Language, generate?: boolean }
+  fastify.post('/test/image', async (request, reply) => {
+    if (NODE_ENV === 'production') return reply.code(404).send({ error: 'not found' });
+    const body = request.body as
+      | { answers?: unknown; language?: unknown; generate?: unknown }
+      | undefined;
+    const answers = Array.isArray(body?.answers) ? (body!.answers as unknown[]) : null;
+    const language = body?.language as string | undefined;
+    if (!answers || answers.length !== 7) return reply.code(400).send({ error: 'answers[7]' });
+    if (!language || !LANGUAGES.some((l) => l.code === language)) {
+      return reply.code(400).send({ error: 'language' });
+    }
+    const normalized = answers.map((a) => (typeof a === 'string' ? a : null));
+    const imagePrompt = await buildPrompt(
+      { answers: normalized, pictureUrl: null },
+      language as Language,
+    );
+    if (body?.generate !== true) return { imagePrompt };
+    try {
+      const pictureUrl = await generateImage(imagePrompt);
+      return { imagePrompt, pictureUrl };
+    } catch (err) {
+      fastify.log.error(err);
+      const parts: string[] = [];
+      let cur: unknown = err;
+      while (cur instanceof Error) {
+        parts.push(`${cur.name}: ${cur.message}`);
+        const c = (cur as Error & { cause?: unknown }).cause;
+        if (c === cur) break;
+        cur = c;
+      }
+      const workerUrl = process.env.CLOUDFLARE_WORKER_URL ?? '(unset)';
+      return reply
+        .code(500)
+        .send({ imagePrompt, error: parts.join(' <- ') || String(err), workerUrl });
+    }
+  });
 
   // Production: this same Fastify process serves the built client bundle —
   // one process, no nginx sidecar (spec §14). Unmatched routes fall back to

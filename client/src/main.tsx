@@ -4,6 +4,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import TestShareScreen from './screens/TestShareScreen';
+import TestImageScreen from './screens/TestImageScreen';
 import { installSwReloadListener } from './swReload';
 import './i18n';
 import './styles/index.css';
@@ -15,10 +16,18 @@ installSwReloadListener();
 // against a placeholder cartoon, bypassing the whole socket / room / game
 // flow. Branching at this level (instead of inside <App>) keeps App's
 // hooks ordering clean and skips the socket connection entirely.
-const isTestShare = new URLSearchParams(window.location.search).get('test') === 'share';
+const testParam = new URLSearchParams(window.location.search).get('test');
 
 const root = document.getElementById('root');
 if (!root) throw new Error('No #root element');
 createRoot(root).render(
-  <React.StrictMode>{isTestShare ? <TestShareScreen /> : <App />}</React.StrictMode>,
+  <React.StrictMode>
+    {testParam === 'share' ? (
+      <TestShareScreen />
+    ) : testParam === 'image' ? (
+      <TestImageScreen />
+    ) : (
+      <App />
+    )}
+  </React.StrictMode>,
 );

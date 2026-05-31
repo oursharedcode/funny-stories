@@ -1,24 +1,37 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import type { Language, Story } from './types.js';
-import { IMAGE_PROMPT_TEMPLATES } from './i18n/index.js';
+import { translateToEnglish } from './translate.js';
 
 // Locked style suffix — appended to every image prompt so the Worker AI
-// model renders in a consistent goofy-cartoon look.
+// model renders in a consistent goofy-cartoon look. English-only: Flux's
+// CLIP text encoder is trained primarily on English captions, so the
+// stylistic anchors (`goofy cartoon`, `googly eyes`, `hand-drawn doodle`)
+// only land when written in English. Translating them caused the model to
+// default to a generic painterly look (see /?test=image RU result).
 export const STYLE_SUFFIX =
   ', in a goofy cartoon style, googly eyes, exaggerated expressions, ' +
   'bright colors, hand-drawn doodle illustration';
 
-// Simplified buildPrompt — substitute slots {0}-{6} from the per-language
-// `imagePrompt` template in `server/src/i18n/<lang>.json`, then append the
-// locked STYLE_SUFFIX. All other previous handling (length cap, duplicate-
-// subject anchor, distinct-pair anchor, EN/RU connective fixes, RU action
-// hints) is commented out below for reference.
-export function buildPrompt(story: Story, language: Language): string {
-  const template = IMAGE_PROMPT_TEMPLATES[language];
-  const body = template.replace(
+// Single English image-prompt template used for every language. The
+// per-language `imagePrompt` strings in server/src/i18n/<lang>.json are
+// no longer used for image generation — they're kept for reference / a
+// possible future translation step. Player-facing prose (`prose`) still
+// uses the per-language template; only the picture prompt is anchored
+// in English. The answers themselves go in verbatim in the player's
+// language; the English skeleton gives Flux structural anchors
+// (`on the left`, `they were …ing`) even when the noun tokens are not
+// English (item observed at /?test=image: RU template produced a
+// soft-painterly result that ignored verbs and locations).
+const IMAGE_PROMPT_EN =
+  'two distinct subjects:{0} on the left and {1} on the right, ' +
+  'they were {2} {3}. They {4}';
+
+export async function buildPrompt(story: Story, language: Language): Promise<string> {
+  const translated = await translateToEnglish(story.answers, language);
+  const body = IMAGE_PROMPT_EN.replace(
     /\{([0-6])\}/g,
-    (_, digit: string) => story.answers[Number(digit)] ?? '',
+    (_, digit: string) => translated[Number(digit)] ?? '',
   );
   return body + STYLE_SUFFIX;
 }

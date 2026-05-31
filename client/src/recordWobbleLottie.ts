@@ -122,7 +122,7 @@ function monkeyAt(ms: number): MonkeyFrame | null {
     // 3.0–4.0 s — stops, raises the pointing arm up-right at the cartoon,
     // head tilts toward the cartoon.
     const t = Math.min((ms - 3000) / 600, 1); // ease into the gesture within 0.6 s
-    armPointRot = degToRad(-10 + 125 * t); // -10° → +115° (up-right)
+    armPointRot = degToRad(-10 + 155 * t); // -10° → +145° (up-right)
     headRot = degToRad(12 * t);
   } else {
     // 4.0–5.0 s — fall onto the back, laughing. Mirrors the right-side fall:
@@ -133,7 +133,7 @@ function monkeyAt(ms: number): MonkeyFrame | null {
     torsoY = GROUND_Y + 22 * fallEase;
     torsoRot = degToRad(78 * fallEase);
     headRot = degToRad(12 - 18 * Math.sin(t * Math.PI * 5));
-    armPointRot = degToRad(115 - 30 * Math.sin(t * Math.PI * 8));
+    armPointRot = degToRad(145 - 30 * Math.sin(t * Math.PI * 8));
     armFreeRot = degToRad(10 + 40 * Math.sin(t * Math.PI * 6));
     legLeftRot = degToRad(40);
     legRightRot = degToRad(30);

@@ -198,8 +198,8 @@ export function getStoryForPlayer(room: Room, socketId: string): Story | null {
 // Outcome of a single picture-generation attempt. Lets the caller decide
 // whether to notify a specific socket (human path) or stay silent (bot path).
 type PictureOutcome =
-  | { kind: 'cached'; pictureUrl: string }
-  | { kind: 'ready'; pictureUrl: string }
+  | { kind: 'cached'; pictureUrl: string; imagePrompt: string }
+  | { kind: 'ready'; pictureUrl: string; imagePrompt: string }
   | { kind: 'blocked' }
   | { kind: 'capped' }
   | { kind: 'failed' };
@@ -216,9 +216,10 @@ async function generateStoryPicture(
   story: Story,
   io: IO,
 ): Promise<PictureOutcome> {
-  if (story.pictureUrl) return { kind: 'cached', pictureUrl: story.pictureUrl };
-
-  const prompt = buildPrompt(story, room.language);
+  const prompt = await buildPrompt(story, room.language);
+  if (story.pictureUrl) {
+    return { kind: 'cached', pictureUrl: story.pictureUrl, imagePrompt: prompt };
+  }
   if (containsCsamCombination(prompt) || containsHardBlock(prompt)) {
     return { kind: 'blocked' };
   }
@@ -231,7 +232,7 @@ async function generateStoryPicture(
   try {
     const pictureUrl = await generateImage(prompt);
     story.pictureUrl = pictureUrl; // write-once cache
-    return { kind: 'ready', pictureUrl };
+    return { kind: 'ready', pictureUrl, imagePrompt: prompt };
   } catch {
     return { kind: 'failed' };
   }
@@ -254,7 +255,10 @@ export async function handlePictureRequest(
   switch (outcome.kind) {
     case 'cached':
     case 'ready':
-      io.to(socketId).emit('reveal:pictureReady', { pictureUrl: outcome.pictureUrl });
+      io.to(socketId).emit('reveal:pictureReady', {
+        pictureUrl: outcome.pictureUrl,
+        imagePrompt: outcome.imagePrompt,
+      });
       // If the host already shared the gallery, a late picture refreshes it (§24).
       if (outcome.kind === 'ready' && room.galleryShared && room.phase === 'reveal') {
         io.to(room.code).emit('gallery:ready', buildGallery(room));
