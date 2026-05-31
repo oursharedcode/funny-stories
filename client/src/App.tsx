@@ -12,6 +12,7 @@ import EndScreen from './screens/EndScreen';
 import BackgroundDoodle from './components/art/BackgroundDoodle';
 import { snappy } from './styles/motion';
 import { socket } from './socket';
+import { APP_VERSION } from './version';
 import type {
   ErrorPayload,
   GalleryReadyPayload,
@@ -178,6 +179,12 @@ export default function App() {
             {body}
           </motion.div>
         </AnimatePresence>
+      </div>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed bottom-1 right-1 z-40 rounded bg-white/70 px-1.5 py-0.5 text-[10px] leading-none text-gray-500"
+      >
+        v{APP_VERSION}
       </div>
       {error && (
         <div
