@@ -11,7 +11,7 @@ A party game where 3–7 friends, on their phones, answer 7 silly questions abou
 
 - **Create a room.** One person taps **Create room**, picks a language, and shares a 6-character code or QR.
 - **Friends join.** They scan the QR or enter the code, pick a nickname; the host taps **Start**.
-- **Answer seven questions.** Each round, one prompt — *Who? With whom? Where? When? What did they do? What for? What happened in the end?*
+- **Answer seven questions.** Each round, one prompt — *Who? And who else? Where? When? What did they do? What for? What happened in the end?*
 - **Stay in the dark.** The story rotates every round, so you never see the other answers in your own story.
 - **Reveal the cartoon.** After seven rounds, tap **Generate picture** to turn your story into a goofy AI cartoon.
 - **No one left behind.** Disconnect and you become a bot — no reconnect, no abandoned rooms.
