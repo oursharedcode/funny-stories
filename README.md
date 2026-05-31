@@ -1,6 +1,6 @@
 # Funny Stories
 
-A party game where 3–7 friends, on their phones, answer 7 silly questions about a shared story they can't see — then watch an AI cartoon goof of the result. English and Russian from day one. No accounts, no database, no analytics. Self-hostable for free.
+A party game where 3–7 friends, on their phones, answer 7 silly questions about a shared story they can't see — then watch an AI cartoon goof of the result. Multi-lingual from day one. No accounts, no database, no analytics. Self-hostable for free.
 
 [![Build](https://img.shields.io/github/actions/workflow/status/oursharedcode/funny-stories/ci.yml?branch=master)](https://github.com/oursharedcode/funny-stories/actions)
 [![License: AGPL-3.0](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](./LICENSE)
@@ -9,7 +9,12 @@ A party game where 3–7 friends, on their phones, answer 7 silly questions abou
 
 ## How it plays
 
-One person taps **Create room**, picks a language, and shares a 6-character code or QR. Friends join, pick nicknames, and the host taps **Start**. Everyone answers one of seven questions — *Who? With whom? Where? When? What did they do? What for? What was at the end?* — and the story rotates each round, so you never see the answers in your own story. After seven rounds your phone shows the story you helped write, and **Generate picture** turns it into a goofy cartoon. Disconnect mid-game and you become a bot; no reconnect, no abandoned rooms.
+- **Create a room.** One person taps **Create room**, picks a language, and shares a 6-character code or QR.
+- **Friends join.** They scan the QR or enter the code, pick a nickname; the host taps **Start**.
+- **Answer seven questions.** Each round, one prompt — *Who? With whom? Where? When? What did they do? What for? What was at the end?*
+- **Stay in the dark.** The story rotates every round, so you never see the other answers in your own story.
+- **Reveal the cartoon.** After seven rounds, tap **Generate picture** to turn your story into a goofy AI cartoon.
+- **No one left behind.** Disconnect and you become a bot — no reconnect, no abandoned rooms.
 
 ## Deploy your own (free, ~5 minutes)
 
@@ -23,6 +28,10 @@ openssl rand -hex 32                                                # macOS / Li
 ```powershell
 [guid]::NewGuid().ToString("N") + [guid]::NewGuid().ToString("N")   # Windows PowerShell
 ```
+
+On Windows, paste the PowerShell line into a terminal and copy the result:
+
+![Generating the secret in Windows PowerShell](./assets/secret-powershell.gif)
 
 **2. Deploy the image Worker (Cloudflare).**
 
@@ -49,13 +58,13 @@ First build takes ~3 minutes. Open your `.onrender.com` URL on a phone and play.
 
 | Guide | What's in it |
 |---|---|
-| [handbook/DEPLOYMENT.md](./handbook/DEPLOYMENT.md) | Full deploy reference — Render details, Docker self-hosting, the Cloudflare Worker, optional KV, and the silent-failure gotchas. |
-| [handbook/DEVELOPMENT.md](./handbook/DEVELOPMENT.md) | Local dev, toolchain, npm scripts, project layout, tests, known limitations. |
-| [handbook/LANGUAGES.md](./handbook/LANGUAGES.md) | Adding a language; how image prompts are translated to English. |
-| [handbook/MODERATION.md](./handbook/MODERATION.md) | Content moderation, operator responsibility, known visual artefacts. |
-| [handbook/CUSTOMIZATION.md](./handbook/CUSTOMIZATION.md) | Logo stamp, rebranding a fork, screenshot guidance. |
+| [handbook/DEPLOYMENT.md](./handbook/DEPLOYMENT.md) | Full deploy: Render, Docker, the Cloudflare Worker, KV, and gotchas. |
+| [handbook/DEVELOPMENT.md](./handbook/DEVELOPMENT.md) | Local dev, toolchain, scripts, layout, tests, limitations. |
+| [handbook/LANGUAGES.md](./handbook/LANGUAGES.md) | Adding a language; image-prompt translation. |
+| [handbook/MODERATION.md](./handbook/MODERATION.md) | Moderation, operator responsibility, visual artefacts. |
+| [handbook/CUSTOMIZATION.md](./handbook/CUSTOMIZATION.md) | Logo stamp, fork rebranding, screenshots. |
 | [CONTRIBUTING.md](./CONTRIBUTING.md) | How to work on the project. |
 
 ## License
 
-[AGPL-3.0](./LICENSE). If you deploy a modified version on a network service, you must offer the source of your modifications to the users of that service. Want different terms? Open an issue and we can talk.
+[AGPL-3.0](./LICENSE). Deploy a modified version on a network service and you must offer its source to that service's users. Want different terms? Open an issue.
