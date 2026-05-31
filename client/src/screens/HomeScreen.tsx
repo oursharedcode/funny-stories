@@ -72,17 +72,22 @@ export default function HomeScreen({ onJoined }: Props) {
   function create(): void {
     setError(null);
     setBusy(true);
-    socket.emit('room:create', { nickname: nickname.trim(), language }, (ack) => {
-      setBusy(false);
-      onJoined({
-        roomCode: ack.roomCode,
-        socketId: ack.socketId,
-        hostId: ack.socketId,
-        language,
-        players: [{ id: ack.socketId, nickname: nickname.trim(), isBot: false }],
-        donateUrl: null,
-      });
-    });
+    socket.emit(
+      'room:create',
+      { nickname: nickname.trim(), language, wobbleEngine },
+      (ack) => {
+        setBusy(false);
+        onJoined({
+          roomCode: ack.roomCode,
+          socketId: ack.socketId,
+          hostId: ack.socketId,
+          language,
+          players: [{ id: ack.socketId, nickname: nickname.trim(), isBot: false }],
+          donateUrl: null,
+          wobbleEngine,
+        });
+      },
+    );
   }
 
   function join(): void {
@@ -109,6 +114,9 @@ export default function HomeScreen({ onJoined }: Props) {
         language: ack.language,
         players: ack.players,
         donateUrl: null,
+        // Placeholder — the lobby:update fired by the server right after
+        // join will overwrite this with the host's actual choice.
+        wobbleEngine: 'css',
       });
     });
   }

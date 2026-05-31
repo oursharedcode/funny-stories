@@ -24,6 +24,7 @@ import type {
   RevealStartPayload,
   RoundStartPayload,
   RoundWaitingPayload,
+  WobbleEngine,
 } from 'shared';
 
 export type GamePhase = 'home' | 'lobby' | 'writing' | 'waiting' | 'reveal' | 'end';
@@ -36,6 +37,10 @@ export interface LobbyState {
   players: Player[];
   // Deployer's "Support this server" link, or null when unset (spec §20).
   donateUrl: string | null;
+  // Engine chosen by the host for the Share-as-video recorder. Joiners
+  // receive it via lobby:update so every player records with the same
+  // engine instead of their own per-device localStorage value.
+  wobbleEngine: WobbleEngine;
 }
 
 export default function App() {
@@ -76,7 +81,13 @@ export default function App() {
     const onLobbyUpdate = (data: LobbyUpdatePayload): void => {
       setLobby((prev) =>
         prev
-          ? { ...prev, players: data.players, hostId: data.hostId, donateUrl: data.donateUrl }
+          ? {
+              ...prev,
+              players: data.players,
+              hostId: data.hostId,
+              donateUrl: data.donateUrl,
+              wobbleEngine: data.wobbleEngine,
+            }
           : prev,
       );
     };

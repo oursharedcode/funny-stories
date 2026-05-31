@@ -64,7 +64,7 @@ export default function EndScreen({ lobby, readyIds, gameOver, gallery }: Props)
         </h2>
 
         {gallery ? (
-          <RoomGallery entries={gallery.entries} />
+          <RoomGallery entries={gallery.entries} wobbleEngine={lobby.wobbleEngine} />
         ) : isHost && !gameOver ? (
           <button
             className="w-full rounded bg-pink-500 py-3 font-display text-xl font-semibold text-white"

@@ -135,6 +135,7 @@ async function main(): Promise<void> {
       players: room.players,
       hostId: room.hostId,
       donateUrl: process.env.DEPLOYER_DONATE_URL || null,
+      wobbleEngine: room.wobbleEngine,
     };
     io.to(room.code).emit('lobby:update', payload);
   }
@@ -195,7 +196,8 @@ async function main(): Promise<void> {
         return;
       }
       try {
-        const room = createRoom(v.nickname, payload.language, socket.id);
+        const engine = payload?.wobbleEngine === 'lottie' ? 'lottie' : 'css';
+        const room = createRoom(v.nickname, payload.language, socket.id, engine);
         socket.join(room.code);
         ack({ roomCode: room.code, socketId: socket.id });
         broadcastLobby(room);

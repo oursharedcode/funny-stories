@@ -32,12 +32,20 @@ export interface Story {
 // cast to NodeJS.Timeout on the server where @types/node is available.
 export type ServerTimerHandle = unknown;
 
+// Animation engine for the Share-as-video recorder. Chosen by the host at
+// room creation and broadcast to all joiners so every player's recording
+// uses the same engine the host picked. Per-device localStorage is still
+// the default for the host's own toggle.
+export type WobbleEngine = 'css' | 'lottie';
+
 export interface Room {
   // 6-char nanoid from the unambiguous alphabet, uppercase. See spec §17.
   code: string;
   // socket.id of current host.
   hostId: string;
   language: Language;
+  // Host's recording-engine choice, applied to every player's WebM export.
+  wobbleEngine: WobbleEngine;
   // Locked at game:start; order drives rotation.
   players: Player[];
   phase: RoomPhase;
@@ -84,6 +92,7 @@ export interface ErrorPayload {
 export interface RoomCreatePayload {
   nickname: string;
   language: Language;
+  wobbleEngine?: WobbleEngine;
 }
 
 export interface RoomCreateAck {
@@ -124,6 +133,8 @@ export interface LobbyUpdatePayload {
   hostId: string;
   // Deployer's DEPLOYER_DONATE_URL env var value, or null when unset (spec §18, §20).
   donateUrl: string | null;
+  // Host's recording-engine choice, broadcast so joiners record with the same engine.
+  wobbleEngine: WobbleEngine;
 }
 
 export interface RoundStartPayload {

@@ -6,16 +6,19 @@ import ProseText from './ProseText';
 import LogoStamp from './LogoStamp';
 import { downloadStoryImage } from '../downloadStory';
 import { isVideoRecordingSupported, recordWobbleVideo } from '../recordWobble';
-import { getWobbleEngine } from '../wobblePreference';
-import type { GalleryEntry } from 'shared';
+import type { GalleryEntry, WobbleEngine } from 'shared';
 
 interface Props {
   entries: GalleryEntry[];
+  // Engine to use for the Share-as-video recorder. Comes from the room's
+  // host choice (broadcast via lobby:update) so every player records with
+  // the same engine instead of consulting their own per-device preference.
+  wobbleEngine: WobbleEngine;
 }
 
 // The shared room gallery (spec §24): every story + its picture, browsed one at
 // a time. Bot slots and ungenerated stories show a no-picture placeholder.
-export default function RoomGallery({ entries }: Props) {
+export default function RoomGallery({ entries, wobbleEngine }: Props) {
   const { t } = useTranslation();
   const [index, setIndex] = useState(0);
   const [recording, setRecording] = useState(false);
@@ -37,7 +40,7 @@ export default function RoomGallery({ entries }: Props) {
       // Lottie is the opt-in path — its ~250 KB stays out of the main bundle
       // until a user with `engine === 'lottie'` actually taps share. CSS is
       // the default and incurs no extra import.
-      if (getWobbleEngine() === 'lottie') {
+      if (wobbleEngine === 'lottie') {
         const { recordWobbleVideoLottie } = await import('../recordWobbleLottie');
         await recordWobbleVideoLottie({
           nickname: entry.nickname,
