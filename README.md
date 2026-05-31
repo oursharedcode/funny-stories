@@ -21,11 +21,11 @@ A party game where 3–7 friends, on their phones, answer 7 silly questions abou
   <a href="./client/public/monkeys-on-bus.png"><img src="./client/public/monkeys-on-bus.png" alt="Seven players" width="200" title="Seven players"></a>
 </p>
 
-*A finished story and the seven-players end screen — click to zoom.*
+*A finished story (left) and the seven-players end screen (right) — click to zoom.*
 
 ## Deploy your own (free, ~5 minutes)
 
-You deploy onto **your own** Cloudflare + Render accounts — both free, no credit card. Two buttons, in order; carry two values between them.
+You deploy onto **your own** Cloudflare + Render accounts — both free, no credit card. The author hosts nothing. Two buttons, in order; carry two values between them.
 
 **1. Make a shared secret S** (32+ chars). On a phone: use a password-manager app (40+ chars, letters/digits only). On a computer, pick a line:
 
@@ -59,7 +59,7 @@ When Render prompts for environment variables, paste:
 
 First build takes ~3 minutes. Open your `.onrender.com` URL on a phone and play.
 
-> **If "Generate picture" fails on every phone,** the two secrets don't match — re-check steps 2 and 3. The free Render tier also sleeps when idle, so the first visit is slow.
+> **If "Generate picture" fails on every phone,** the two secrets don't match — re-check steps 2 and 3. The free Render tier also sleeps when idle, so the first visit after a quiet period is slow.
 
 ## Documentation
 
