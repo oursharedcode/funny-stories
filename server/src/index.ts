@@ -196,8 +196,7 @@ async function main(): Promise<void> {
         return;
       }
       try {
-        const engine = payload?.wobbleEngine === 'lottie' ? 'lottie' : 'css';
-        const room = createRoom(v.nickname, payload.language, socket.id, engine);
+        const room = createRoom(v.nickname, payload.language, socket.id);
         socket.join(room.code);
         ack({ roomCode: room.code, socketId: socket.id });
         broadcastLobby(room);
@@ -246,7 +245,7 @@ async function main(): Promise<void> {
       if (result.deleted) broadcastStats(io);
     });
 
-    socket.on('game:start', () => {
+    socket.on('game:start', (payload) => {
       const room = findRoomForSocket(socket.id);
       if (!room) {
         socket.emit('error', { code: 'ROOM_NOT_FOUND', message: 'No room.' });
@@ -267,6 +266,11 @@ async function main(): Promise<void> {
         });
         return;
       }
+      // Lock in the host's recording-engine choice at the exact moment of
+      // pressing Start. Re-broadcast lobby:update so every joiner learns
+      // the engine before they get to the End-screen gallery.
+      room.wobbleEngine = payload?.wobbleEngine === 'lottie' ? 'lottie' : 'css';
+      broadcastLobby(room);
       startGame(room, io);
     });
 

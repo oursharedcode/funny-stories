@@ -6,6 +6,7 @@ import { socket } from '../socket';
 import PlayerList from '../components/PlayerList';
 import QRCode from '../components/QRCode';
 import { hoursUntilUtcMidnight, isCapReached } from '../capReset';
+import { getWobbleEngine } from '../wobblePreference';
 import type { LobbyState } from '../App';
 import type { StatsPayload } from 'shared';
 
@@ -69,7 +70,10 @@ export default function LobbyScreen({ lobby, onLeave }: Props) {
   }
 
   function startGame(): void {
-    socket.emit('game:start');
+    // Send the host's current per-device engine preference at the exact
+    // moment of pressing Start. The server stores it on the room and
+    // broadcasts via lobby:update so every joiner records with this engine.
+    socket.emit('game:start', { wobbleEngine: getWobbleEngine() });
   }
 
   return (

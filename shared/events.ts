@@ -92,6 +92,12 @@ export interface ErrorPayload {
 export interface RoomCreatePayload {
   nickname: string;
   language: Language;
+}
+
+export interface GameStartPayload {
+  // Host's recording-engine choice at the moment of pressing Start Game.
+  // The server stores it on the room and re-broadcasts via lobby:update so
+  // every joiner records with the same engine.
   wobbleEngine?: WobbleEngine;
 }
 
@@ -226,7 +232,7 @@ export interface ClientToServerEvents {
   'room:create': (payload: RoomCreatePayload, ack: (response: RoomCreateAck) => void) => void;
   'room:join': (payload: RoomJoinPayload, ack: (response: RoomJoinAck) => void) => void;
   'room:leave': () => void;
-  'game:start': () => void;
+  'game:start': (payload?: GameStartPayload) => void;
   'round:submit': (payload: RoundSubmitPayload) => void;
   'reveal:requestPicture': () => void;
   'reveal:retryPicture': () => void;

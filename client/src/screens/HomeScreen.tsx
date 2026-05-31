@@ -72,22 +72,18 @@ export default function HomeScreen({ onJoined }: Props) {
   function create(): void {
     setError(null);
     setBusy(true);
-    socket.emit(
-      'room:create',
-      { nickname: nickname.trim(), language, wobbleEngine },
-      (ack) => {
-        setBusy(false);
-        onJoined({
-          roomCode: ack.roomCode,
-          socketId: ack.socketId,
-          hostId: ack.socketId,
-          language,
-          players: [{ id: ack.socketId, nickname: nickname.trim(), isBot: false }],
-          donateUrl: null,
-          wobbleEngine,
-        });
-      },
-    );
+    socket.emit('room:create', { nickname: nickname.trim(), language }, (ack) => {
+      setBusy(false);
+      onJoined({
+        roomCode: ack.roomCode,
+        socketId: ack.socketId,
+        hostId: ack.socketId,
+        language,
+        players: [{ id: ack.socketId, nickname: nickname.trim(), isBot: false }],
+        donateUrl: null,
+        wobbleEngine: 'css',
+      });
+    });
   }
 
   function join(): void {
