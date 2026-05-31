@@ -32,8 +32,12 @@ const NOTICE_COLOR = '#4b5563';
 const QR_SIZE = 96;
 const QR_TEXT_GAP = 14;
 const SOURCE_LABEL_FONT = 'bold 13px system-ui, sans-serif';
+const SOURCE_LABEL_HEIGHT = 16;
 const URL_FONT = '12px ui-monospace, "SF Mono", Consolas, monospace';
 const URL_LINE_HEIGHT = 16;
+// Minimum gap between the notice (top of the right column) and the source
+// label (dropped to the QR's bottom edge) so a long notice never overlaps it.
+const NOTICE_SOURCE_GAP = 10;
 
 // Greedy word-wrap against a measured context.
 function wrapText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number): string[] {
@@ -114,18 +118,32 @@ export async function downloadStoryImage(opts: {
   // drawn onto the composite below.
   const qrCanvas = await renderQrCanvas(SOURCE_URL);
 
-  // Measure the wrapped prose and notice against a scratch context.
+  // Right-column geometry: the notice and the source label/URL sit to the
+  // right of the QR. The notice stacks at the top of the column; the source
+  // label drops to the QR's bottom edge with the URL just beneath it.
+  const rightColX = PAD + QR_SIZE + QR_TEXT_GAP;
+  const rightColWidth = WIDTH - rightColX - PAD;
+
+  // Measure the wrapped prose (full width) and notice (right column width).
   const scratch = document.createElement('canvas').getContext('2d')!;
   scratch.font = PROSE_FONT;
   const proseLines = wrapText(scratch, prose, WIDTH - PAD * 2);
   scratch.font = NOTICE_FONT;
-  const noticeLines = wrapText(scratch, notice, WIDTH - PAD * 2);
+  const noticeLines = wrapText(scratch, notice, rightColWidth);
 
-  // Footer block height — `notice` lines stacked, then a divider gap, then a
-  // row of [QR | label + URL]. The QR is taller than the two text lines, so
-  // QR_SIZE bounds the row height.
-  const footerBlockHeight =
-    noticeLines.length * NOTICE_LINE_HEIGHT + FOOTER_DIVIDER_PAD + QR_SIZE;
+  // Footer row: QR on the left; right column = notice (top) + source label
+  // dropped to the QR's bottom edge + URL below it. The source label sits at
+  // `QR_SIZE - SOURCE_LABEL_HEIGHT` from the row top, unless a tall notice
+  // pushes it lower. The URL drops below, so the row can exceed the QR height.
+  const noticeHeight = noticeLines.length * NOTICE_LINE_HEIGHT;
+  const sourceLabelTop = Math.max(
+    QR_SIZE - SOURCE_LABEL_HEIGHT,
+    noticeHeight + NOTICE_SOURCE_GAP,
+  );
+  const footerRowHeight = Math.max(
+    QR_SIZE,
+    sourceLabelTop + URL_LINE_HEIGHT + 4 + URL_LINE_HEIGHT,
+  );
 
   const height =
     pictureHeight +
@@ -134,7 +152,7 @@ export async function downloadStoryImage(opts: {
     PAD +
     NAME_HEIGHT +
     FOOTER_DIVIDER_PAD +
-    footerBlockHeight +
+    footerRowHeight +
     PAD;
 
   const canvas = document.createElement('canvas');
@@ -160,29 +178,30 @@ export async function downloadStoryImage(opts: {
   ctx.fillText(`— ${nickname}`, PAD, y + PAD);
   y += PAD + NAME_HEIGHT + FOOTER_DIVIDER_PAD;
 
-  // Content-responsibility notice — italic, muted, wraps to as many lines as
-  // needed at the composite width.
+  // Footer row begins here.
+  const rowTop = y;
+
+  // QR (left).
+  ctx.drawImage(qrCanvas, PAD, rowTop, QR_SIZE, QR_SIZE);
+
+  // Content-responsibility notice — right column, stacked from the top.
+  // Italic, muted, wraps to the right-column width.
   ctx.fillStyle = NOTICE_COLOR;
   ctx.font = NOTICE_FONT;
+  let noticeY = rowTop;
   for (const line of noticeLines) {
-    ctx.fillText(line, PAD, y);
-    y += NOTICE_LINE_HEIGHT;
+    ctx.fillText(line, rightColX, noticeY);
+    noticeY += NOTICE_LINE_HEIGHT;
   }
-  y += FOOTER_DIVIDER_PAD;
 
-  // QR (left) + source label and URL stacked to its right, vertically
-  // centred against the QR's height.
-  ctx.drawImage(qrCanvas, PAD, y, QR_SIZE, QR_SIZE);
-  const textX = PAD + QR_SIZE + QR_TEXT_GAP;
-  const textBlockHeight = URL_LINE_HEIGHT * 2 + 4; // label + small gap + url
-  const textTopY = y + Math.max(0, (QR_SIZE - textBlockHeight) / 2);
-
+  // Source label dropped to the QR's bottom edge, URL just beneath it.
+  const sourceLabelY = rowTop + sourceLabelTop;
   ctx.fillStyle = INK;
   ctx.font = SOURCE_LABEL_FONT;
-  ctx.fillText(sourceLabel, textX, textTopY);
+  ctx.fillText(sourceLabel, rightColX, sourceLabelY);
 
   ctx.font = URL_FONT;
-  ctx.fillText(SOURCE_URL, textX, textTopY + URL_LINE_HEIGHT + 4);
+  ctx.fillText(SOURCE_URL, rightColX, sourceLabelY + URL_LINE_HEIGHT + 4);
 
   await new Promise<void>((resolve) => {
     canvas.toBlob((blob) => {
