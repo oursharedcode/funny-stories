@@ -20,7 +20,7 @@ A party game where 3–7 friends, on their phones, answer 7 silly questions abou
 
 You deploy onto **your own** Cloudflare + Render accounts — both free, no credit card. The author hosts nothing. Two buttons, in order; carry two values between them.
 
-**1. Make a shared secret S** (32+ chars). Pick the line for your machine:
+**1. Make a shared secret S** (32+ chars). Easiest: a password manager (Bitwarden, 1Password, KeePass) generating 40+ chars. Or pick a line:
 
 ```bash
 openssl rand -hex 32                                                # macOS / Linux / Git Bash
@@ -29,7 +29,7 @@ openssl rand -hex 32                                                # macOS / Li
 [guid]::NewGuid().ToString("N") + [guid]::NewGuid().ToString("N")   # Windows PowerShell
 ```
 
-On Windows, paste the PowerShell line into a terminal and copy the result:
+On Windows, run the PowerShell line and copy the result:
 
 ![Generating the secret in Windows PowerShell](./assets/secret-powershell.gif)
 
