@@ -18,21 +18,29 @@ enabled = true
 [ai]
 binding = "AI"
 
-# Workers KV — persists the daily image counter across Render free-tier
-# spin-downs (vol02 follow-up to BUGS_AND_IMPROVEMENTS_01.md item 22). The
-# Render server's in-memory counter resets to 0 on each cold start; this KV
+# Workers KV — OPTIONAL. Persists the daily image counter across Render
+# free-tier spin-downs (vol02 follow-up to BUGS_AND_IMPROVEMENTS_01.md item 22).
+# The Render server's in-memory counter resets to 0 on each cold start; this KV
 # namespace is the cross-process source of truth.
 #
-# One-time setup:
-#   wrangler kv namespace create STATS_KV
-#   wrangler kv namespace create STATS_KV --preview
-# then paste the returned IDs into the placeholders below. The free tier
+# Left commented out by default so the one-click Cloudflare deploy button works
+# for ANY account: a KV `id` belongs to the account that created it, so a
+# hard-coded id from another account makes `wrangler deploy` fail with
+# "namespace not valid". The Worker treats STATS_KV as optional (see worker.js:
+# `env.STATS_KV ? … : 0`) and runs fine without it — only the cross-cold-start
+# "Images today" counter is lost, which the Render free tier already resets.
+#
+# To enable persistent stats in YOUR account (one-time):
+#   wrangler kv namespace create STATS_KV            # prints your id
+#   wrangler kv namespace create STATS_KV --preview  # prints your preview_id
+# then uncomment the block below and paste YOUR returned IDs. The free tier
 # (1 000 writes/day per key, 100 000 reads/day) is far above our usage
 # (~25 writes/day, ~300 reads/day).
-[[kv_namespaces]]
-binding = "STATS_KV"
-id = "b884878707724f2ca8a3f5fec2a4140f"
-preview_id = "743e90df81564bbbb54f557412eccdb6"
+#
+# [[kv_namespaces]]
+# binding = "STATS_KV"
+# id = "<your-namespace-id>"
+# preview_id = "<your-preview-namespace-id>"
 
 # Set WORKER_SECRET via: wrangler secret put WORKER_SECRET
 # Then set the same value as CLOUDFLARE_WORKER_SECRET in the Render dashboard.

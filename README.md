@@ -127,7 +127,7 @@ Two supported paths. Pick one. Both need the Cloudflare Worker for image generat
    | `NODE_VERSION` | yes | `20` (already in `render.yaml`). |
    | `NODE_ENV` | yes | `production` (already in `render.yaml`). |
 
-3. Render auto-builds on push to `main`. First deploy takes ~3 minutes.
+3. Render auto-builds on push to `master`. First deploy takes ~3 minutes.
 4. Visit your `.onrender.com` URL on a real phone and run the [acceptance test](./docs/FUNNY_STORIES_SPEC_v4.md#19-acceptance-test).
 
 **Known limitations on the Render free plan:** single instance, ~512 MB RAM, no horizontal scaling. The game is deliberately built for this — room state is in-memory, so adding instances breaks rooms across them. If you outgrow one instance, the right next step is Redis pub/sub, not load balancers; see [spec §18](./docs/FUNNY_STORIES_SPEC_v4.md). The free plan also spins the service down after a stretch of inactivity, so the first visit after an idle period waits a few seconds for a cold start — and because rooms are in-memory, a spin-down ends any rooms that were still open. The host's *"Images today"* counter ([spec §26](./docs/FUNNY_STORIES_SPEC_v4.md)) is also in-memory and resets on every spin-down; persistence across cold starts would need Cloudflare KV (not implemented in v1).
@@ -169,22 +169,51 @@ docker compose up -d
 
 ### Deploying the Cloudflare Worker
 
-The Worker handles AI image generation. It's separate from the Node service and stays on Cloudflare's free tier.
+The Worker handles AI image generation. It's separate from the Node service and stays on Cloudflare's free tier. **Deploy it first** — its URL doesn't exist until it's live, and the Render service (Option A) needs that URL.
+
+First, generate a shared secret **S** (any high-entropy string, 32+ chars). Use whichever one-liner matches the machine you have open:
+
+```bash
+openssl rand -hex 32                                                       # macOS / Linux / Git Bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"   # any machine with Node 20
+```
+```powershell
+[guid]::NewGuid().ToString("N") + [guid]::NewGuid().ToString("N")          # Windows PowerShell
+```
+
+No terminal handy? You can make **S** by hand instead: type **at least 32 characters**, use **only letters and digits** (`A–Z a–z 0–9`), **no spaces, no symbols**, and make it genuinely random-looking — not a word or a date. (Symbols and spaces get mangled differently by shells and config fields, which silently breaks the both-sides match; letters and digits are safe.)
+
+Copy **S** once — you paste it in two places (the Worker and the Node service) and never type it again.
+
+**One-click (recommended):**
+
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/oursharedcode/funny-stories/tree/master/cloudflare)
+
+The button reads the `cloudflare/` folder from this public repo and creates a **new Worker repo on your own GitHub + Cloudflare account**. After it deploys, you **must** set the secret yourself (the button can't): **dashboard → your Worker → Settings → Variables →** `WORKER_SECRET = S`. Until you do, the Worker returns 403 to every request.
+
+**Or via the CLI:**
 
 ```bash
 npm install -g wrangler
 wrangler login
 cd cloudflare
 wrangler deploy
-wrangler secret put WORKER_SECRET   # paste a strong random string
+wrangler secret put WORKER_SECRET   # paste S
 ```
 
 Note the deployed URL (`https://funny-stories-image.<your-account>.workers.dev`). Set:
 
-- The Worker's `WORKER_SECRET` (above)
-- The Node service's `CLOUDFLARE_WORKER_URL` and `CLOUDFLARE_WORKER_SECRET` (same secret value, both sides)
+- The Worker's `WORKER_SECRET` = **S** (above)
+- The Node service's `CLOUDFLARE_WORKER_URL` (the deployed URL) and `CLOUDFLARE_WORKER_SECRET` = **S** (same value, both sides)
 
 If the secrets don't match, the Worker returns 403 and `Generate picture` shows a friendly error on every phone. That's the right behaviour — it's what protects the free-tier neuron budget from public scraping.
+
+**Optional — persistent image counter (Cloudflare KV).** By default the Worker ships with KV **disabled**, so the one-click button works in any account (a hard-coded KV namespace id only works in the account that created it). The Worker runs fine without it — only the host's *"Images today"* counter resets on each Render cold start. To enable persistence in *your* account, create your own namespace and uncomment the block in `cloudflare/wrangler.toml`:
+
+```bash
+wrangler kv namespace create STATS_KV            # prints your id
+wrangler kv namespace create STATS_KV --preview  # prints your preview_id
+```
 
 ### Accepting donations from *your* players
 
