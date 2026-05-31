@@ -1,6 +1,8 @@
 # Funny Stories
 
-A party game where 3–7 friends, on their phones, answer 7 silly questions about a shared story they can't see — then watch an AI cartoon goof of the result. Multilingual from day one. No accounts, no database, no analytics. Self-hostable for free.
+A party game where 3–7 friends, on their phones, answer 7 silly questions about a shared story they can't see — then watch an AI cartoon goof of the result. 
+Multilingual from day one. 
+No accounts, no database, no analytics. Self-hostable for free.
 
 [![Build](https://img.shields.io/github/actions/workflow/status/oursharedcode/funny-stories/ci.yml?branch=master)](https://github.com/oursharedcode/funny-stories/actions)
 [![License: AGPL-3.0](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](./LICENSE)
@@ -28,7 +30,7 @@ A party game where 3–7 friends, on their phones, answer 7 silly questions abou
 You deploy onto **your own** Cloudflare + Render accounts — both free, no credit card. (You sign in with your Google account — just seconds)
 
 **1. Make a shared secret string (let's call it S)** (40+ chars). You will need it in steps 2 and 3.
-On a phone: use a password-manager app — or type your own random string. (important: 40+ chars, letters/digits only). 
+On a phone: use a password-manager app — or type your own random string. (important: 40+ chars, letters/digits only).
 On a computer, pick a line:
 
 ```bash
