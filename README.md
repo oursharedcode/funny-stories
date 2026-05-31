@@ -1,6 +1,6 @@
 # Funny Stories
 
-A party game where 3–7 friends, on their phones, answer 7 silly questions about a shared story they can't see — then watch an AI cartoon goof of the result.\
+A party game where 3–7 friends, on their phones, answer 7 silly questions about a shared story they can't see — then watch an AI cartoon goof of the result (+short video).\
 Multilingual from day one.\
 No accounts, no database, no analytics. Self-hostable for free.
 
@@ -27,7 +27,7 @@ No accounts, no database, no analytics. Self-hostable for free.
 
 ## Deploy your own (free, ~5 minutes)
 
-You deploy onto **your own** Cloudflare + Render accounts — both free, no credit card. (You sign in with your Google account — just seconds)
+You deploy onto **your own** Cloudflare + Render accounts — both free, no credit card. (You sign in with your Google account — just seconds).
 
 **1. Make a shared secret string (let's call it S)** (40+ chars). You will need it in steps 2 and 3.\
 On a phone: use a password-manager app — or type your own random string. (important: 40+ chars, letters/digits only).\
