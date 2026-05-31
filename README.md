@@ -1,7 +1,7 @@
 # Funny Stories
 
-A party game where 3–7 friends, on their phones, answer 7 silly questions about a shared story they can't see — then watch an AI cartoon goof of the result. 
-Multilingual from day one. 
+A party game where 3–7 friends, on their phones, answer 7 silly questions about a shared story they can't see — then watch an AI cartoon goof of the result.\
+Multilingual from day one.\
 No accounts, no database, no analytics. Self-hostable for free.
 
 [![Build](https://img.shields.io/github/actions/workflow/status/oursharedcode/funny-stories/ci.yml?branch=master)](https://github.com/oursharedcode/funny-stories/actions)
