@@ -375,8 +375,19 @@ export async function recordWobbleVideoLottie(opts: {
   const canvas = document.createElement('canvas');
   canvas.width = W;
   canvas.height = H;
+  // Android Chrome throttles requestAnimationFrame for canvases that are
+  // never inserted into the DOM, which caused the monkey to be missing or
+  // frozen on mobile. Attach the canvas off-screen but laid-out (so rAF
+  // ticks at full rate). `display:none` would also pause rAF, so we use
+  // off-screen positioning instead.
+  canvas.style.cssText =
+    'position:fixed;left:-99999px;top:0;pointer-events:none;opacity:0;';
+  document.body.appendChild(canvas);
   const ctx = canvas.getContext('2d');
-  if (!ctx) throw new Error('Canvas 2D context unavailable');
+  if (!ctx) {
+    canvas.remove();
+    throw new Error('Canvas 2D context unavailable');
+  }
 
   const stream = canvas.captureStream(FPS);
   const recorder = new MediaRecorder(stream, { mimeType: mime.mime });
@@ -456,5 +467,6 @@ export async function recordWobbleVideoLottie(opts: {
     await done;
   } finally {
     cancelAnimationFrame(raf);
+    canvas.remove();
   }
 }
