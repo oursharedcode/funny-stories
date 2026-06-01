@@ -1,8 +1,17 @@
 # Funny Stories
 
-A party game where 3–7 friends, on their phones, answer 7 silly questions about a shared story they can't see — then watch an AI cartoon goof of the result (+short video).\
-Multilingual from day one.\
+<table>
+<tr>
+<td width="220" valign="middle">
+<a href="./client/public/monkeys-on-bus.png"><img src="./client/public/monkeys-on-bus.png" alt="Seven players" width="200" title="Seven players"></a>
+</td>
+<td valign="middle">
+A party game where 3–7 friends, on their phones, answer 7 silly questions about a shared story they can't see — then watch an AI cartoon goof of the result (+short video).<br>
+Multilingual from day one.<br>
 No accounts, no database, no analytics. Self-hostable for free.
+</td>
+</tr>
+</table>
 
 [![Build](https://img.shields.io/github/actions/workflow/status/oursharedcode/funny-stories/ci.yml?branch=master)](https://github.com/oursharedcode/funny-stories/actions)
 [![License: AGPL-3.0](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](./LICENSE)
@@ -20,10 +29,9 @@ No accounts, no database, no analytics. Self-hostable for free.
 
 <p>
   <a href="./assets/Story01.JPG"><img src="./assets/Story01.JPG" alt="A finished story" width="200"></a>
-  <a href="./client/public/monkeys-on-bus.png"><img src="./client/public/monkeys-on-bus.png" alt="Seven players" width="200" title="Seven players"></a>
 </p>
 
-*A finished story (left) and the seven-players end screen (right) — click to zoom.*
+*A finished story — click to zoom.*
 
 ## Deploy your own (free, ~5 minutes)
 
