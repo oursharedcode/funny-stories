@@ -21,17 +21,17 @@ No accounts, no database, no analytics. Self-hostable for free.
 ## How it plays
 
 - **Create a room.** One person taps **Create room**, picks a language, and shares a 6-character code or QR.
-- **Friends join.** They scan the QR or enter the code, pick a nickname; the host taps **Start**.
+- **Friends join.** They scan the QR or enter the code, pick a nickname; the host taps **Start Game**.
 - **Answer seven questions.** Each round, one prompt — *Who? And who else? Where? When? What did they do? What for? What happened in the end?*
 - **Stay in the dark.** The story rotates every round, so you never see the other answers in your own story.
 - **Reveal the cartoon.** After seven rounds, your story will be turned into a goofy AI cartoon (+short video).
 
-
 <p>
-  <a href="./assets/Story01.JPG"><img src="./assets/Story01.JPG" alt="A finished story" width="200"></a>
+  <img src="./assets/demo.gif" alt="A host playthrough — create a room, answer the prompts, reveal the cartoon" height="200">
+  <img src="./assets/funny-stories-01.png" alt="A goofy AI cartoon from a story" height="200">
+  <img src="./assets/funny-stories-02.png" alt="A goofy AI cartoon from a story" height="200">
+  <img src="./assets/funny-stories-03.png" alt="A goofy AI cartoon from a story" height="200">
 </p>
-
-*A finished story — click to zoom.*
 
 ## Deploy your own (free, ~5 minutes)
 
