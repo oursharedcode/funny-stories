@@ -51,14 +51,111 @@ Note the deployed URL (`https://funny-stories-image.<your-account>.workers.dev`)
 
 If the secrets don't match, the Worker returns 403 and `Generate picture` shows a friendly error on every phone. That's the right behaviour — it's what protects the free-tier neuron budget from public scraping.
 
-### Optional — persistent image counter (Cloudflare KV)
+### Optional (advanced) — persistent image counter (Cloudflare KV)
 
-By default the Worker ships with KV **disabled**, so the one-click button works in any account (a hard-coded KV namespace id only works in the account that created it). The Worker runs fine without it — only the host's *"Images today"* counter resets on each Render cold start. To enable persistence in *your* account, create your own namespace and uncomment the block in `cloudflare/wrangler.toml`:
+By default the Worker ships with KV **disabled**, so the one-click button works in any account (a hard-coded KV namespace id only works in the account that created it). The Worker runs fine without it. This section is for an advanced operator who wants the daily image count to survive restarts; it walks through the full mechanism and the code that implements it.
+
+#### The Render spin-down issue (why this exists)
+
+The daily image ceiling (`MAX_IMAGES_PER_DAY`, default 25) is enforced by a **process-global counter that lives only in the Node service's memory**, resetting at 00:00 UTC. On Render's **free** tier this matters:
+
+- The service **spins down after ~15 minutes idle**.
+- On the next request it **cold-starts a fresh process** — and the in-memory counter is back to **0**.
+
+So a host who generated 20 cartoons, went idle, and came back later finds the count reset to 0 and the daily cap effectively restarted. For casual use this is harmless. But if you want the cap to be a *true* per-UTC-day total that survives spin-downs (and is shared across restarts), you need a store that outlives the process. Cloudflare KV — already sitting next to the Worker — is that store. **Without KV, the counter is accurate only within one continuous run; with KV, it is recovered after every cold start.** (The label the host sees was made deployment-agnostic on purpose — *"Up to N cartoons per day. Resets daily at 00:00 UTC."* — precisely because the live tally can't be trusted across spin-downs in the default deployment.)
+
+#### How the two layers cooperate
+
+The Node service (`server/src/image.ts`) keeps two numbers and surfaces the **max** of them:
+
+- `imagesToday` — the in-process counter, incremented synchronously inside `reserveImageSlot()` *before* the Worker call. Authoritative for reservation, so concurrent rooms can't overshoot the cap.
+- `workerCount` — the last value read from the Worker's KV-backed counter, refreshed lazily (30 s TTL) via `/stats`. Survives the cold start that resets `imagesToday` to 0.
+
+Within a live session the local counter dominates (correct and immediate); after a Render restart the KV counter dominates (recovered). The cap check uses the same `max`, so a cold-started process whose KV count already exceeds the limit correctly refuses new reservations.
+
+#### Step 1 — create your namespace and enable it
 
 ```bash
 wrangler kv namespace create STATS_KV            # prints your id
 wrangler kv namespace create STATS_KV --preview  # prints your preview_id
 ```
+
+Then uncomment the `[[kv_namespaces]]` block in `cloudflare/wrangler.toml` and paste **your** `id` / `preview_id`. (Never commit someone else's id — it belongs to the account that minted it and breaks every other deployer's button.)
+
+#### Step 2 — the Worker side (`cloudflare/worker.js`)
+
+The Worker treats `STATS_KV` as optional and bumps it best-effort after each successful generation; a KV failure must never break image generation. It also exposes `/stats` for the Node service to poll:
+
+```js
+const KV_KEY_PREFIX = 'count:';
+const KV_TTL_SECONDS = 60 * 60 * 48; // 48 h — yesterday's key self-expires
+
+// GET /stats → { date: "YYYY-MM-DD", count: N }
+if (url.pathname === '/stats') {
+  const date = utcDayKey();
+  const count = env.STATS_KV ? await readCount(env.STATS_KV, date) : 0;
+  return new Response(JSON.stringify({ date, count }), {
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
+
+// …after a successful env.AI.run(...) generation:
+if (env.STATS_KV) {
+  try {
+    const date = utcDayKey();
+    const current = await readCount(env.STATS_KV, date);
+    await env.STATS_KV.put(`${KV_KEY_PREFIX}${date}`, String(current + 1), {
+      expirationTtl: KV_TTL_SECONDS,
+    });
+  } catch {
+    // Intentional: KV is observational, never authoritative — ignore failures.
+  }
+}
+
+async function readCount(kv, date) {
+  const raw = await kv.get(`${KV_KEY_PREFIX}${date}`);
+  const n = Number.parseInt(raw ?? '0', 10);
+  return Number.isFinite(n) && n >= 0 ? n : 0;
+}
+
+function utcDayKey() {
+  return new Date().toISOString().slice(0, 10);
+}
+```
+
+KV has no atomic increment, so two truly-concurrent generations could under-count by one in a rare race; the Node service still tracks its own counter and surfaces `max(local, kv)`, so the visible count stays monotonic.
+
+#### Step 3 — the Node service side (`server/src/image.ts`)
+
+The service polls `/stats` (TTL-bounded) and folds the result into `workerCount`, guarded by a day-rollover check so a pre-midnight count never stamps onto the new day:
+
+```js
+let imagesToday = 0;
+let workerCount = 0;
+
+export function reserveImageSlot() {
+  rolloverIfNewDay();
+  if (imagesGeneratedToday() >= maxImagesPerDay()) return false;
+  imagesToday++;
+  return true;
+}
+
+export function imagesGeneratedToday() {
+  return Math.max(imagesToday, workerCount); // local live, KV recovers after restart
+}
+
+export async function syncImageCounterFromWorker() {
+  rolloverIfNewDay();
+  const res = await fetch(`${workerUrl}/stats`, { headers: { 'X-Secret': secret } });
+  if (!res.ok) return;
+  const data = await res.json();
+  if (data?.date === utcDayKey() && typeof data.count === 'number' && data.count >= 0) {
+    workerCount = Math.floor(data.count);
+  }
+}
+```
+
+The full, production version (timeouts via `AbortController`, the 30 s sync TTL, startup eager-sync, and silent network-failure absorption) is in `server/src/image.ts`. With this in place the host's cap is a real per-UTC-day total that survives Render's spin-downs.
 
 ---
 

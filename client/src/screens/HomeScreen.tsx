@@ -208,7 +208,6 @@ export default function HomeScreen({ onJoined }: Props) {
               <p>{t('home.openRooms', { count: stats.openRooms })}</p>
               <p>
                 {t('home.imagesToday', {
-                  count: stats.imagesGeneratedToday,
                   total: stats.imagesLimit,
                 })}
               </p>

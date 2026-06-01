@@ -10,7 +10,7 @@
     "roomGone": "Esta sala não existe mais — talvez tenha terminado ou o link esteja velho.",
     "createNew": "Criar uma nova sala",
     "openRooms": "Salas abertas: {{count}}",
-    "imagesToday": "Imagens hoje: {{count}} / {{total}}",
+    "imagesToday": "Até {{total}} imagens por dia. Reinicia todo dia às 00:00 UTC.",
     "wobbleEngine": "Motor de vídeo compartilhado",
     "engine": {
       "css": "CSS (leve)",

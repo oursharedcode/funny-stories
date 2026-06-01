@@ -10,7 +10,7 @@
     "roomGone": "Ruangan ini sudah tidak ada — mungkin sudah berakhir atau tautannya sudah kedaluwarsa.",
     "createNew": "Buat ruangan baru",
     "openRooms": "Ruangan terbuka: {{count}}",
-    "imagesToday": "Gambar hari ini: {{count}} / {{total}}",
+    "imagesToday": "Hingga {{total}} gambar per hari. Disetel ulang setiap hari pukul 00:00 UTC.",
     "wobbleEngine": "Mesin video berbagi",
     "engine": {
       "css": "CSS (ringan)",
