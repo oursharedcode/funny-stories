@@ -22,6 +22,10 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"   # any
 [guid]::NewGuid().ToString("N") + [guid]::NewGuid().ToString("N")          # Windows PowerShell
 ```
 
+On Windows, run the PowerShell line and copy the result:
+
+![Generating the secret in Windows PowerShell](../assets/secret-powershell.gif)
+
 No terminal handy? Make **S** by hand: **at least 32 characters**, **only letters and digits** (`A–Z a–z 0–9`), **no spaces, no symbols**, genuinely random-looking — not a word or a date. (Symbols and spaces get mangled differently by shells and config fields, silently breaking the both-sides match; letters and digits are safe.)
 
 Copy **S** once — you paste it in two places (the Worker and the Node service) and never type it again.

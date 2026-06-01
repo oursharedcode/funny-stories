@@ -39,18 +39,7 @@ You deploy onto **your own** Cloudflare + Render accounts — both free, no cred
 
 **1. Make a shared secret string (let's call it S)** (40+ chars). You will need it in steps 2 and 3.\
 On a phone: use a password-manager app — or type your own random string. (important: 40+ chars, letters/digits only).\
-On a computer, pick a line:
-
-```bash
-openssl rand -hex 32                                                # macOS / Linux / Git Bash
-```
-```powershell
-[guid]::NewGuid().ToString("N") + [guid]::NewGuid().ToString("N")   # Windows PowerShell
-```
-
-On Windows, run the PowerShell line and copy the result:
-
-![Generating the secret in Windows PowerShell](./assets/secret-powershell.gif)
+On a computer, see the [handbook/DEPLOYMENT.md](handbook/DEPLOYMENT.md#1-generate-a-shared-secret-s).
 
 **2. Deploy the image Worker (Cloudflare).**
 
