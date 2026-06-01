@@ -36,6 +36,7 @@ export const LANGUAGES = [
   { code: 'ru', name: 'Русский (Россия)', flag: '🇷🇺' },
   { code: 'id', name: 'Indonesia (Indonesia)', flag: '🇮🇩' },
   { code: 'it', name: 'Italiano (Italia)', flag: '🇮🇹' },
+  { code: 'zh', name: '中文 (普通话)', flag: '🇨🇳' },
   { code: 'ja', name: '日本語 (日本)', flag: '🇯🇵' },
   { code: 'ko', name: '한국어 (대한민국)', flag: '🇰🇷' },
   { code: 'pt-br', name: 'Português (Brasil)', flag: '🇧🇷' },

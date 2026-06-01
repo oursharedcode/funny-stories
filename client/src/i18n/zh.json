@@ -1,0 +1,95 @@
+{
+  "_note": "needs-zh-review — machine-translated stub awaiting native Mandarin Chinese review per CONTRIBUTING.md.",
+  "home": {
+    "title": "搞笑故事",
+    "subtitle": "一起写荒诞的故事。适合手机。",
+    "nicknamePlaceholder": "取个昵称",
+    "create": "创建房间",
+    "join": "加入房间",
+    "joining": "正在加入房间",
+    "roomGone": "该房间已不存在 — 可能已经结束，或链接已过期。",
+    "createNew": "创建新房间",
+    "openRooms": "开放房间: {{count}}",
+    "imagesToday": "每天最多 {{total}} 张漫画。每天 00:00 UTC 重置。"
+  },
+  "lobby": {
+    "roomCodeLabel": "房间代码",
+    "copyLink": "复制链接",
+    "copied": "已复制!",
+    "qrCaption": "扫码加入",
+    "waitingForHost": "等待房主开始…",
+    "startGame": "开始游戏",
+    "startDisabled": "至少需要 3 名玩家才能开始",
+    "leave": "离开",
+    "host": "房主",
+    "capReached": "图片生成在接下来约 {{hours}} 小时内不可用。你仍然可以游玩 — 玩家将看到故事文字代替漫画。",
+    "capReachedHost": "准备好后点击开始游戏，或等待每日漫画额度重置。"
+  },
+  "round": {
+    "progress": "第 {{current}} 轮 / 共 {{total}} 轮",
+    "placeholder": "输入你的答案…",
+    "submit": "提交",
+    "submitted": "已提交"
+  },
+  "waiting": {
+    "title": "等待其他人",
+    "progress": "已提交 {{submitted}} / {{total}}",
+    "ellipsis": "请稍候。"
+  },
+  "reveal": {
+    "title": "这是你的故事",
+    "spinner": "召唤混乱中…",
+    "retry": "再试一次",
+    "error": "生成失败。请再试一次。",
+    "capReached": "漫画烤箱已满。新漫画将在约 {{hours}} 小时后生成。",
+    "pictureAlt": "AI 生成的你的故事漫画",
+    "continue": "继续"
+  },
+  "end": {
+    "title": "游戏结束",
+    "roundsOver": "各轮已结束",
+    "oneMoreGame": "再来一局",
+    "finishGame": "结束游戏",
+    "ready": "我准备好开新游戏了",
+    "readyActive": "已准备 ✓",
+    "waitingForHost": "等待房主…",
+    "needPlayers": "再开一局至少需要 3 名玩家",
+    "waitingForReady": "等待所有人准备就绪"
+  },
+  "endScreen": {
+    "supportServer": "支持此服务器"
+  },
+  "gallery": {
+    "share": "分享房间的图片",
+    "title": "房间图库",
+    "storyBy": "{{nickname}} 的故事",
+    "noPicture": "这个故事没有图片",
+    "pictureAlt": "{{nickname}} 故事的漫画",
+    "counter": "{{index}} / {{total}}",
+    "prev": "上一个故事",
+    "next": "下一个故事",
+    "download": "下载故事和静态图片",
+    "downloadStoryOnly": "下载故事",
+    "shareVideo": "分享为 5 秒视频",
+    "recording": "录制中…"
+  },
+  "playerLost": {
+    "label": "{{nickname}} 已退出",
+    "ignore": "忽略，继续游戏",
+    "newRoom": "创建新房间"
+  },
+  "footer": {
+    "source": "GitHub 上的源代码",
+    "contentNotice": "玩家的答案和 AI 图片由本服务器的运营者负责，与上游项目无关。"
+  },
+  "errors": {
+    "ROOM_NOT_FOUND": "未找到房间",
+    "ROOM_LOCKED": "游戏已经开始",
+    "ROOM_FULL": "房间已满",
+    "NOT_HOST": "只有房主才能这么做",
+    "NOT_ENOUGH_PLAYERS": "至少需要 3 名玩家",
+    "INVALID_NICKNAME": "无效的昵称",
+    "RATE_LIMITED": "请稍微慢一点",
+    "SERVER_BUSY": "服务器繁忙"
+  }
+}

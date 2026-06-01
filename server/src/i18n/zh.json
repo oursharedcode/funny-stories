@@ -1,0 +1,14 @@
+{
+  "_note": "needs-zh-review — machine-translated stub awaiting native Mandarin Chinese review per CONTRIBUTING.md.",
+  "questions": [
+    "谁?",
+    "还有谁?",
+    "在哪里?",
+    "什么时候?",
+    "他们做了什么?",
+    "为了什么?",
+    "最后怎么样了?"
+  ],
+  "prose": "{3}，{0}{1}在{2}{4}{5}。最后，{6}。",
+  "imagePrompt": "左边是{0}，右边是{1}，在{2}，{3}，{4}"
+}

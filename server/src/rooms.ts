@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { customAlphabet } from 'nanoid';
+import { isLanguage } from 'shared';
 import type { ErrorCode, Language, Player, Room } from './types.js';
 
 // Constants from spec §17.
@@ -62,7 +63,7 @@ export function validateNickname(raw: unknown): ValidationResult {
 }
 
 export function isValidLanguage(value: unknown): value is Language {
-  return value === 'en' || value === 'ru';
+  return typeof value === 'string' && isLanguage(value);
 }
 
 export function createRoom(

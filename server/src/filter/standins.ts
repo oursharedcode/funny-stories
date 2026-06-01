@@ -225,6 +225,16 @@ export const STANDINS: Record<Language, Record<number, string[]>> = {
     5: ['per ragioni che avevano senso lì per lì', 'per impressionare un piccione', 'perché la garanzia lo vietava', 'in cambio di un singolo acino', 'per dispetto'],
     6: ['un\'anatra ha sporto formale denuncia', 'diversi piccioni hanno ricevuto un attestato', 'il sindaco ha mandato un cesto di frutta', 'tutti hanno deciso di non parlarne mai più', 'è stato dichiarato festivo in tre paesi'],
   },
+  // needs-zh-review — machine-translated stub.
+  zh: {
+    0: ['一只困倦的羊驼', '图书管理员的邪恶双胞胎', '一只困惑的企鹅', '一只过度自信的浣熊', '一位穿越时空的会计师'],
+    1: ['和一个闹鬼的烤面包机', '和三只愤怒的鹅', '和一条爱思考的金鱼', '和一位迷路很久的游客', '和他们想象中的会计师'],
+    2: ['奶酪工厂里', '海底', '行驶的公交车顶上', '沙发后面', '云里'],
+    3: ['在一次小地震中', '凌晨三点毫无理由地', '当所有的钟都停下时', '在一年一度的帽子节期间', '当网络中断时'],
+    4: ['发明了一种新的悲伤', '试图烤出一种情绪', '按大小重新排列了云朵', '向星期一宣战', '忘了楼梯怎么走'],
+    5: ['出于当时看来合理的原因', '为了给一只鸽子留下深刻印象', '因为保修单不让这么做', '为了换取一颗葡萄', '出于怨恨'],
+    6: ['一只鸭子提出了正式投诉', '几只鸽子获得了证书', '市长送来一篮水果', '大家一致同意再也不提此事', '这在三个国家被定为节日'],
+  },
   // needs-ja-review — machine-translated stub.
   ja: {
     0: ['眠そうなラマ', '司書の邪悪な双子', '混乱したペンギン', '自信過剰なアライグマ', '時を超える会計士'],

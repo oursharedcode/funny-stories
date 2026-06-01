@@ -52,6 +52,7 @@ function toMyMemorySource(language: Language): string | null {
     ru: 'ru',
     id: 'id',
     it: 'it',
+    zh: 'zh-CN',
     ja: 'ja',
     ko: 'ko',
     'pt-br': 'pt-BR',
