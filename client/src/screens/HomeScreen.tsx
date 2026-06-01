@@ -248,7 +248,7 @@ export default function HomeScreen({ onJoined }: Props) {
         </>
       )}
 
-      <SourceFooter />
+      <SourceFooter sourceQr={mode === 'create'} />
     </div>
   );
 }
