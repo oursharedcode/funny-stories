@@ -10,12 +10,7 @@
     "roomGone": "Cette salle n'existe plus — la partie est peut-être terminée ou le lien est trop ancien.",
     "createNew": "Créer une nouvelle salle",
     "openRooms": "Salles ouvertes : {{count}}",
-    "imagesToday": "Jusqu'à {{total}} images par jour. Réinitialisation chaque jour à 00h00 UTC.",
-    "wobbleEngine": "Moteur vidéo partagée",
-    "engine": {
-      "css": "CSS (léger)",
-      "lottie": "Lottie (riche)"
-    }
+    "imagesToday": "Jusqu'à {{total}} images par jour. Réinitialisation chaque jour à 00h00 UTC."
   },
   "lobby": {
     "roomCodeLabel": "Code de la salle",

@@ -245,7 +245,7 @@ async function main(): Promise<void> {
       if (result.deleted) broadcastStats(io);
     });
 
-    socket.on('game:start', (payload) => {
+    socket.on('game:start', () => {
       const room = findRoomForSocket(socket.id);
       if (!room) {
         socket.emit('error', { code: 'ROOM_NOT_FOUND', message: 'No room.' });
@@ -266,10 +266,11 @@ async function main(): Promise<void> {
         });
         return;
       }
-      // Lock in the host's recording-engine choice at the exact moment of
-      // pressing Start. Re-broadcast lobby:update so every joiner learns
-      // the engine before they get to the End-screen gallery.
-      room.wobbleEngine = payload?.wobbleEngine === 'lottie' ? 'lottie' : 'css';
+      // Lottie is the only supported recording engine — the client's
+      // engine toggle was removed. Hard-lock it here regardless of payload,
+      // and re-broadcast lobby:update so every joiner records with Lottie
+      // before they reach the End-screen gallery.
+      room.wobbleEngine = 'lottie';
       broadcastLobby(room);
       startGame(room, io);
     });

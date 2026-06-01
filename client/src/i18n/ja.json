@@ -10,12 +10,7 @@
     "roomGone": "このルームはもう存在しません — 終了したか、リンクが古い可能性があります。",
     "createNew": "新しいルームを作成",
     "openRooms": "公開中のルーム: {{count}}",
-    "imagesToday": "1日あたり最大{{total}}枚の画像。毎日00:00 UTCにリセットされます。",
-    "wobbleEngine": "共有動画エンジン",
-    "engine": {
-      "css": "CSS(軽量)",
-      "lottie": "Lottie(高品質)"
-    }
+    "imagesToday": "1日あたり最大{{total}}枚の画像。毎日00:00 UTCにリセットされます。"
   },
   "lobby": {
     "roomCodeLabel": "ルームコード",

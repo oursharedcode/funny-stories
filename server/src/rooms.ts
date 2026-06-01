@@ -69,7 +69,7 @@ export function createRoom(
   nickname: string,
   language: Language,
   hostSocketId: string,
-  wobbleEngine: 'css' | 'lottie' = 'css',
+  wobbleEngine: 'css' | 'lottie' = 'lottie',
 ): Room {
   if (rooms.size >= getMaxRooms()) {
     throw new RoomError('SERVER_BUSY', 'Server at capacity. Please try again later.');

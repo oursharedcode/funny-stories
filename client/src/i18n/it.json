@@ -10,12 +10,7 @@
     "roomGone": "Questa stanza non esiste più — forse è finita, o il link è vecchio.",
     "createNew": "Crea una nuova stanza",
     "openRooms": "Stanze aperte: {{count}}",
-    "imagesToday": "Fino a {{total}} immagini al giorno. Si azzera ogni giorno alle 00:00 UTC.",
-    "wobbleEngine": "Motore video condiviso",
-    "engine": {
-      "css": "CSS (leggero)",
-      "lottie": "Lottie (ricco)"
-    }
+    "imagesToday": "Fino a {{total}} immagini al giorno. Si azzera ogni giorno alle 00:00 UTC."
   },
   "lobby": {
     "roomCodeLabel": "Codice stanza",

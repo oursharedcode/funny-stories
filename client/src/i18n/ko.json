@@ -10,12 +10,7 @@
     "roomGone": "이 방은 더 이상 존재하지 않습니다 — 끝났거나 링크가 오래됐을 수 있어요.",
     "createNew": "새 방 만들기",
     "openRooms": "열린 방: {{count}}",
-    "imagesToday": "하루 최대 {{total}}개의 이미지. 매일 00:00 UTC에 초기화됩니다.",
-    "wobbleEngine": "공유 동영상 엔진",
-    "engine": {
-      "css": "CSS (가볍게)",
-      "lottie": "Lottie (풍부하게)"
-    }
+    "imagesToday": "하루 최대 {{total}}개의 이미지. 매일 00:00 UTC에 초기화됩니다."
   },
   "lobby": {
     "roomCodeLabel": "방 코드",
