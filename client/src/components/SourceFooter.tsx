@@ -30,7 +30,7 @@ export default function SourceFooter({ sourceQr = false }: Props) {
             aria-label={t('footer.source')}
             className="shrink-0 rounded bg-white p-1"
           >
-            <QRCode value={SOURCE_URL} size={56} />
+            <QRCode value={SOURCE_URL} size={28} />
           </a>
         )}
         <a
