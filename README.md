@@ -35,7 +35,7 @@ No accounts, no database, no analytics. Self-hostable for free.
 
 ## Deploy your own (free, ~5 minutes)
 
-You deploy onto **your own** Cloudflare + Render accounts — both free, no credit card. (You sign in with your Google account — just seconds).
+You deploy onto **your own** Cloudflare + Render accounts — both free, no credit card. (You could sign in with your Google account — just seconds).
 
 **Step 1. Make a shared secret string (let's call it "S")** (40+ chars). You will need it in steps 2 and 3.\
 > On a phone: use a password-manager app — or type your own random string. (important: 40+ chars, letters/digits only).\
@@ -45,7 +45,7 @@ You deploy onto **your own** Cloudflare + Render accounts — both free, no cred
 
 > [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/oursharedcode/funny-stories/tree/master/cloudflare)
 >
-> After it deploys, set `WORKER_SECRET = S`(no quotes) in the Worker's **Settings → Variables** (the button can't do this — until you do, it returns 403). Copy the Worker URL it gives you.
+> After it deploys, set `WORKER_SECRET = S`(no quotes) in the Worker's **Settings → Variables** (the button can't do this — until you do, it returns 403). Copy the **Worker URL** it gives you.
 
 **Step 3. Deploy the game server (Render).**
 
@@ -55,7 +55,7 @@ You deploy onto **your own** Cloudflare + Render accounts — both free, no cred
 >
 > | Variable | Value |
 > |---|---|
-> | `CLOUDFLARE_WORKER_URL` | the Worker URL from Step 2 |
+> | `CLOUDFLARE_WORKER_URL` | the **Worker URL** from Step 2 |
 > | `CLOUDFLARE_WORKER_SECRET` | (no quotes)**"S"** (the *same* string from Step 1) |
 
 First build takes ~3 minutes. Open your `.onrender.com` URL on a phone and play.
