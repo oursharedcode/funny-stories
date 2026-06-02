@@ -5,6 +5,8 @@ import { createRoot } from 'react-dom/client';
 import App from './App';
 import TestShareScreen from './screens/TestShareScreen';
 import TestImageScreen from './screens/TestImageScreen';
+import TestDemoScreen from './screens/TestDemoScreen';
+import TestDemoImageScreen from './screens/TestDemoImageScreen';
 import { installSwReloadListener } from './swReload';
 import './i18n';
 import './styles/index.css';
@@ -26,6 +28,10 @@ createRoot(root).render(
       <TestShareScreen />
     ) : testParam === 'image' ? (
       <TestImageScreen />
+    ) : testParam === 'demo' ? (
+      <TestDemoScreen />
+    ) : testParam === 'demopic' ? (
+      <TestDemoImageScreen />
     ) : (
       <App />
     )}
