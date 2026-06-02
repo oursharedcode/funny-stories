@@ -19,6 +19,9 @@ type Status = 'idle' | 'recording-css' | 'recording-lottie' | 'done' | 'error';
 
 const PLACEHOLDER_PICTURE_URL = '/monkeys-on-bus.png';
 const TEST_NICKNAME = 'TestPlayer';
+const TEST_PROSE =
+  'On a sunny Tuesday, a troop of monkeys boarded the number 9 bus and asked the ' +
+  'driver to take them all the way to the banana festival.';
 
 export default function TestShareScreen(): JSX.Element {
   const [status, setStatus] = useState<Status>('idle');
@@ -30,6 +33,7 @@ export default function TestShareScreen(): JSX.Element {
     try {
       await recordWobbleVideo({
         nickname: TEST_NICKNAME,
+        prose: TEST_PROSE,
         pictureUrl: PLACEHOLDER_PICTURE_URL,
       });
       setStatus('done');
@@ -48,6 +52,7 @@ export default function TestShareScreen(): JSX.Element {
       const { recordWobbleVideoLottie } = await import('../recordWobbleLottie');
       await recordWobbleVideoLottie({
         nickname: TEST_NICKNAME,
+        prose: TEST_PROSE,
         pictureUrl: PLACEHOLDER_PICTURE_URL,
       });
       setStatus('done');

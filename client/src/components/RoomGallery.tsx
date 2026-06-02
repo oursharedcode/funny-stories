@@ -44,10 +44,15 @@ export default function RoomGallery({ entries, wobbleEngine }: Props) {
         const { recordWobbleVideoLottie } = await import('../recordWobbleLottie');
         await recordWobbleVideoLottie({
           nickname: entry.nickname,
+          prose: entry.prose,
           pictureUrl: entry.pictureUrl,
         });
       } else {
-        await recordWobbleVideo({ nickname: entry.nickname, pictureUrl: entry.pictureUrl });
+        await recordWobbleVideo({
+          nickname: entry.nickname,
+          prose: entry.prose,
+          pictureUrl: entry.pictureUrl,
+        });
       }
     } finally {
       setRecording(false);

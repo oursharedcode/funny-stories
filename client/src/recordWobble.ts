@@ -10,7 +10,12 @@
 // rejects; the caller surfaces this as a button-disabled state.
 
 import { SOURCE_URL } from './sourceUrl.js';
-import { drawAttribution, renderQrCanvas } from './videoFooter.js';
+import {
+  drawAttribution,
+  drawStoryText,
+  measureAttributionHeight,
+  renderQrCanvas,
+} from './videoFooter.js';
 
 const W = 720;
 const H = 1280;
@@ -100,9 +105,10 @@ export function isVideoRecordingSupported(): boolean {
 
 export async function recordWobbleVideo(opts: {
   nickname: string;
+  prose: string;
   pictureUrl: string;
 }): Promise<void> {
-  const { nickname, pictureUrl } = opts;
+  const { nickname, prose, pictureUrl } = opts;
   const mime = pickMime();
   if (!mime) throw new Error('MediaRecorder not supported in this browser');
 
@@ -130,6 +136,16 @@ export async function recordWobbleVideo(opts: {
   const picSize = W - margin * 2;
   const picX = margin;
   const picY = (H - picSize) / 2 - 60; // bias up to leave room for the badge
+
+  // Vertical budget for the story text: whatever's left between the name and
+  // the attribution footer, so a long story shrinks rather than clipping the
+  // QR off the bottom. The footer height is constant, so measure it once.
+  const STORY_GAP = 30; // gap between the story block and the footer
+  const BOTTOM_MARGIN = 40;
+  const badgeY = picY + picSize + 50;
+  const storyTop = badgeY + 40;
+  const attributionHeight = measureAttributionHeight(ctx, W);
+  const maxStoryHeight = H - BOTTOM_MARGIN - attributionHeight - STORY_GAP - storyTop;
 
   const stream = canvas.captureStream(FPS);
   const recorder = new MediaRecorder(stream, { mimeType: mime.mime });
@@ -174,7 +190,6 @@ export async function recordWobbleVideo(opts: {
     // Pulsing nickname badge — the "speech bubble pulse" element. URL was
     // moved out of the pulse into the static attribution block below; the
     // pulse now carries just the nickname to avoid duplicating the URL.
-    const badgeY = picY + picSize + 50;
     const badgeCx = W / 2;
     ctx!.save();
     ctx!.translate(badgeCx, badgeY);
@@ -186,9 +201,17 @@ export async function recordWobbleVideo(opts: {
     ctx!.fillText(nickname, 0, 0);
     ctx!.restore();
 
+    // Full story text, just below the player's name. Font auto-shrinks to fit
+    // the budgeted height so the footer below never clips off the bottom.
+    const storyBottom = drawStoryText(ctx!, prose, {
+      topY: storyTop,
+      canvasWidth: W,
+      maxHeight: maxStoryHeight,
+    });
+
     // Static attribution footer matching the downloadable PNG's footer:
     // wrapped content-responsibility notice + QR + source label + URL.
-    drawAttribution(ctx!, qrCanvas, { topY: badgeY + 50, canvasWidth: W });
+    drawAttribution(ctx!, qrCanvas, { topY: storyBottom + STORY_GAP, canvasWidth: W });
 
     if (elapsed >= DURATION_MS) {
       recorder.stop();

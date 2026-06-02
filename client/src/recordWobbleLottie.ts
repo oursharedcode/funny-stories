@@ -16,7 +16,12 @@
 // + monkey, CSS engine = cartoon only) stays the same.
 
 import { SOURCE_URL } from './sourceUrl.js';
-import { drawAttribution, renderQrCanvas } from './videoFooter.js';
+import {
+  drawAttribution,
+  drawStoryText,
+  measureAttributionHeight,
+  renderQrCanvas,
+} from './videoFooter.js';
 
 const W = 720;
 const H = 1280;
@@ -93,7 +98,10 @@ interface MonkeyFrame {
 // (the monkey's full head-to-foot height: 84 px above torso centre for the
 // head + 122 px below for the legs) so the whole figure sits higher in the
 // frame and stops overlapping the QR attribution footer at the bottom.
-const GROUND_Y = 974;
+// Then nudged 40 px back down to make room for the story text that now sits
+// between the nickname and the attribution footer, and a further 103 px down
+// (half the monkey's 206 px full height) to sit lower in the frame.
+const GROUND_Y = 1117;
 
 function monkeyAt(ms: number): MonkeyFrame | null {
   // Off-screen for the first 1.5 s.
@@ -358,9 +366,10 @@ async function loadMonkeySprites(): Promise<MonkeySprites> {
 
 export async function recordWobbleVideoLottie(opts: {
   nickname: string;
+  prose: string;
   pictureUrl: string;
 }): Promise<void> {
-  const { nickname, pictureUrl } = opts;
+  const { nickname, prose, pictureUrl } = opts;
   const mime = pickMime();
   if (!mime) throw new Error('MediaRecorder not supported in this browser');
 
@@ -416,6 +425,15 @@ export async function recordWobbleVideoLottie(opts: {
   const picCx = margin + picRenderSize / 2;
   const picCy = (H - picRenderSize) / 2 - 60;
 
+  // Vertical budget for the story text — see recordWobble.ts. The footer
+  // height is constant, so measure it once before the frame loop.
+  const STORY_GAP = 30;
+  const BOTTOM_MARGIN = 40;
+  const badgeY = picCy + picRenderSize / 2 + 50;
+  const storyTop = badgeY + 40;
+  const attributionHeight = measureAttributionHeight(ctx, W);
+  const maxStoryHeight = H - BOTTOM_MARGIN - attributionHeight - STORY_GAP - storyTop;
+
   function drawFrame(now: number): void {
     const elapsed = now - start;
     const w = cartoonWobbleAt(elapsed);
@@ -439,7 +457,6 @@ export async function recordWobbleVideoLottie(opts: {
     //    attribution block below to avoid duplicating it next to the QR.
     const pulsePhase = ((elapsed % 600) / 600) * Math.PI * 2;
     const pulse = 1 + 0.12 * (0.5 - 0.5 * Math.cos(pulsePhase));
-    const badgeY = picCy + picRenderSize / 2 + 50;
     ctx!.save();
     ctx!.translate(W / 2, badgeY);
     ctx!.scale(pulse, pulse);
@@ -450,9 +467,17 @@ export async function recordWobbleVideoLottie(opts: {
     ctx!.fillText(nickname, 0, 0);
     ctx!.restore();
 
-    // 5. Static attribution footer (notice + QR + source label + URL).
+    // 5. Full story text, just below the player's name. Font auto-shrinks to
+    //    fit the budgeted height so the footer never clips off the bottom.
+    const storyBottom = drawStoryText(ctx!, prose, {
+      topY: storyTop,
+      canvasWidth: W,
+      maxHeight: maxStoryHeight,
+    });
+
+    // 6. Static attribution footer (notice + QR + source label + URL).
     //    Same content as the downloadable PNG footer.
-    drawAttribution(ctx!, qrCanvas, { topY: badgeY + 50, canvasWidth: W });
+    drawAttribution(ctx!, qrCanvas, { topY: storyBottom + STORY_GAP, canvasWidth: W });
 
     if (elapsed >= DURATION_MS) {
       recorder.stop();
