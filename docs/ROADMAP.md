@@ -32,7 +32,7 @@ M2M-100 translation) noted against the Russian-action-verb bug in
 | Small app-version label on the start page | Solved | v4.17.0 §27 — `v<version> · <build-date>` in the source footer. | vol01 #17 |
 | Image prompt preserves a duplicate subject ("X with X") | Solved | v4.20.0 §10 — `"two of them, "` anchor on same-subject pairs. | vol01 #19 |
 | English prose connective "for" between slots 4 and 5 | Solved | v4.21.0 §9 — render-time "for " prefix when no connective present. | vol01 #20 |
-| Deployer-logo stamp default reworked | Solved | v4.22.0 §25 — 7×7 native-size PNG; delete/replace to opt out. | vol01 #21 |
+| Deployer-logo stamp default reworked | Solved | §25 — 25×25 native-size PNG; delete/replace to opt out. | vol01 #21 |
 | Russian prose "и" between subjects + "это закончилось" before ending | Solved | v4.24.0 §9 — render-time prefixes with word-count heuristic. | vol01 #23 |
 | Generated pictures with painter-style signatures / scribbled text | Solved | v4.25.0 §22 — documented and accepted; "Known visual artefacts" in MODERATION. Options A–E held in reserve. | vol02 #1 |
 | Bot-filled stories for exited players still get a picture | Solved | v4.30.0 — server-driven `generateBotStoryPictures` for bot-owned stories. | vol02 #3 |

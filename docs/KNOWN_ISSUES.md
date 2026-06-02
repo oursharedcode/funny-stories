@@ -8,11 +8,15 @@ triage volume, vol02 = second).
 
 Improvements and new features are tracked separately in [ROADMAP.md](./ROADMAP.md).
 
+> **Note on the image-prompt rows (vol01 #18, vol02 #2/#10/#12):** these record the
+> earlier per-language-template / anchor approach. The shipping pipeline now
+> translates the answers to English and fills a single English template (see
+> [LANGUAGES.md](./LANGUAGES.md)); the exact template and slot order are an
+> implementation detail and may change.
+
 ## Open / partial
 
-| Issue | Status | Detail | Source |
-|---|---|---|---|
-| Russian action verbs don't appear in the generated picture | **Partial** | Action-first template (v4.27.0) + Russian→English action-hint lexicon `server/src/promptHints.ts` (v4.29.0) shipped. Escalation **option C** — Worker-side `@cf/meta/m2m100-1.2b` translation — remains **not done**, to be picked up only if A+B prove empirically insufficient. | vol02 #2 |
+_None._
 
 ## Resolved
 
@@ -30,3 +34,4 @@ Improvements and new features are tracked separately in [ROADMAP.md](./ROADMAP.m
 | "I'm ready" / "Я готов" end-screen button read as ambiguous | Solved | Relabelled "I'm ready for a new game" / "Я готов к новой игре" (v4.33.1). | vol02 #7 |
 | Distinct subjects (cat + dog) merged into one chimera | Solved | Language-aware distinct-pair anchor in `buildPrompt` (v4.34.0, refined v4.34.1). | vol02 #10 |
 | English image prompts produced a cat-dog chimera | Solved | Prepend `"and "` to slot 1 when it lacks a connector, mirroring the Russian "и" logic (v4.34.x). | vol02 #12 |
+| Russian action verbs missing from the picture | Solved | The image prompt now translates the answers to English before generation, so Flux receives English action verbs. | vol02 #2 |

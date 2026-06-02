@@ -631,6 +631,13 @@ On `HomeScreen`, the language selector sets the room language and is shown **onl
 
 ## 10. Image prompt builder (`server/src/prompt.ts`)
 
+> **Current behaviour:** `buildPrompt` translates every answer to English (via
+> `server/src/translate.ts`) and fills a single English template, then appends
+> the locked style suffix (§22). Only the picture prompt is translated — the
+> player-facing prose (§9) stays in the room's language. The per-language-template
+> description below is retained for design rationale; the exact template and slot
+> order are an implementation detail and may change.
+
 ```typescript
 function buildPrompt(story: Story, language: Language): string {
   const a = story.answers.map(ans => ans ?? 'something surprising');
@@ -706,7 +713,7 @@ doesn't move the needle, keeping A in place.
 
 Notes:
 
-- Answers are used verbatim — no translation, no language detection.
+- Answers are translated to English before the prompt is assembled (see the current-behaviour note above); only the picture prompt is translated — the prose (§9) stays in the room's language.
 - The narrative is a per-language template, not a list of comma-
   separated noun phrases. Flux is trained on natural language and on
   image captions; the templated forms read to its text encoder as
