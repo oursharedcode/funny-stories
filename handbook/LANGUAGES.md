@@ -2,7 +2,7 @@
 
 ## Adding a new language
 
-Currently English and Russian ship in v1. The registry, type, i18n loaders, and filter dispatch are all data-driven, so adding a third language is a small, well-bounded set of edits. To add (say) German:
+The project is multilingual from v1. The registry, type, i18n loaders, and filter dispatch are all data-driven, so adding another language is a small, well-bounded set of edits. To add (say) German:
 
 1. **`shared/languages.ts`** — append one row to the `LANGUAGES` array (`{ code: 'de', name: 'Deutsch', flag: '🇩🇪' }`). The `Language` union type is derived from this array, so this edit also widens the type — every `Record<Language, …>` site in the codebase will become a compile error until the rest of the steps are done. **Run `npm run typecheck` now and let the compiler list the remaining required edits for you.**
 2. **`client/src/i18n/de.json`** — copy `en.json`, translate every key. The `endScreen.supportServer` key must say "this server", not "the developer" — see [spec §18](../docs/FUNNY_STORIES_SPEC_v4.md#18-things-not-to-do). The Vite glob picks it up automatically; no bootstrap edit needed.

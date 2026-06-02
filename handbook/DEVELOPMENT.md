@@ -59,7 +59,7 @@ See [`FUNNY_STORIES_SPEC_v4.md` §3](../docs/FUNNY_STORIES_SPEC_v4.md) for the c
 
 - Not a database project. **Don't add an ORM, a DB driver, or Redis.** See spec §18.
 - Not a reconnect project. **Disconnect = bot.** This is a feature, not a limitation.
-- Not a translation project. **Don't auto-translate player answers** — they go verbatim into the AI prompt. The room's prose template *structure* differs between EN and RU; never port one to the other slot-for-slot.
+- Not a translation project. **Don't auto-translate player answers** — they go verbatim into the AI prompt. The room's prose template *structure* differs between languages; never port one to the other slot-for-slot.
 
 ## Documentation hierarchy
 
@@ -74,4 +74,4 @@ See [`FUNNY_STORIES_SPEC_v4.md` §3](../docs/FUNNY_STORIES_SPEC_v4.md) for the c
 - **No persistence.** When the process restarts, all rooms end. Intentional. There is nothing to back up.
 - **Cloudflare free tier caps image generation.** Roughly 15–30 images/day per Worker. Adequate for personal use and small friend groups.
 - **Accessibility is partial.** Focus rings, contrast, and reduced-motion are honoured. Screen-reader narration of game state and keyboard-only flow are not implemented. See [`DESIGN_SYSTEM.md` §8](../docs/DESIGN_SYSTEM.md).
-- **Mobile portrait only.** Tablets and desktops work but get the phone layout, centered.
+- **Mobile portrait only.** Tablets and desktops work but get the phone layout, centred.

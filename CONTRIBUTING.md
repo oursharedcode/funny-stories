@@ -75,7 +75,7 @@ If you think one of these is justified, open an issue first. Sometimes the answe
 
 ## Translations
 
-The project ships English and Russian from v1. Adding a language is welcome.
+The project is multilingual from v1. Adding a language is welcome.
 
 ### Adding a new language
 
