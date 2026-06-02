@@ -42,7 +42,7 @@ npm run typecheck    # tsc --noEmit, all workspaces
 
 ## Project layout
 
-See [`FUNNY_STORIES_SPEC_v4.md` §3](../docs/FUNNY_STORIES_SPEC_v4.md) for the canonical file tree. Short version:
+See [`FUNNY_STORIES_SPEC_v4.md` §3](./FUNNY_STORIES_SPEC_v4.md) for the canonical file tree. Short version:
 
 - `client/` — React + Vite PWA.
 - `server/` — Fastify + Socket.IO + in-memory room state. No DB, no Redis.
@@ -63,9 +63,9 @@ See [`FUNNY_STORIES_SPEC_v4.md` §3](../docs/FUNNY_STORIES_SPEC_v4.md) for the c
 
 ## Documentation hierarchy
 
-- **[`docs/FUNNY_STORIES_SPEC_v4.md`](../docs/FUNNY_STORIES_SPEC_v4.md)** — what the app does (binding).
-- **[`docs/DESIGN_SYSTEM.md`](../docs/DESIGN_SYSTEM.md)** — how it looks and moves.
-- **[`CONTRIBUTING.md`](../CONTRIBUTING.md)** — how to work on it.
+- **[`docs/FUNNY_STORIES_SPEC_v4.md`](./FUNNY_STORIES_SPEC_v4.md)** — what the app does (binding).
+- **[`docs/DESIGN_SYSTEM.md`](./DESIGN_SYSTEM.md)** — how it looks and moves.
+- **[`CONTRIBUTING.md`](./CONTRIBUTING.md)** — how to work on it.
 
 ## Known limitations
 
@@ -73,5 +73,5 @@ See [`FUNNY_STORIES_SPEC_v4.md` §3](../docs/FUNNY_STORIES_SPEC_v4.md) for the c
 - **No reconnect.** Disconnect = bot for the rest of the game. Intentional.
 - **No persistence.** When the process restarts, all rooms end. Intentional. There is nothing to back up.
 - **Cloudflare free tier caps image generation.** Roughly 15–30 images/day per Worker. Adequate for personal use and small friend groups.
-- **Accessibility is partial.** Focus rings, contrast, and reduced-motion are honoured. Screen-reader narration of game state and keyboard-only flow are not implemented. See [`DESIGN_SYSTEM.md` §8](../docs/DESIGN_SYSTEM.md).
+- **Accessibility is partial.** Focus rings, contrast, and reduced-motion are honoured. Screen-reader narration of game state and keyboard-only flow are not implemented. See [`DESIGN_SYSTEM.md` §8](./DESIGN_SYSTEM.md).
 - **Mobile portrait only.** Tablets and desktops work but get the phone layout, centred.

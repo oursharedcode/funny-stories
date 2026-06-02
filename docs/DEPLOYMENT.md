@@ -181,7 +181,7 @@ The full, production version (timeouts via `AbortController`, the 30 s sync TTL,
    | `NODE_ENV` | yes | `production` (already in `render.yaml`). |
 
 3. Render auto-builds on push to `master`. First deploy takes ~3 minutes.
-4. Visit your `.onrender.com` URL on a real phone and run the [acceptance test](../docs/FUNNY_STORIES_SPEC_v4.md#19-acceptance-test).
+4. Visit your `.onrender.com` URL on a real phone and run the [acceptance test](./FUNNY_STORIES_SPEC_v4.md#19-acceptance-test).
 
 **Render free-tier caveats.** Single instance, ~512 MB RAM, no horizontal scaling. The game is deliberately built for this — room state is in-memory, so adding instances breaks rooms across them. The free tier also **spins the service down when idle**: the first visit after a quiet period waits a few seconds for a cold start, and because rooms are in-memory, a spin-down **ends any rooms that were still open**. The host's *"Images today"* counter is also in-memory and resets on every spin-down (see KV above for persistence). Render's free tier allows up to 15 free web services per account, and needs no credit card. Upgrade the one service to a paid plan for always-on, no-cold-start behaviour.
 
@@ -244,4 +244,4 @@ Most of these fail *silently* — no error points at the cause.
 
 ## Accepting donations from *your* players
 
-If you run a public instance and want a small "Support this server" button on the end screen, set `DEPLOYER_DONATE_URL` to your own donation page (Buy Me a Coffee, Ko-fi, GitHub Sponsors, Patreon, YuMoney, anything). The button only appears when this variable is set. **Donations go to you, the operator, not to the upstream author** — this is by design and is a [structural property of the AGPL distribution path](../docs/FUNNY_STORIES_SPEC_v4.md#18-things-not-to-do). The upstream author is supported only through the GitHub Sponsors link in the root README.
+If you run a public instance and want a small "Support this server" button on the end screen, set `DEPLOYER_DONATE_URL` to your own donation page (Buy Me a Coffee, Ko-fi, GitHub Sponsors, Patreon, YuMoney, anything). The button only appears when this variable is set. **Donations go to you, the operator, not to the upstream author** — this is by design and is a [structural property of the AGPL distribution path](./FUNNY_STORIES_SPEC_v4.md#18-things-not-to-do). The upstream author is supported only through the GitHub Sponsors link in the root README.

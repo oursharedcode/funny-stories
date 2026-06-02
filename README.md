@@ -39,7 +39,7 @@ You deploy onto **your own** Cloudflare + Render accounts — both free, no cred
 
 **Step 1. Make a shared secret string (let's call it "S")** (40+ chars). You will need it in steps 2 and 3.
 > On a phone: use a password-manager app — or type your own random string (important: 40+ chars, letters/digits only).\
-> On a computer: see the [handbook/DEPLOYMENT.md](handbook/DEPLOYMENT.md#1-generate-a-shared-secret-s).
+> On a computer: see the [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md#1-generate-a-shared-secret-s).
 
 **Step 2. Deploy the image Worker (Cloudflare).**
 
@@ -66,12 +66,12 @@ First build takes ~3 minutes. Open your `.onrender.com` URL on a phone and play.
 
 | Guide | What's in it |
 |---|---|
-| [handbook/DEPLOYMENT.md](./handbook/DEPLOYMENT.md) | Full deploy: Render, Docker, the Cloudflare Worker, KV, and gotchas. |
-| [handbook/DEVELOPMENT.md](./handbook/DEVELOPMENT.md) | Local dev, toolchain, scripts, layout, tests, limitations. |
-| [handbook/LANGUAGES.md](./handbook/LANGUAGES.md) | Adding a language; image-prompt translation. |
-| [handbook/MODERATION.md](./handbook/MODERATION.md) | Moderation, operator responsibility, visual artefacts. |
-| [handbook/CUSTOMIZATION.md](./handbook/CUSTOMIZATION.md) | Logo stamp, fork rebranding, screenshots. |
-| [CONTRIBUTING.md](./CONTRIBUTING.md) | How to work on the project. |
+| [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md) | Full deploy: Render, Docker, the Cloudflare Worker, KV, and gotchas. |
+| [docs/DEVELOPMENT.md](./docs/DEVELOPMENT.md) | Local dev, toolchain, scripts, layout, tests, limitations. |
+| [docs/LANGUAGES.md](./docs/LANGUAGES.md) | Adding a language; image-prompt translation. |
+| [docs/MODERATION.md](./docs/MODERATION.md) | Moderation, operator responsibility, visual artefacts. |
+| [docs/CUSTOMIZATION.md](./docs/CUSTOMIZATION.md) | Logo stamp, fork rebranding, screenshots. |
+| [CONTRIBUTING.md](./docs/CONTRIBUTING.md) | How to work on the project. |
 
 ## License
 

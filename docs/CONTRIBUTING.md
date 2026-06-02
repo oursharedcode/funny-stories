@@ -6,8 +6,8 @@ Thanks for considering it. This is a small, opinionated project and contribution
 
 ## Before you open a PR
 
-1. **Read the spec.** [`FUNNY_STORIES_SPEC_v4.md`](./docs/FUNNY_STORIES_SPEC_v4.md) is binding. If your change contradicts it, the spec wins or the spec changes — not the code silently.
-2. **Read the design system.** [`DESIGN_SYSTEM.md`](./docs/DESIGN_SYSTEM.md) is binding for visuals and motion.
+1. **Read the spec.** [`FUNNY_STORIES_SPEC_v4.md`](./FUNNY_STORIES_SPEC_v4.md) is binding. If your change contradicts it, the spec wins or the spec changes — not the code silently.
+2. **Read the design system.** [`DESIGN_SYSTEM.md`](./DESIGN_SYSTEM.md) is binding for visuals and motion.
 3. **One feature per PR.** Bundled PRs get sent back.
 4. **Open an issue first for anything bigger than a one-file change.** Saves both of us the rework.
 
@@ -58,7 +58,7 @@ If any check fails, fix it before opening the PR. We don't merge red branches.
 
 ### What not to add
 
-A short, non-exhaustive list. The full list is in [`FUNNY_STORIES_SPEC_v4.md` §18](./docs/FUNNY_STORIES_SPEC_v4.md#18-things-not-to-do).
+A short, non-exhaustive list. The full list is in [`FUNNY_STORIES_SPEC_v4.md` §18](./FUNNY_STORIES_SPEC_v4.md#18-things-not-to-do).
 
 - A database, an ORM, Redis, any persistence layer.
 - A reconnect mechanism. Disconnect = bot is a feature.
@@ -79,14 +79,7 @@ The project is multilingual from v1. Adding a language is welcome.
 
 ### Adding a new language
 
-Steps and files in [README.md → Adding a new language](./README.md#adding-a-new-language). The short version:
-
-- `client/src/i18n/<lang>.json` — UI strings.
-- `server/src/i18n/<lang>.json` — questions array + prose template, written naturally for the language (don't port English slot order).
-- `server/src/filter/standins.ts` — 10 stand-ins per question index.
-- `server/src/filter/<lang>.ts` — profanity word list.
-- `shared/events.ts` — extend `Language` union.
-- `client/src/screens/HomeScreen.tsx` — language toggle button.
+The full, current checklist — every file to touch, what's optional, and the gotchas — lives in [LANGUAGES.md → Adding a new language](./LANGUAGES.md#adding-a-new-language). That guide is the single source of truth; this section deliberately doesn't duplicate the file list so the two can't drift.
 
 ### Russian-string review
 
@@ -94,7 +87,7 @@ The implementer (Claude or a human) drafts Russian strings during initial build 
 
 ### Russian template note
 
-The Russian prose template in `server/src/i18n/ru.json` intentionally puts slot 3 (when) before slot 2 (where) and uses "В итоге" as the connective. This is correct Russian word order. **Do not "fix" it back to slot order** during translation review or refactor — the spec ([§9](./docs/FUNNY_STORIES_SPEC_v4.md)) calls this out specifically.
+The Russian prose template in `server/src/i18n/ru.json` intentionally puts slot 3 (when) before slot 2 (where) and uses "В итоге" as the connective. This is correct Russian word order. **Do not "fix" it back to slot order** during translation review or refactor — the spec ([§9](./FUNNY_STORIES_SPEC_v4.md)) calls this out specifically.
 
 ---
 
@@ -102,8 +95,8 @@ The Russian prose template in `server/src/i18n/ru.json` intentionally puts slot 
 
 The nine mascot SVGs in `client/src/components/art/` are implementer-drafted and flagged for design review **post-launch**. PRs that polish, improve, or replace them are welcome — but:
 
-- The personality rules in [`DESIGN_SYSTEM.md` §5](./docs/DESIGN_SYSTEM.md) (exaggerated eyes, visible outlines, hand-drawn imperfection, no gradients) are binding.
-- The motion presets in [`DESIGN_SYSTEM.md` §4](./docs/DESIGN_SYSTEM.md) (`snappy` / `goofy` / `panic`) are the only springs in use. Don't introduce a fourth without a written justification.
+- The personality rules in [`DESIGN_SYSTEM.md` §5](./DESIGN_SYSTEM.md) (exaggerated eyes, visible outlines, hand-drawn imperfection, no gradients) are binding.
+- The motion presets in [`DESIGN_SYSTEM.md` §4](./DESIGN_SYSTEM.md) (`snappy` / `goofy` / `panic`) are the only springs in use. Don't introduce a fourth without a written justification.
 - Reduced-motion fallbacks must be honoured in any new animation.
 
 ---
@@ -147,7 +140,7 @@ In-scope: anything that lets a player read another room's data, escalate to host
 
 ## License
 
-By contributing, you agree your contribution is licensed under [AGPL-3.0](./LICENSE), the project's license. There is no CLA.
+By contributing, you agree your contribution is licensed under [AGPL-3.0](../LICENSE), the project's license. There is no CLA.
 
 ---
 

@@ -11,4 +11,10 @@ Thumbs.db
 .vite/
 .claude/
 test-output/
-docs
+int_docs
+
+# Local-only scripted demo pages for screen recording (never committed).
+client/src/screens/TestDemoScreen.tsx
+client/src/screens/TestDemoImageScreen.tsx
+client/public/cartoon-cat-with-arm.jpeg
+client/public/demo-story-cartoon.jpg

@@ -2,16 +2,16 @@
 
 ## Adding a new language
 
-The project is multilingual from v1. The registry, type, i18n loaders, and filter dispatch are all data-driven, so adding another language is a small, well-bounded set of edits. To add (say) German:
+The project is multilingual from v1. The registry, type, i18n loaders, and filter dispatch are all data-driven, so adding another language is a small, well-bounded set of edits. To add (say) Polish:
 
-1. **`shared/languages.ts`** — append one row to the `LANGUAGES` array (`{ code: 'de', name: 'Deutsch', flag: '🇩🇪' }`). The `Language` union type is derived from this array, so this edit also widens the type — every `Record<Language, …>` site in the codebase will become a compile error until the rest of the steps are done. **Run `npm run typecheck` now and let the compiler list the remaining required edits for you.**
-2. **`client/src/i18n/de.json`** — copy `en.json`, translate every key. The `endScreen.supportServer` key must say "this server", not "the developer" — see [spec §18](../docs/FUNNY_STORIES_SPEC_v4.md#18-things-not-to-do). The Vite glob picks it up automatically; no bootstrap edit needed.
-3. **`server/src/i18n/de.json`** — questions array + prose template + image-prompt template. **Do not port the English slot order.** Word order is language-specific (the Russian template already swaps slots 2 and 3 for natural Russian). Write the template the way a native speaker would. The server `readdirSync` picks it up automatically; no bootstrap edit needed.
-4. **`server/src/filter/standins.ts`** — 10 stand-ins for each of the 7 question indices, in the new language. These also serve as bot auto-fills.
+1. **`shared/languages.ts`** — append one row to the `LANGUAGES` array (`{ code: 'pl', name: 'Polski', flag: '🇵🇱' }`). The `Language` union type is derived from this array, so this edit also widens the type — every `Record<Language, …>` site in the codebase will become a compile error until the rest of the steps are done. **Run `npm run typecheck` now and let the compiler list the remaining required edits for you.**
+2. **`client/src/i18n/pl.json`** — copy `en.json`, translate every key. The `endScreen.supportServer` key must say "this server", not "the developer" — see [spec §18](./FUNNY_STORIES_SPEC_v4.md#18-things-not-to-do). The Vite glob picks it up automatically; no bootstrap edit needed.
+3. **`server/src/i18n/pl.json`** — questions array + prose template + image-prompt template. **Do not port the English slot order.** Word order is language-specific (the Russian template already swaps slots 2 and 3 for natural Russian). Write the template the way a native speaker would. The server `readdirSync` picks it up automatically; no bootstrap edit needed.
+4. **`server/src/filter/standins.ts`** — stand-ins for each of the 7 question indices, in the new language. EN/RU ship 10 per slot (locked from spec §6); a new language ships ~5 per slot as a machine-translated stub, marked `needs-pl-review` for later native-speaker tightening. These also serve as bot auto-fills.
 5. **`server/src/i18n/index.ts`** — if your language needs morphology fixes like English's slot-5 `for` prefix or Russian's slot-1 `и` prefix, extend the `renderProse` switch. Languages without these needs touch nothing here.
 6. **(Optional) `server/src/filter/<code>.ts` + register it in `MATCHERS`** in `server/src/filter/index.ts` — native-language profanity matcher. Without it, the OR-all semantic still catches English and Russian profanity in mixed-language answers, so it's safe to skip until a native-speaker review.
 
-When `npm run typecheck` and `npm test` both pass, you're done. See [CONTRIBUTING.md](../CONTRIBUTING.md#translations) for the review workflow.
+When `npm run typecheck` and `npm test` both pass, you're done. See [CONTRIBUTING.md](./CONTRIBUTING.md#translations) for the review workflow.
 
 ---
 

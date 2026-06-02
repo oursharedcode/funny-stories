@@ -8,7 +8,7 @@
 // client/src/i18n/ and server/src/i18n/, plus an entry in server/src/filter/
 // standins.ts. The `Language` union below derives from this array via
 // `as const`, so a missed code in any consumer becomes a compile error.
-// See README.md → "Adding a new language" for the full checklist.
+// See docs/LANGUAGES.md → "Adding a new language" for the full checklist.
 
 export interface LanguageOption {
   /** Two-letter code; sometimes with a region suffix for variant disambiguation. */
