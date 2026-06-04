@@ -28,9 +28,9 @@ No accounts, no database, no analytics. Self-hostable for free.
 
 <p>
   <img src="./assets/demo.gif" alt="A host playthrough — create a room, answer the prompts, reveal the cartoon" height="240">
+  <img src="./assets/demo-story-cartoon.jpg" alt="A finished story turned into a goofy AI cartoon" height="240">
   <img src="./assets/funny-stories-01.png" alt="A goofy AI cartoon from a story" height="228">
-  <img src="./assets/funny-stories-03.png" alt="A goofy AI cartoon from a story" height="228">
-  <img src="./assets/funny-stories-02.png" alt="A goofy AI cartoon from a story" height="228">
+  <img src="./assets/story02.jpg" alt="A goofy AI cartoon from a story" height="228">
 </p>
 
 ## Deploy your own (free, ~5 minutes)
