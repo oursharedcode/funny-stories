@@ -41,16 +41,42 @@ You deploy onto **your own** Cloudflare + Render accounts — both free, no cred
 > On a phone: use a password-manager app — or type your own random string (important: 40+ chars, letters/digits only).\
 > On a computer: see the [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md#1-generate-a-shared-secret-s).
 
-**Step 2. Deploy the image Worker (Cloudflare).**
+**Step 2. Deploy the image Worker (Cloudflare) - press the button below.**
 
-> [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/oursharedcode/funny-stories/tree/master/cloudflare)
->
+<table>
+<tr>
+<td width="210" valign="middle">
+
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/oursharedcode/funny-stories/tree/master/cloudflare)
+
+</td>
+<td valign="middle">
+
+*Safe to click:* this deploys the repo's open-source Worker — a single 92-line [`worker.js`](./cloudflare/worker.js) you can read in a minute — into **your own** Cloudflare account via Cloudflare's official button. It runs only on your account; nothing is sent to the authors.
+
+</td>
+</tr>
+</table>
+
 > After it deploys, set `WORKER_SECRET = S`(no quotes) in the Worker's **Settings → Variables** (the button can't do this — until you do, it returns 403). Copy the **Worker URL** it gives you.
 
-**Step 3. Deploy the game server (Render).**
+**Step 3. Deploy the game server (Render) - press the button below.**
 
-> [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/oursharedcode/funny-stories)
->
+<table>
+<tr>
+<td width="210" valign="middle">
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/oursharedcode/funny-stories)
+
+</td>
+<td valign="middle">
+
+*Safe to click:* this builds the repo's open-source [`server/`](./server) on **your own** Render account via Render's official button. You own it and can delete it anytime — no telemetry, and nothing runs on the authors' servers.
+
+</td>
+</tr>
+</table>
+
 > When Render prompts for environment variables, paste:
 >
 > | Variable | Value |
@@ -58,9 +84,9 @@ You deploy onto **your own** Cloudflare + Render accounts — both free, no cred
 > | `CLOUDFLARE_WORKER_URL` | the **Worker URL** from Step 2 |
 > | `CLOUDFLARE_WORKER_SECRET` | (no quotes)**"S"** (the *same* string from Step 1) |
 
-First build takes ~3 minutes. Open your `.onrender.com` URL on a phone and play.
+First build takes ~3 minutes. Open your `<custom>.onrender.com` URL on a phone and play.
 
-> **If "Generate picture" fails on every phone,** the two secrets don't match — re-check steps 2 and 3. The free Render tier also sleeps when idle, so the first visit after a quiet period is slow.
+> **If every phone shows "Generation failed,"** the two secrets don't match — re-check steps 2 and 3. The free Render tier also sleeps when idle, so the first visit after a quiet period is slow.
 
 ## Documentation
 
