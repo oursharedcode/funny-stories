@@ -9,7 +9,7 @@
 A party game where 3–7 friends, on their phones, answer 7 silly questions about a shared story they can't see — then watch an AI cartoon goof of the result (+short video).<br>
 Multilingual from day one.<br>
 No accounts, no database, no analytics. Self-hostable for free.<br>
-Runs on a free Cloudflare Workers AI account.
+Runs on a free Cloudflare Workers AI.
 </td>
 </tr>
 </table>
