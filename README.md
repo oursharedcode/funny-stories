@@ -8,7 +8,8 @@
 <td valign="middle">
 A party game where 3–7 friends, on their phones, answer 7 silly questions about a shared story they can't see — then watch an AI cartoon goof of the result (+short video).<br>
 Multilingual from day one.<br>
-No accounts, no database, no analytics. Self-hostable for free.
+No accounts, no database, no analytics. Self-hostable for free.<br>
+Runs on a free Cloudflare Workers AI account.
 </td>
 </tr>
 </table>
@@ -16,7 +17,7 @@ No accounts, no database, no analytics. Self-hostable for free.
 [![Build](https://img.shields.io/github/actions/workflow/status/oursharedcode/funny-stories/ci.yml?branch=master)](https://github.com/oursharedcode/funny-stories/actions)
 [![License: AGPL-3.0](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](./LICENSE)
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/oursharedcode?label=sponsor)](https://github.com/sponsors/oursharedcode)
-[![Stars](https://img.shields.io/github/stars/oursharedcode/funny-stories?style=social)](https://github.com/oursharedcode/funny-stories/stargazers)
+[![Stars](https://img.shields.io/github/stars/oursharedcode/funny-stories?style=social&cacheSeconds=3600)](https://github.com/oursharedcode/funny-stories/stargazers)
 
 ## How it plays
 
@@ -35,7 +36,7 @@ No accounts, no database, no analytics. Self-hostable for free.
 
 ## Deploy your own (free, ~5 minutes)
 
-You deploy onto **your own** Cloudflare + Render accounts — both free, no credit card. (You could sign in with your Google account — just seconds).
+You deploy onto **your own** GitHub, Cloudflare + Render accounts — both free, no credit card. (You could sign in with your Google account — just seconds).
 
 **Step 1. Make a shared secret string (let's call it "S")** (40+ chars). You will need it in steps 2 and 3.
 > On a phone: use a password-manager app — or type your own random string (important: 40+ chars, letters/digits only).\
