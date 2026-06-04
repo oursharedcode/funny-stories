@@ -291,9 +291,8 @@ Runs on every `round:submit` answer before it is stored. The player is never tol
 ### Pipeline
 
 1. **Normalize:** lowercase, strip diacritics (`é→e`), collapse leet separators (`s.h.i.t → shit`, `sh!t → shit`).
-2. **English check:** `obscenity` `RegExpMatcher` with the default English dataset.
-3. **Russian check:** `bad-words-next` with the bundled Russian word list in `filter/ru.ts`.
-4. **On any hit:** replace the entire answer with a random stand-in for the current question index, drawn from the room's language list in `standins.ts`.
+2. **Native-matcher check (OR over every registered language):** the matcher registry in `filter/index.ts` (`MATCHERS`) maps a language code to a checker, and the answer is tested against **every** registered matcher — not just the room's — so an English-room player typing Russian profanity is still caught, and vice-versa. English uses `obscenity` (`filter/en.ts`); Russian, French, German, Mandarin (`zh`, via `bad-words-next`'s `ch` dictionary), and Spanish (`es-419` + `es-es`, one shared `es` dictionary) use `bad-words-next` (`filter/ru.ts`, `fr.ts`, `de.ts`, `zh.ts`, `es.ts`). Indonesian, Italian, Japanese, Korean and Portuguese have **no native matcher** yet — `bad-words-next` ships no dictionary for them — and are covered only by this cross-language OR, which leaves their own-language profanity in the prose a known coverage gap (the picture is still guarded; see "Image-prompt profanity check" below).
+3. **On any hit:** replace the entire answer with a random stand-in for the current question index, drawn from the room's language list in `standins.ts`.
 
 ### Stand-in shape
 
@@ -403,6 +402,10 @@ const standins: Record<Language, Record<number, string[]>> = {
   }
 };
 ```
+
+### Image-prompt profanity check (translated layer)
+
+The per-answer check above runs in the room's language and so only has a native matcher for some languages; because the player-facing prose is never translated, a language without a native matcher leaks its own-language profanity into its prose. The **picture** is guarded independently of native-matcher coverage by a second layer that lives in the prompt builder (§10): `buildPrompt` translates every answer to English, then runs the English `obscenity` matcher (`filter/en.ts`) over the translated slots and swaps any hit for an English stand-in (`pickStandin('en', i)`) **before** the prompt is assembled. Because every source language funnels through English translation first, this single check catches profanity from any language without needing a per-language matcher. It runs inside `buildPrompt`, i.e. ahead of the CSAM-pattern guard and hard-block list below. It guards only the image — the prose layer above is the only thing that can clean the room-language prose.
 
 ### CSAM-pattern guard
 
@@ -1685,6 +1688,13 @@ invariant — no translation key required.
 ---
 
 ## Changelog
+
+### `4.35.0` — 2026-06-04
+
+- **§6 — native profanity matchers extended from 2 to 7 of the 12 language codes.** The matcher registry in `server/src/filter/index.ts` (`MATCHERS`) gains French, German, Mandarin, and Spanish alongside the existing English and Russian. Each new matcher mirrors `filter/ru.ts` — a single `bad-words-next` dictionary behind a `check` wrapper: `filter/fr.ts`, `filter/de.ts`, `filter/zh.ts` (the library's `ch` dictionary, since the game's code for Mandarin is `zh`), and `filter/es.ts` (one `es` dictionary registered under both `es-419` and `es-es`). `bad-words-next` ships no dictionary for Indonesian, Italian, Japanese, Korean or Portuguese, so those five remain covered only by the cross-language OR — no word lists were fabricated for them. `server/src/filter/index.test.ts` gains native-hit and clean-pass cases for the five newly-covered codes.
+- **§6, §10 — new "Image-prompt profanity check" layer (defense-in-depth).** Because the player-facing prose is never translated, a language without a native matcher leaks profanity into its own prose; the picture is now guarded independently of native-matcher coverage. `buildPrompt` translates every answer to English, then runs the English `obscenity` matcher over the translated slots and swaps any hit for an English stand-in (`pickStandin('en', i)`) before assembling the prompt — i.e. ahead of the §6 CSAM-pattern guard and hard-block list. `server/src/prompt.test.ts` (previously an `it.todo` placeholder) gains a four-test suite covering the swap, clean-prompt pass-through, all-null safety, and stand-in availability.
+- **§6 Pipeline** — the former step 2 ("English check") and step 3 ("Russian check") are merged into a single "native-matcher check" step that documents the OR-over-every-registered-matcher semantic and names the covered and uncovered languages.
+- Minor-level: server-only additive moderation coverage behind the existing `round:submit` and `reveal:requestPicture` paths. No new socket events, no client changes, no data-model changes. No spec body sections renumbered.
 
 ### `4.34.1` — 2026-05-25
 

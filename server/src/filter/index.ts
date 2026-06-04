@@ -3,6 +3,10 @@
 import type { Language } from '../types.js';
 import { isEnglishProfane } from './en.js';
 import { isRussianProfane } from './ru.js';
+import { isFrenchProfane } from './fr.js';
+import { isGermanProfane } from './de.js';
+import { isSpanishProfane } from './es.js';
+import { isChineseProfane } from './zh.js';
 import { pickStandin } from './standins.js';
 
 // Language → profanity matcher map. Adding a new language with profanity
@@ -19,6 +23,12 @@ type ProfanityMatcher = (text: string) => boolean;
 const MATCHERS: Partial<Record<Language, ProfanityMatcher>> = {
   en: isEnglishProfane,
   ru: isRussianProfane,
+  fr: isFrenchProfane,
+  de: isGermanProfane,
+  zh: isChineseProfane,
+  // Both Spanish locales share bad-words-next's single `es` dictionary.
+  'es-419': isSpanishProfane,
+  'es-es': isSpanishProfane,
 };
 
 // Light pre-normalisation (spec §6):

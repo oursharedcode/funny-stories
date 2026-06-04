@@ -2,6 +2,8 @@
 
 import type { Language, Story } from './types.js';
 import { translateToEnglish } from './translate.js';
+import { isEnglishProfane } from './filter/en.js';
+import { pickStandin } from './filter/standins.js';
 
 // Locked style suffix — appended to every image prompt so the Worker AI
 // model renders in a consistent goofy-cartoon look. English-only: Flux's
@@ -29,9 +31,21 @@ const IMAGE_PROMPT_EN =
 
 export async function buildPrompt(story: Story, language: Language): Promise<string> {
   const translated = await translateToEnglish(story.answers, language);
+  // Layer-2 moderation (defense-in-depth) — the per-answer filter at submit
+  // time (filterAnswer, spec §6) only has native matchers for some languages
+  // (currently en/ru), so profanity in a language without one is stored
+  // verbatim and reaches here untouched. Every answer is translated to English
+  // above, so a single English check on the translated slots catches it
+  // regardless of source language; a hit swaps that slot for an English
+  // stand-in. This guards the *picture* only — the player-facing prose is
+  // never translated and is guarded separately at submit time. Runs before the
+  // CSAM/hard-block guards in generateStoryPicture. See docs/MODERATION.md.
+  const safe = translated.map((text, i) =>
+    text && isEnglishProfane(text) ? pickStandin('en', i) : text,
+  );
   const body = IMAGE_PROMPT_EN.replace(
     /\{([0-6])\}/g,
-    (_, digit: string) => translated[Number(digit)] ?? '',
+    (_, digit: string) => safe[Number(digit)] ?? '',
   );
   return body + STYLE_SUFFIX;
 }

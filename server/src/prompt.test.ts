@@ -1,19 +1,67 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { it } from 'vitest';
+import { describe, expect, it } from 'vitest';
+import { STYLE_SUFFIX, buildPrompt } from './prompt.js';
+import { isEnglishProfane } from './filter/en.js';
+import { pickStandin, STANDINS } from './filter/standins.js';
+import type { Story } from './types.js';
 
-// Tests commented out: prompt.ts has been simplified to a plain slot
-// substitution from i18n's `imagePrompt`, so the assertions below
-// (STYLE_SUFFIX, length cap, duplicate/distinct-pair anchors, EN/RU
-// connective prefixes, RU action hints) no longer apply. The original
-// behaviour they covered is preserved in the commented-out block in
-// prompt.ts. Re-enable a subset (or rewrite) once the new prompt
-// design stabilises.
-//
-// The `it.todo` below keeps this a valid (non-empty) test suite so the
-// runner doesn't fail with "No test suite found", while flagging the
-// pending rewrite in the test report.
-it.todo('rewrite buildPrompt tests for the simplified prompt.ts');
+// Most of the old buildPrompt assertions (length cap, duplicate/distinct-pair
+// anchors, EN/RU connective prefixes, RU action hints) describe the previous
+// implementation and are kept commented out below until the new prompt design
+// stabilises. The active suite here covers the layer-2 moderation check added
+// to the simplified buildPrompt — see docs/MODERATION.md.
+
+// Layer-2 moderation: an English-side profanity check on the *translated*
+// image prompt, run inside buildPrompt before the CSAM/hard-block guards.
+// English answers skip translation (translate.ts short-circuits `en`), so an
+// English profane answer exercises the check deterministically with no network
+// call. A hit is swapped for an English stand-in for that slot.
+describe('buildPrompt — layer-2 image-prompt profanity check', () => {
+  function story(answers: (string | null)[]): Story {
+    return { answers, pictureUrl: null };
+  }
+
+  it('replaces a profane (translated) slot with an English stand-in', async () => {
+    // Pick a profanity obscenity flags, and confirm the assumption holds so
+    // the test fails loudly if the dataset ever stops matching it.
+    const profane = 'shit';
+    expect(isEnglishProfane(profane)).toBe(true);
+
+    const p = await buildPrompt(
+      story([profane, 'a dog', 'in a library', 'on Saturday', 'skiing', null, null]),
+      'en',
+    );
+    expect(p).not.toContain(profane);
+    // The slot-0 stand-in pool supplies the replacement.
+    expect(STANDINS.en[0]!.some((s) => p.includes(s))).toBe(true);
+    expect(p.endsWith(STYLE_SUFFIX)).toBe(true);
+  });
+
+  it('leaves a clean prompt untouched', async () => {
+    const p = await buildPrompt(
+      story(['a llama', 'a dog', 'in a library', 'on Saturday', 'skiing', null, null]),
+      'en',
+    );
+    expect(p).toContain('a llama');
+    expect(p).toContain('a dog');
+    expect(p).toContain('skiing');
+    expect(p.endsWith(STYLE_SUFFIX)).toBe(true);
+  });
+
+  it('does not throw on all-null answers', async () => {
+    const p = await buildPrompt(story([null, null, null, null, null, null, null]), 'en');
+    expect(p.endsWith(STYLE_SUFFIX)).toBe(true);
+  });
+
+  // Sanity: pickStandin('en', i) is the replacement source used above.
+  it('every used slot index (0-4) has an English stand-in pool', () => {
+    for (let i = 0; i <= 4; i++) {
+      expect(typeof pickStandin('en', i)).toBe('string');
+      expect(pickStandin('en', i).length).toBeGreaterThan(0);
+    }
+  });
+});
 
 /* ============================================================================
 
