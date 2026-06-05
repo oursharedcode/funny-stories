@@ -152,7 +152,7 @@ Reports of "the AI made an inappropriate cartoon" should also include the room l
 
 ## Reporting security issues
 
-Don't open a public issue. Email the address in `SECURITY.md` (TODO: not yet written for v1; until it exists, use GitHub's "Report a vulnerability" private flow).
+Don't open a public issue. Follow the process in [`SECURITY.md`](../SECURITY.md) — report privately through GitHub's "Report a vulnerability" flow on the repo's **Security** tab.
 
 In-scope: anything that lets a player read another room's data, escalate to host, exhaust the Worker neuron budget cheaply, or DoS the Node process with a single message. Out of scope: rate-limit edge cases on a deliberately abusive client, social-engineering nicknames, the game being "too silly."
 
