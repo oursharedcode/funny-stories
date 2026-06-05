@@ -117,6 +117,26 @@ Body is optional. If the change is non-obvious, write a paragraph explaining why
 
 ---
 
+## Sign your commits (DCO)
+
+This project uses the [Developer Certificate of Origin](https://developercertificate.org/) (DCO). It's lightweight and there is no CLA to sign — you simply certify that you wrote the change, or otherwise have the right to submit it under AGPL-3.0.
+
+Add a sign-off to every commit with the `-s` flag:
+
+```bash
+git commit -s -m "docs: clarify Cloudflare Worker setup"
+```
+
+This appends a trailer to your commit message using your configured `git config user.name` and `user.email`, so set those once before you start:
+
+```
+Signed-off-by: Your Name <your@email.com>
+```
+
+If you forget, amend the last commit with `git commit --amend -s`, or for several commits rebase with `git rebase --signoff <base>`. Please make sure every commit in your PR is signed off — unsigned commits will be asked to amend before merge.
+
+---
+
 ## Reporting bugs
 
 Open an issue. Useful issues include:
@@ -140,7 +160,7 @@ In-scope: anything that lets a player read another room's data, escalate to host
 
 ## License
 
-By contributing, you agree your contribution is licensed under [AGPL-3.0](../LICENSE), the project's license. There is no CLA.
+By contributing, you agree your contribution is licensed under [AGPL-3.0](../LICENSE), the project's license. There is no CLA — we use a lightweight DCO sign-off instead (see [Sign your commits (DCO)](#sign-your-commits-dco)).
 
 ---
 
