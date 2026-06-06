@@ -99,6 +99,7 @@ First build takes ~3 minutes. Open your `<custom>.onrender.com` URL on a phone a
 | [docs/MODERATION.md](./docs/MODERATION.md) | Moderation, operator responsibility, visual artefacts. |
 | [docs/CUSTOMIZATION.md](./docs/CUSTOMIZATION.md) | Logo stamp, fork rebranding, screenshots. |
 | [CONTRIBUTING.md](./docs/CONTRIBUTING.md) | How to work on the project. |
+| [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md) | Community expectations. The short version: be decent. |
 
 ## License
 

@@ -2,6 +2,8 @@
 
 Thanks for considering it. This is a small, opinionated project and contributions are welcome within those opinions.
 
+By taking part you agree to follow the [Code of Conduct](../CODE_OF_CONDUCT.md). The short version: be decent.
+
 ---
 
 ## Before you open a PR
