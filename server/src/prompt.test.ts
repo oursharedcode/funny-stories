@@ -7,7 +7,7 @@ import { pickStandin, STANDINS } from './filter/standins.js';
 import type { Story } from './types.js';
 
 // Most of the old buildPrompt assertions (length cap, duplicate/distinct-pair
-// anchors, EN/RU connective prefixes, RU action hints) describe the previous
+// anchors, connective prefixes, action hints) describe the previous
 // implementation and are kept commented out below until the new prompt design
 // stabilises. The active suite here covers the layer-2 moderation check added
 // to the simplified buildPrompt — see docs/MODERATION.md.

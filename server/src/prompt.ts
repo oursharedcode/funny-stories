@@ -32,8 +32,8 @@ const IMAGE_PROMPT_EN =
 export async function buildPrompt(story: Story, language: Language): Promise<string> {
   const translated = await translateToEnglish(story.answers, language);
   // Layer-2 moderation (defense-in-depth) — the per-answer filter at submit
-  // time (filterAnswer, spec §6) only has native matchers for some languages
-  // (currently en/ru), so profanity in a language without one is stored
+  // time (filterAnswer, spec §6) only has native matchers for some
+  // languages, so profanity in a language without one is stored
   // verbatim and reaches here untouched. Every answer is translated to English
   // above, so a single English check on the translated slots catches it
   // regardless of source language; a hit swaps that slot for an English
