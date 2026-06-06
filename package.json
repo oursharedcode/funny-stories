@@ -1,6 +1,6 @@
 {
   "name": "funny-stories",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "description": "A party game where 3-7 friends write absurd stories together and AI illustrates them.",
   "license": "AGPL-3.0-only",
