@@ -104,3 +104,7 @@ First build takes ~3 minutes. Open your `<custom>.onrender.com` URL on a phone a
 ## License
 
 [AGPL-3.0](./LICENSE). Deploy a modified version on a network service and you must offer its source to that service's users. Want different terms? Open an issue.
+
+## Mirror
+
+A read-only mirror is kept at [codeberg.org/oursharedcode/funny-stories](https://codeberg.org/oursharedcode/funny-stories) for those who prefer to avoid GitHub. Development, issues, and pull requests happen here on GitHub.

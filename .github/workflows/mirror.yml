@@ -1,0 +1,41 @@
+name: Mirror to Codeberg
+
+# Read-only push mirror: keeps codeberg.org/oursharedcode/funny-stories in sync
+# with GitHub. GitHub stays the source of truth; Codeberg is an exact shadow
+# (all branches + tags, pruned). Contributions still go through GitHub.
+on:
+  push:
+    branches: ["**"]
+    tags: ["**"]
+  delete: # propagate deleted branches/tags to the mirror
+  workflow_dispatch: # allow manual runs from the Actions tab
+
+# This job only reads the public GitHub repo (via clone) and writes to Codeberg
+# using CODEBERG_TOKEN — it needs no write access to GitHub itself.
+permissions:
+  contents: read
+
+# Never run two mirror pushes at once, and don't cancel an in-flight push.
+concurrency:
+  group: mirror-codeberg
+  cancel-in-progress: false
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mirror GitHub -> Codeberg
+        env:
+          CODEBERG_TOKEN: ${{ secrets.CODEBERG_TOKEN }}
+        run: |
+          set -euo pipefail
+          # Bare mirror clone of the public GitHub repo (no auth needed).
+          git clone --mirror "https://github.com/${GITHUB_REPOSITORY}.git" repo.git
+          cd repo.git
+          # Drop GitHub's internal pull-request refs so we don't push them.
+          git for-each-ref --format='%(refname)' refs/pull | \
+            while read -r ref; do git update-ref -d "$ref"; done
+          # Push an exact, pruned copy to Codeberg. Token is the password;
+          # it is masked in logs as a registered secret.
+          git push --mirror \
+            "https://oursharedcode:${CODEBERG_TOKEN}@codeberg.org/oursharedcode/funny-stories.git"
