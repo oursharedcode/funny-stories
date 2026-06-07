@@ -83,7 +83,7 @@ You deploy onto **your own** GitHub, Cloudflare + Render accounts — both free,
 > | Variable | Value |
 > |---|---|
 > | `CLOUDFLARE_WORKER_URL` | the **Worker URL** from Step 2 |
-> | `CLOUDFLARE_WORKER_SECRET` | (no quotes)**"S"** (the *same* string from Step 1) |
+> | `CLOUDFLARE_WORKER_SECRET` | Paste **S** without quotes (the *same* string from Step 1). |
 
 First build takes ~3 minutes. Open your `<custom>.onrender.com` URL on a phone and play.
 
