@@ -35,3 +35,4 @@ _None._
 | Distinct subjects (cat + dog) merged into one chimera | Solved | Language-aware distinct-pair anchor in `buildPrompt` (v4.34.0, refined v4.34.1). | vol02 #10 |
 | English image prompts produced a cat-dog chimera | Solved | Prepend `"and "` to slot 1 when it lacks a connector, mirroring the Russian "и" logic (v4.34.x). | vol02 #12 |
 | Russian action verbs missing from the picture | Solved | The image prompt now translates the answers to English before generation, so Flux receives English action verbs. | vol02 #2 |
+| CSAM guard fell open when translation failed (10 of 12 languages unscreened) | Solved | Two backstops behind the translate-then-check path: translation retries once and a still-failing answer makes `generateStoryPicture` fail closed (refuse the picture); and the CSAM indicator lists now cover all 12 languages, so untranslated passthrough is still screened in its own language. See [MODERATION.md](./MODERATION.md). | vol02 follow-up |

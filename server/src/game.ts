@@ -216,11 +216,15 @@ async function generateStoryPicture(
   story: Story,
   io: IO,
 ): Promise<PictureOutcome> {
-  const prompt = await buildPrompt(story, room.language);
+  const { prompt, translationFailed } = await buildPrompt(story, room.language);
   if (story.pictureUrl) {
     return { kind: 'cached', pictureUrl: story.pictureUrl, imagePrompt: prompt };
   }
-  if (containsCsamCombination(prompt) || containsHardBlock(prompt)) {
+  // Fail closed when translation to English failed: a non-English answer that
+  // reaches the English CSAM guard untranslated would slip past it, so we
+  // refuse rather than send an unscreened prompt to the model. The retry in
+  // translateToEnglish absorbs transient blips first. See docs/MODERATION.md.
+  if (translationFailed || containsCsamCombination(prompt) || containsHardBlock(prompt)) {
     return { kind: 'blocked' };
   }
   if (!reserveImageSlot()) return { kind: 'capped' };

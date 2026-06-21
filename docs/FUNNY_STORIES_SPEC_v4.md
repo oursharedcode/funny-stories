@@ -405,7 +405,7 @@ const standins: Record<Language, Record<number, string[]>> = {
 
 ### Image-prompt profanity check (translated layer)
 
-The per-answer check above runs in the room's language and so only has a native matcher for some languages; because the player-facing prose is never translated, a language without a native matcher leaks its own-language profanity into its prose. The **picture** is guarded independently of native-matcher coverage by a second layer that lives in the prompt builder (§10): `buildPrompt` translates every answer to English, then runs the English `obscenity` matcher (`filter/en.ts`) over the translated slots and swaps any hit for an English stand-in (`pickStandin('en', i)`) **before** the prompt is assembled. Because every source language funnels through English translation first, this single check catches profanity from any language without needing a per-language matcher. It runs inside `buildPrompt`, i.e. ahead of the CSAM-pattern guard and hard-block list below. It guards only the image — the prose layer above is the only thing that can clean the room-language prose.
+The per-answer check above runs in the room's language. All 12 languages now have a native matcher (six from bundled dictionaries, five — IT/ID/JA/KO/PT — from hand-built starter stubs fed to `bad-words-next`; see §6 above and [LANGUAGES.md](./LANGUAGES.md)), but the stubs are deliberately conservative and the player-facing prose is never translated, so own-language profanity the stub misses still reaches its prose. The **picture** is guarded independently of native-matcher coverage by a second layer that lives in the prompt builder (§10): `buildPrompt` translates every answer to English, then runs the English `obscenity` matcher (`filter/en.ts`) over the translated slots and swaps any hit for an English stand-in (`pickStandin('en', i)`) **before** the prompt is assembled. Because every source language funnels through English translation first, this single check catches profanity from any language without needing a per-language matcher. It runs inside `buildPrompt`, i.e. ahead of the CSAM-pattern guard and hard-block list below. It guards only the image — the prose layer above is the only thing that can clean the room-language prose.
 
 ### CSAM-pattern guard
 
@@ -436,12 +436,27 @@ product; NCMEC's term holdings are restricted to law-enforcement
 partners — neither publishes a freely-usable wordlist). It is a
 deliberately conservative combinatorial heuristic in the spirit of what
 open-source content-handling projects ship: small minor-indicator and
-sexual-indicator lists in both EN and RU, substring-matched against the
-lower-cased prompt. False positives ("a sexy hat for the kid's
+sexual-indicator lists covering all 12 shipped languages, substring-matched
+against the lower-cased prompt. False positives ("a sexy hat for the kid's
 birthday") and false negatives (obfuscated inputs) are both possible
 and accepted; the guard is calibrated to err toward over-blocking
 because the user impact of a false positive is "try again with
 different words."
+
+Because the guard runs on the **already-translated English prompt** (the
+prompt builder translates every answer to English before assembly, §10),
+the English indicator list alone covers every source language — coverage
+no longer depends on the player's language. Two backstops sit behind it.
+(1) The translation step **fails closed**: a non-English answer that cannot
+be translated (after one retry) leaves the prompt carrying source-language
+text the English list can't read, so `buildPrompt` flags it
+(`translationFailed`) and `generateStoryPicture` refuses the picture rather
+than ship an unscreened prompt to the model. (2) The indicator lists carry
+terms for **all 12 languages**, so text the translator passes through
+untranslated — or mixed-language input — is still screened in its own
+language. The refusal uses the same generic `reveal:pictureError` path and
+costs no daily-cap slot. See [MODERATION.md](./MODERATION.md) and
+`server/src/translate.ts`.
 
 The indicator lists live in `server/src/filter/csam.ts` and their
 behaviour is pinned by `server/src/filter/csam.test.ts`. Changes to the
@@ -637,9 +652,13 @@ On `HomeScreen`, the language selector sets the room language and is shown **onl
 > **Current behaviour:** `buildPrompt` translates every answer to English (via
 > `server/src/translate.ts`) and fills a single English template, then appends
 > the locked style suffix (§22). Only the picture prompt is translated — the
-> player-facing prose (§9) stays in the room's language. The per-language-template
-> description below is retained for design rationale; the exact template and slot
-> order are an implementation detail and may change.
+> player-facing prose (§9) stays in the room's language. Translating first is
+> also what lets the English CSAM/profanity guards (§6) cover every language;
+> to keep that guarantee, `buildPrompt` returns `{ prompt, translationFailed }`
+> and a translation that fails (after one retry) makes `generateStoryPicture`
+> fail closed — the picture is refused rather than sent unscreened. The
+> per-language-template description below is retained for design rationale; the
+> exact template and slot order are an implementation detail and may change.
 
 ```typescript
 function buildPrompt(story: Story, language: Language): string {

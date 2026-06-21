@@ -15,6 +15,12 @@ const FR_BAD = 'merde'; // present in bad-words-next/lib/fr
 const DE_BAD = 'ficken'; // present in bad-words-next/lib/de
 const ES_BAD = 'puta'; // present in bad-words-next/lib/es
 const ZH_BAD = '鸡巴'; // present in bad-words-next/lib/ch
+// Hand-built stub dictionaries (no bundled bad-words-next dict for these).
+const IT_BAD = 'cazzo';
+const ID_BAD = 'kontol';
+const JA_BAD = 'ちんぽ'; // voiced kana (ぽ) — exercises the NFC re-composition path
+const KO_BAD = '씨발'; // Hangul — exercises the NFC re-composition path
+const PT_BAD = 'caralho';
 
 const STANDIN_POOL_EN_Q0 = STANDINS.en[0]!;
 const STANDIN_POOL_RU_Q0 = STANDINS.ru[0]!;
@@ -79,6 +85,29 @@ describe('profanity filter — spec §6', () => {
     expect(filterAnswer('hallo katze', 'de', 0)).toBe('hallo katze');
     expect(filterAnswer('un gato dormido', 'es-419', 0)).toBe('un gato dormido');
     expect(filterAnswer('你好小猫', 'zh', 0)).toBe('你好小猫');
+  });
+
+  it('matches native profanity for the hand-built stub languages (it/id/ja/ko/pt-br)', () => {
+    const cases: Array<[string, Parameters<typeof filterAnswer>[1]]> = [
+      [IT_BAD, 'it'],
+      [ID_BAD, 'id'],
+      [JA_BAD, 'ja'],
+      [KO_BAD, 'ko'],
+      [PT_BAD, 'pt-br'],
+    ];
+    for (const [bad, lang] of cases) {
+      const result = filterAnswer(bad, lang, 0);
+      expect(result).not.toBe(bad);
+      expect(STANDINS[lang][0]).toContain(result);
+    }
+  });
+
+  it('lets clean answers pass in the stub languages', () => {
+    expect(filterAnswer('un gatto che dorme', 'it', 0)).toBe('un gatto che dorme');
+    expect(filterAnswer('kucing yang tidur', 'id', 0)).toBe('kucing yang tidur');
+    expect(filterAnswer('眠っている猫', 'ja', 0)).toBe('眠っている猫');
+    expect(filterAnswer('잠자는 고양이', 'ko', 0)).toBe('잠자는 고양이');
+    expect(filterAnswer('um gato dormindo', 'pt-br', 0)).toBe('um gato dormindo');
   });
 
   it('replaces with a stand-in from the *room language* even if the bad word was in the other language', () => {

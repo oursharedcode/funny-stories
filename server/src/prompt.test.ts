@@ -28,7 +28,7 @@ describe('buildPrompt — layer-2 image-prompt profanity check', () => {
     const profane = 'shit';
     expect(isEnglishProfane(profane)).toBe(true);
 
-    const p = await buildPrompt(
+    const { prompt: p } = await buildPrompt(
       story([profane, 'a dog', 'in a library', 'on Saturday', 'skiing', null, null]),
       'en',
     );
@@ -39,7 +39,7 @@ describe('buildPrompt — layer-2 image-prompt profanity check', () => {
   });
 
   it('leaves a clean prompt untouched', async () => {
-    const p = await buildPrompt(
+    const { prompt: p } = await buildPrompt(
       story(['a llama', 'a dog', 'in a library', 'on Saturday', 'skiing', null, null]),
       'en',
     );
@@ -50,7 +50,10 @@ describe('buildPrompt — layer-2 image-prompt profanity check', () => {
   });
 
   it('does not throw on all-null answers', async () => {
-    const p = await buildPrompt(story([null, null, null, null, null, null, null]), 'en');
+    const { prompt: p } = await buildPrompt(
+      story([null, null, null, null, null, null, null]),
+      'en',
+    );
     expect(p.endsWith(STYLE_SUFFIX)).toBe(true);
   });
 

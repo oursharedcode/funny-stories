@@ -76,14 +76,17 @@ async function main(): Promise<void> {
       return reply.code(400).send({ error: 'language' });
     }
     const normalized = answers.map((a) => (typeof a === 'string' ? a : null));
-    const imagePrompt = await buildPrompt(
+    // Dev-only inspection endpoint — surfaces translationFailed so the test
+    // page can show when the player-path fail-closed block would trip, but
+    // (unlike the player path in game.ts) it still builds/returns the prompt.
+    const { prompt: imagePrompt, translationFailed } = await buildPrompt(
       { answers: normalized, pictureUrl: null },
       language as Language,
     );
-    if (body?.generate !== true) return { imagePrompt };
+    if (body?.generate !== true) return { imagePrompt, translationFailed };
     try {
       const pictureUrl = await generateImage(imagePrompt);
-      return { imagePrompt, pictureUrl };
+      return { imagePrompt, pictureUrl, translationFailed };
     } catch (err) {
       fastify.log.error(err);
       const parts: string[] = [];

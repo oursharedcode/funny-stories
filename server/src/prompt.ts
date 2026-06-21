@@ -29,8 +29,16 @@ const IMAGE_PROMPT_EN =
   'two distinct subjects:{0} on the left and {1} on the right, ' +
   'they were {2} {3}. They {4}';
 
-export async function buildPrompt(story: Story, language: Language): Promise<string> {
-  const translated = await translateToEnglish(story.answers, language);
+export interface BuiltPrompt {
+  prompt: string;
+  // True when a non-English answer could not be translated, so the assembled
+  // prompt still carries source-language text the English CSAM guard can't
+  // read. generateStoryPicture fails closed on this. See docs/MODERATION.md.
+  translationFailed: boolean;
+}
+
+export async function buildPrompt(story: Story, language: Language): Promise<BuiltPrompt> {
+  const { texts: translated, untranslated } = await translateToEnglish(story.answers, language);
   // Layer-2 moderation (defense-in-depth) — the per-answer filter at submit
   // time (filterAnswer, spec §6) only has native matchers for some
   // languages, so profanity in a language without one is stored
@@ -47,7 +55,7 @@ export async function buildPrompt(story: Story, language: Language): Promise<str
     /\{([0-6])\}/g,
     (_, digit: string) => safe[Number(digit)] ?? '',
   );
-  return body + STYLE_SUFFIX;
+  return { prompt: body + STYLE_SUFFIX, translationFailed: untranslated };
 }
 
 /* ============================================================================

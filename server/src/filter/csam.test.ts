@@ -57,6 +57,64 @@ describe('containsCsamCombination — spec §6', () => {
     expect(containsCsamCombination('shotacon, nude, in a library')).toBe(true);
   });
 
+  // Fallback per-language coverage (spec §6) — the picture prompt is normally
+  // translated to English before this guard, but these lists back up the cases
+  // translation can't clean (untranslated passthrough, mixed-language text).
+  it('returns true when both categories co-occur (French)', () => {
+    expect(containsCsamCombination('un enfant, nudité, dans une bibliothèque')).toBe(true);
+    expect(containsCsamCombination('fillette, érotique, sur un bus')).toBe(true);
+  });
+
+  it('returns true when both categories co-occur (German)', () => {
+    expect(containsCsamCombination('nacktes mädchen in einer bibliothek')).toBe(true);
+    expect(containsCsamCombination('minderjährig, erotik, auf dem dach')).toBe(true);
+  });
+
+  it('returns true when both categories co-occur (Spanish)', () => {
+    expect(containsCsamCombination('niño desnudo en una biblioteca')).toBe(true);
+    expect(containsCsamCombination('colegiala, tetas, en un autobús')).toBe(true);
+  });
+
+  it('returns true when both categories co-occur (Italian)', () => {
+    expect(containsCsamCombination('bambino nudo in biblioteca')).toBe(true);
+    expect(containsCsamCombination('minorenne, sesso, sul tetto')).toBe(true);
+  });
+
+  it('returns true when both categories co-occur (Portuguese)', () => {
+    expect(containsCsamCombination('criança, nudez, numa biblioteca')).toBe(true);
+    expect(containsCsamCombination('menino, foder, no telhado')).toBe(true);
+  });
+
+  it('returns true when both categories co-occur (Indonesian)', () => {
+    expect(containsCsamCombination('anak telanjang di perpustakaan')).toBe(true);
+    expect(containsCsamCombination('gadis, payudara, di bus')).toBe(true);
+  });
+
+  it('returns true when both categories co-occur (Chinese)', () => {
+    expect(containsCsamCombination('儿童裸体在图书馆')).toBe(true);
+    expect(containsCsamCombination('女孩，色情，在公交车上')).toBe(true);
+  });
+
+  it('returns true when both categories co-occur (Japanese)', () => {
+    expect(containsCsamCombination('女の子 エロ 図書館で')).toBe(true);
+    expect(containsCsamCombination('幼児、全裸、バスで')).toBe(true);
+  });
+
+  it('returns true when both categories co-occur (Korean)', () => {
+    expect(containsCsamCombination('소녀 나체 도서관에서')).toBe(true);
+    expect(containsCsamCombination('미성년 포르노 옥상에서')).toBe(true);
+  });
+
+  it('returns false for single-category prompts in other languages', () => {
+    // Minor-only.
+    expect(containsCsamCombination('un enfant avec un canard, dans une bibliothèque')).toBe(false);
+    expect(containsCsamCombination('niño con un pato en una biblioteca')).toBe(false);
+    expect(containsCsamCombination('儿童和一只鸭子在图书馆')).toBe(false);
+    // Sexual-only.
+    expect(containsCsamCombination('un chapeau érotique sur un canard')).toBe(false);
+    expect(containsCsamCombination('色情的鸭子在图书馆')).toBe(false);
+  });
+
   it('does not trip on the existing stand-ins (smoke check)', () => {
     // The verbatim §6 stand-in pools should never trip the heuristic, since
     // they contain no sexual indicators by construction.

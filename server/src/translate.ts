@@ -12,7 +12,12 @@
 // via MYMEMORY_EMAIL env var). One GET per slot, in parallel.
 //
 // On any failure (network down, rate-limited, unknown language) the
-// originals are returned so the prompt is always well-formed.
+// original is kept for that slot AND the `untranslated` flag is set, so the
+// prompt is always well-formed but the caller learns a non-English answer
+// could not be screened. Each failing slot is retried once before giving up.
+// The caller (buildPrompt → generateStoryPicture) fails closed on
+// `untranslated`: a non-English answer that reaches the English CSAM guard
+// untranslated would slip past it, so generation is refused instead.
 //
 // Caching: in-memory Map keyed by `<sourceLang>|<text>` avoids paying for
 // the same answer twice. LRU-ish eviction at CACHE_LIMIT.
@@ -21,6 +26,11 @@ import type { Language } from './types.js';
 
 const CACHE_LIMIT = 2000;
 const TIMEOUT_MS = 4000;
+// One extra attempt after the first failure. A transient blip (timeout, a
+// single 5xx, a momentary rate-limit) often clears on retry, which keeps the
+// fail-closed block below from firing on legitimate answers.
+const TRANSLATE_RETRIES = 1;
+const RETRY_DELAY_MS = 300;
 const ENDPOINT = 'https://api.mymemory.translated.net/get';
 
 const cache = new Map<string, string>();
@@ -92,19 +102,52 @@ async function translateOne(text: string, sourceCode: string): Promise<string> {
   }
 }
 
-// Translates `texts` to English. Returns one output per input, in order.
-// Null/empty inputs are passed through untouched. On any per-item failure
-// the original is kept — the caller's prompt is still well-formed.
+// Attempts one slot, retrying once on failure. Returns the translated string,
+// or null when every attempt failed (caller keeps the original and flags it).
+async function translateWithRetry(
+  text: string,
+  sourceCode: string,
+): Promise<string | null> {
+  for (let attempt = 0; attempt <= TRANSLATE_RETRIES; attempt++) {
+    try {
+      return await translateOne(text, sourceCode);
+    } catch {
+      if (attempt < TRANSLATE_RETRIES) {
+        await new Promise((r) => setTimeout(r, RETRY_DELAY_MS));
+      }
+    }
+  }
+  return null;
+}
+
+export interface TranslationResult {
+  // One output per input, in order. Failing/empty slots keep their original.
+  texts: (string | null)[];
+  // True when at least one non-empty slot could not be translated (after the
+  // retry) — i.e. a non-English answer reaches the prompt unscreened. The
+  // caller fails closed on this. Always false for an English room (answers are
+  // already English and covered by the English CSAM/profanity checks directly).
+  untranslated: boolean;
+}
+
+// Translates `texts` to English. Null/empty inputs are passed through
+// untouched. On a per-item failure the original is kept and `untranslated` is
+// set so the caller can refuse to ship an unscreened prompt to the model.
 export async function translateToEnglish(
   texts: (string | null)[],
   sourceLanguage: Language,
-): Promise<(string | null)[]> {
-  if (sourceLanguage === 'en') return texts;
+): Promise<TranslationResult> {
+  if (sourceLanguage === 'en') return { texts, untranslated: false };
   const sourceCode = toMyMemorySource(sourceLanguage);
-  if (!sourceCode) return texts;
+  // No MyMemory mapping for this language: we cannot translate, so we cannot
+  // screen it. Fail closed (untranslated) rather than ship it unverified. All
+  // 12 shipped languages are mapped, so this only trips if a new language code
+  // is added without a mapping — a loud, immediate signal to add one.
+  if (!sourceCode) return { texts, untranslated: true };
 
   const cachePrefix = `${sourceCode}|`;
   const out: (string | null)[] = texts.map((t) => t);
+  let untranslated = false;
 
   await Promise.all(
     texts.map(async (text, i) => {
@@ -114,14 +157,15 @@ export async function translateToEnglish(
         out[i] = hit;
         return;
       }
-      try {
-        const translated = await translateOne(text, sourceCode);
-        out[i] = translated;
-        cacheSet(cachePrefix + text, translated);
-      } catch {
-        // Keep original on per-item failure.
+      const translated = await translateWithRetry(text, sourceCode);
+      if (translated === null) {
+        // Original kept (out[i] already holds it); flag it as unscreened.
+        untranslated = true;
+        return;
       }
+      out[i] = translated;
+      cacheSet(cachePrefix + text, translated);
     }),
   );
-  return out;
+  return { texts: out, untranslated };
 }

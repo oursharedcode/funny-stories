@@ -7,18 +7,28 @@ import { isFrenchProfane } from './fr.js';
 import { isGermanProfane } from './de.js';
 import { isSpanishProfane } from './es.js';
 import { isChineseProfane } from './zh.js';
+import { isItalianProfane } from './it.js';
+import { isIndonesianProfane } from './id.js';
+import { isJapaneseProfane } from './ja.js';
+import { isKoreanProfane } from './ko.js';
+import { isPortugueseProfane } from './pt.js';
 import { pickStandin } from './standins.js';
 
 // Language → profanity matcher map. Adding a new language with profanity
 // coverage means writing a `<code>.ts` matcher in this folder and adding a
-// row here. Missing entries are fine — that language simply has no native
-// matcher, and `filterAnswer` falls back to the OR over every registered
-// matcher (load-bearing for the silent-stand-in brand asset: an English-room
-// player typing Russian profanity is still caught, and vice-versa).
+// row here. `filterAnswer` runs the OR over every registered matcher, which is
+// load-bearing for the silent-stand-in brand asset: an English-room player
+// typing Russian profanity is still caught, and vice-versa.
 //
-// Type is `Partial<Record<Language, …>>` because the i18n strings ship ahead
-// of native-speaker profanity work — a stub language registers in shared/
-// without yet having a matcher here.
+// All 12 shipped languages now have a native matcher. The first six are backed
+// by bundled dictionaries (en via `obscenity`; ru/fr/de/zh/es via
+// `bad-words-next`). The last five (it/id/ja/pt-br via `bad-words-next` with a
+// hand-built dataset, plus ja/ko which also re-compose NFC) had no bundled
+// dictionary and ship conservative starter stubs pending native review — see
+// each `<code>.ts` header and docs/LANGUAGES.md.
+//
+// Type stays `Partial<Record<Language, …>>` so a future stub language can
+// register in shared/ before its matcher lands here.
 type ProfanityMatcher = (text: string) => boolean;
 const MATCHERS: Partial<Record<Language, ProfanityMatcher>> = {
   en: isEnglishProfane,
@@ -29,6 +39,11 @@ const MATCHERS: Partial<Record<Language, ProfanityMatcher>> = {
   // Both Spanish locales share bad-words-next's single `es` dictionary.
   'es-419': isSpanishProfane,
   'es-es': isSpanishProfane,
+  it: isItalianProfane,
+  id: isIndonesianProfane,
+  ja: isJapaneseProfane,
+  ko: isKoreanProfane,
+  'pt-br': isPortugueseProfane,
 };
 
 // Light pre-normalisation (spec §6):
