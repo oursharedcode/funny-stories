@@ -52,7 +52,7 @@ See [`FUNNY_STORIES_SPEC_v4.md` §3](./FUNNY_STORIES_SPEC_v4.md) for the canonic
 ## Tests of note
 
 - `server/src/game.test.ts` — exhaustive coverage of the rotation formula `storyIndex(P, R, N) = (P - R + N) mod N` from spec §4. **Written before the UI** in build step 4.
-- `server/src/filter/index.test.ts` — profanity filter normalisation, English matches, Russian matches, stand-in selection.
+- `server/src/filter/index.test.ts` — profanity filter normalisation, multilingual matches, stand-in selection.
 - `server/src/prompt.test.ts` — prompt builder length cap, style suffix integrity, mixed-language answer handling.
 
 ## What this project is not

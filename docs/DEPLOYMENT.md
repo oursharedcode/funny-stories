@@ -61,7 +61,7 @@ By default the Worker ships with KV **disabled**, so the one-click button works 
 
 #### The Render spin-down issue (why this exists)
 
-The daily image ceiling (`MAX_IMAGES_PER_DAY`, default 25) is enforced by a **process-global counter that lives only in the Node service's memory**, resetting at 00:00 UTC. On Render's **free** tier this matters:
+The optional daily image limit (`MAX_IMAGES_PER_DAY`, default 25) is enforced by a **process-global counter that lives only in the Node service's memory**, resetting at 00:00 UTC. On Render's **free** tier this matters:
 
 - The service **spins down after ~15 minutes idle**.
 - On the next request it **cold-starts a fresh process** — and the in-memory counter is back to **0**.
@@ -176,7 +176,7 @@ The full, production version (timeouts via `AbortController`, the 30 s sync TTL,
    | `CLOUDFLARE_WORKER_SECRET` | yes | The same secret **S** you set on the Worker. |
    | `DEPLOYER_DONATE_URL` | no | If set, the end screen shows a small **Support this server** button linking here. **Donations go to *you*, the operator** — not to the upstream author. Leave unset for no button. |
    | `MAX_ROOMS` | no | Concurrent room ceiling. Default 500. Safe to leave unset on the free plan. |
-   | `MAX_IMAGES_PER_DAY` | no | Daily Cloudflare AI image ceiling per process (resets 00:00 UTC). Default 25. |
+   | `MAX_IMAGES_PER_DAY` | no | Optional daily Cloudflare AI image limit per process (resets 00:00 UTC). Default 25. |
    | `NODE_VERSION` | yes | `20` (already in `render.yaml`). |
    | `NODE_ENV` | yes | `production` (already in `render.yaml`). |
 

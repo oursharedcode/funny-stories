@@ -232,7 +232,7 @@ Mobile party games can't be fully accessible — they assume a touchscreen, sigh
 - All mascot SVGs are `aria-hidden="true"`. They are decorative. The functional screen content is in real HTML elements with real text.
 - All text meets WCAG AA contrast against its background (verified: `gray-800` on `amber-100` ≈ 11.5:1; `pink-600` on `amber-100` ≈ 5.2:1).
 - `prefers-reduced-motion` is honoured per §4.
-- Russian and English UI strings are i18n-keyed; no text baked into SVGs.
+- Multilingual UI strings are i18n-keyed; no text baked into SVGs.
 
 What v1 does **not** do: screen-reader narration of game state changes, keyboard-only game flow, high-contrast theme. Document this in `CONTRIBUTING.md` as a "good first PR" area.
 

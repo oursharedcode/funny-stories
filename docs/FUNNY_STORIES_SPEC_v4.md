@@ -44,7 +44,7 @@
 ```
 
 - **No database.** Room state lives in a `Map<roomCode, Room>` on the Node process.
-- **No translation.** Workers AI handles Russian and English prompts natively.
+- **No translation.** Workers AI handles multilingual prompts natively.
 - **Bounded reconnect.** A short connection-state-recovery grace window (§7) tolerates brief drops — a phone backgrounding the browser. Beyond it, disconnect during a game = bot replacement. `socket.id` is the only player identifier.
 - **No client-side AI calls.** All image generation is server→Worker→server→client.
 - **One Render service.** No Docker sidecar, no Redis.
@@ -90,7 +90,7 @@ After round 8, the **host** sees **"One more game"** and **"Finish game"**. Othe
 | vite-plugin-pwa | Manifest + service worker |
 | Tailwind CSS | Styling |
 | Framer Motion | Round transitions (spring physics) |
-| react-i18next + i18next | English + Russian UI strings |
+| react-i18next + i18next | Multilingual UI strings |
 | socket.io-client | Real-time communication |
 | qrcode.react | QR code in lobby |
 | nanoid | Client-side room code display IDs where needed |
@@ -851,8 +851,9 @@ No socket events are emitted for bot-owned outcomes — there is no client to re
 
 ### Daily image cap
 
-`server/src/image.ts` enforces a process-global daily ceiling on image
-generation to protect the Cloudflare Workers AI free tier (see §15).
+`server/src/image.ts` applies an **optional**, operator-configurable
+process-global daily limit on image generation (`MAX_IMAGES_PER_DAY`,
+default 25) to protect the Cloudflare Workers AI free tier (see §15).
 Cloudflare gives no notification when the free
 Neuron budget is exhausted, and on the Workers Paid plan overage is billed
 automatically with no built-in spend cap — so the only provider-independent
@@ -1231,9 +1232,9 @@ These are validation rules that cross-cut the data model (§4), socket events (�
 - On exceeding the ceiling, reject new `room:create` with `error` `{ code: 'SERVER_BUSY', message: '...' }`.
 - This is a soft safety rail for a single Render starter instance, not a hard memory limit. Operators with larger plans can raise it via an env var (`MAX_ROOMS`, default 500).
 
-### Daily image-generation ceiling
+### Daily image-generation limit (optional)
 
-- **Max images generated per server process per UTC day: 25 (`MAX_IMAGES_PER_DAY`, default 25).**
+- **Optional cap on images generated per server process per UTC day, set by `MAX_IMAGES_PER_DAY` (default 25).** It is an operator-tunable safety rail, not a fixed system limit.
 - Enforced by a process-global counter in `server/src/image.ts`, shared across **all rooms** — the Cloudflare Workers AI Neuron budget is account-wide, not per-room, so a per-room cap would multiply and cap nothing.
 - The counter resets at **00:00 UTC**, matching Cloudflare's free-tier daily reset.
 - The slot is reserved (counter incremented) **before** the Worker call is awaited, so concurrent `reveal:requestPicture` events cannot overshoot the cap. **Attempts are counted, not successes** — a failed generation may still have consumed Neurons.
