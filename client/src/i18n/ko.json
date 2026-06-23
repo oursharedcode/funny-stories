@@ -10,7 +10,8 @@
     "roomGone": "이 방은 더 이상 존재하지 않습니다 — 끝났거나 링크가 오래됐을 수 있어요.",
     "createNew": "새 방 만들기",
     "openRooms": "열린 방: {{count}}",
-    "imagesToday": "하루 최대 {{total}}개의 이미지. 매일 00:00 UTC에 초기화됩니다."
+    "imagesToday": "하루 최대 {{total}}개의 이미지. 매일 00:00 UTC에 초기화됩니다.",
+    "uiLanguage": "탭하여 인터페이스 언어 변경"
   },
   "lobby": {
     "roomCodeLabel": "방 코드",
@@ -29,7 +30,8 @@
     "progress": "{{total}} 중 {{current}} 라운드",
     "placeholder": "답을 입력하세요…",
     "submit": "제출",
-    "submitted": "제출됨"
+    "submitted": "제출됨",
+    "storyLanguage": "이야기 언어"
   },
   "waiting": {
     "title": "다른 플레이어를 기다리는 중",

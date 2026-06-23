@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 import TimerBar from '../components/TimerBar';
 import SubmitConfirm from '../components/art/SubmitConfirm';
 import { socket } from '../socket';
+import { LANGUAGES } from '../languages';
+import type { Language } from 'shared';
 
 interface RoundData {
   roundNumber: number;
@@ -14,13 +16,18 @@ interface RoundData {
 
 interface Props {
   round: RoundData;
+  // Room content language — the language the story is written/moderated in,
+  // fixed by the host. Used for the joiner-only indicator below.
+  language: Language;
+  isHost: boolean;
 }
 
 const ROUND_DURATION_MS = 60_000;
 const ANSWER_MAX_LENGTH = 70;
 
-export default function RoundScreen({ round }: Props) {
+export default function RoundScreen({ round, language, isHost }: Props) {
   const { t } = useTranslation();
+  const storyLang = LANGUAGES.find((opt) => opt.code === language);
   const [answer, setAnswer] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const taRef = useRef<HTMLTextAreaElement>(null);
@@ -53,6 +60,19 @@ export default function RoundScreen({ round }: Props) {
         {t('round.progress', { current: round.roundNumber + 1, total: 7 })}
       </p>
       <h2 className="font-display font-semibold text-3xl">{round.question}</h2>
+      {/* Constant story-language indicator, joiners only (spec §8). The host
+          picked this language so they already know it; the joiner gets a quiet
+          reminder of which language to write their answer in. */}
+      {!isHost && storyLang && (
+        <div className="flex items-center gap-2 text-sm text-gray-600">
+          <span className="text-lg" aria-hidden="true">
+            {storyLang.flag}
+          </span>
+          <span>
+            {t('round.storyLanguage')}: {storyLang.name}
+          </span>
+        </div>
+      )}
       <textarea
         ref={taRef}
         className="w-full p-3 rounded border border-amber-300 text-lg h-40 resize-none"

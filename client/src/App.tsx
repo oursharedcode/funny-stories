@@ -147,8 +147,14 @@ export default function App() {
     );
   } else if (phase === 'reveal' && reveal) {
     body = <RevealScreen reveal={reveal} onContinue={() => setPhase('end')} />;
-  } else if (phase === 'writing' && round) {
-    body = <RoundScreen round={round} />;
+  } else if (phase === 'writing' && round && lobby) {
+    body = (
+      <RoundScreen
+        round={round}
+        language={lobby.language}
+        isHost={lobby.socketId === lobby.hostId}
+      />
+    );
   } else if (phase === 'waiting' && waiting) {
     body = <WaitingScreen waiting={waiting} />;
   } else if (phase === 'lobby' && lobby) {

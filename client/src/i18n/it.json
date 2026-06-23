@@ -10,7 +10,8 @@
     "roomGone": "Questa stanza non esiste più — forse è finita, o il link è vecchio.",
     "createNew": "Crea una nuova stanza",
     "openRooms": "Stanze aperte: {{count}}",
-    "imagesToday": "Fino a {{total}} immagini al giorno. Si azzera ogni giorno alle 00:00 UTC."
+    "imagesToday": "Fino a {{total}} immagini al giorno. Si azzera ogni giorno alle 00:00 UTC.",
+    "uiLanguage": "Tocca per cambiare la lingua dell'interfaccia"
   },
   "lobby": {
     "roomCodeLabel": "Codice stanza",
@@ -29,7 +30,8 @@
     "progress": "Round {{current}} di {{total}}",
     "placeholder": "Scrivi la tua risposta…",
     "submit": "Invia",
-    "submitted": "Inviato"
+    "submitted": "Inviato",
+    "storyLanguage": "Lingua della storia"
   },
   "waiting": {
     "title": "In attesa degli altri",

@@ -10,7 +10,8 @@
     "roomGone": "Esta sala não existe mais — talvez tenha terminado ou o link esteja velho.",
     "createNew": "Criar uma nova sala",
     "openRooms": "Salas abertas: {{count}}",
-    "imagesToday": "Até {{total}} imagens por dia. Reinicia todo dia às 00:00 UTC."
+    "imagesToday": "Até {{total}} imagens por dia. Reinicia todo dia às 00:00 UTC.",
+    "uiLanguage": "Toque para mudar o idioma da interface"
   },
   "lobby": {
     "roomCodeLabel": "Código da sala",
@@ -29,7 +30,8 @@
     "progress": "Rodada {{current}} de {{total}}",
     "placeholder": "Digite sua resposta…",
     "submit": "Enviar",
-    "submitted": "Enviado"
+    "submitted": "Enviado",
+    "storyLanguage": "Idioma da história"
   },
   "waiting": {
     "title": "Esperando os outros",

@@ -10,7 +10,8 @@
     "roomGone": "Diesen Raum gibt es nicht mehr — das Spiel ist vielleicht zu Ende, oder der Link ist veraltet.",
     "createNew": "Einen neuen Raum erstellen",
     "openRooms": "Offene Räume: {{count}}",
-    "imagesToday": "Bis zu {{total}} Bilder pro Tag. Zurücksetzung täglich um 00:00 UTC."
+    "imagesToday": "Bis zu {{total}} Bilder pro Tag. Zurücksetzung täglich um 00:00 UTC.",
+    "uiLanguage": "Tippen, um die Sprache der Oberfläche zu ändern"
   },
   "lobby": {
     "roomCodeLabel": "Raumcode",
@@ -29,7 +30,8 @@
     "progress": "Runde {{current}} von {{total}}",
     "placeholder": "Tippe deine Antwort…",
     "submit": "Senden",
-    "submitted": "Gesendet"
+    "submitted": "Gesendet",
+    "storyLanguage": "Sprache der Geschichte"
   },
   "waiting": {
     "title": "Warten auf die anderen",

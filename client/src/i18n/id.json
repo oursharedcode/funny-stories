@@ -10,7 +10,8 @@
     "roomGone": "Ruangan ini sudah tidak ada — mungkin sudah berakhir atau tautannya sudah kedaluwarsa.",
     "createNew": "Buat ruangan baru",
     "openRooms": "Ruangan terbuka: {{count}}",
-    "imagesToday": "Hingga {{total}} gambar per hari. Disetel ulang setiap hari pukul 00:00 UTC."
+    "imagesToday": "Hingga {{total}} gambar per hari. Disetel ulang setiap hari pukul 00:00 UTC.",
+    "uiLanguage": "Ketuk untuk mengganti bahasa antarmuka"
   },
   "lobby": {
     "roomCodeLabel": "Kode ruangan",
@@ -29,7 +30,8 @@
     "progress": "Ronde {{current}} dari {{total}}",
     "placeholder": "Ketik jawabanmu…",
     "submit": "Kirim",
-    "submitted": "Terkirim"
+    "submitted": "Terkirim",
+    "storyLanguage": "Bahasa cerita"
   },
   "waiting": {
     "title": "Menunggu yang lain",

@@ -10,7 +10,8 @@
     "roomGone": "Cette salle n'existe plus — la partie est peut-être terminée ou le lien est trop ancien.",
     "createNew": "Créer une nouvelle salle",
     "openRooms": "Salles ouvertes : {{count}}",
-    "imagesToday": "Jusqu'à {{total}} images par jour. Réinitialisation chaque jour à 00h00 UTC."
+    "imagesToday": "Jusqu'à {{total}} images par jour. Réinitialisation chaque jour à 00h00 UTC.",
+    "uiLanguage": "Touche pour changer la langue de l'interface"
   },
   "lobby": {
     "roomCodeLabel": "Code de la salle",
@@ -29,7 +30,8 @@
     "progress": "Manche {{current}} sur {{total}}",
     "placeholder": "Tape ta réponse…",
     "submit": "Envoyer",
-    "submitted": "Envoyé"
+    "submitted": "Envoyé",
+    "storyLanguage": "Langue de l'histoire"
   },
   "waiting": {
     "title": "En attente des autres",

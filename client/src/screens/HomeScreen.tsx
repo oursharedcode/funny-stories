@@ -31,6 +31,9 @@ export default function HomeScreen({ onJoined }: Props) {
   const [roomGone, setRoomGone] = useState(false);
   const [busy, setBusy] = useState(false);
   const [stats, setStats] = useState<StatsPayload | null>(null);
+  // A joiner who explicitly cycles the UI language must keep that choice — it
+  // must not be clobbered by the room's content language on join (see join()).
+  const [uiLangTouched, setUiLangTouched] = useState(false);
 
   // When the invite link carries the room language (`?room=CODE&lang=ru`),
   // render the join screen in that language immediately rather than waiting for
@@ -58,6 +61,20 @@ export default function HomeScreen({ onJoined }: Props) {
     setLanguage(lang);
     void i18n.changeLanguage(lang);
   }
+
+  // Joiner-only UI-language control (spec §8): a small button that cycles the
+  // interface language to the next registry entry on each press, independent of
+  // the room's content language — the host fixed that and the joiner can't
+  // change it. This only touches i18n display, never the `language` content
+  // state used by the host's room:create payload.
+  function cycleUiLanguage(): void {
+    setUiLangTouched(true);
+    const idx = LANGUAGES.findIndex((opt) => opt.code === i18n.language);
+    const next = LANGUAGES[(idx + 1) % LANGUAGES.length];
+    void i18n.changeLanguage(next.code);
+  }
+
+  const uiLang = LANGUAGES.find((opt) => opt.code === i18n.language) ?? LANGUAGES[0];
 
   function create(): void {
     setError(null);
@@ -92,7 +109,9 @@ export default function HomeScreen({ onJoined }: Props) {
         }
         return;
       }
-      void i18n.changeLanguage(ack.language);
+      // Default the joiner's UI to the room's content language — unless they
+      // explicitly cycled to a different one on this screen, which we preserve.
+      if (!uiLangTouched) void i18n.changeLanguage(ack.language);
       onJoined({
         roomCode: urlRoom,
         socketId: ack.socketId,
@@ -197,6 +216,22 @@ export default function HomeScreen({ onJoined }: Props) {
 
       {mode === 'join' && !roomGone && (
         <>
+          {/* Joiner-only UI-language toggle (spec §8). Small, self-contained
+              button: each tap advances to the next language; the joiner stops
+              pressing when the interface reads the way they want. */}
+          <button
+            type="button"
+            className="self-end flex items-center gap-2 rounded-full border border-amber-300 bg-white px-3 py-1.5 text-sm font-semibold text-gray-700"
+            onClick={cycleUiLanguage}
+            aria-label={t('home.uiLanguage')}
+            title={t('home.uiLanguage')}
+          >
+            <span className="text-lg" aria-hidden="true">
+              {uiLang.flag}
+            </span>
+            <span>{uiLang.name}</span>
+          </button>
+
           <div className="w-full text-center">
             <p className="text-sm text-gray-600">{t('home.joining')}</p>
             <p className="font-display font-bold text-4xl text-pink-500 tracking-widest">

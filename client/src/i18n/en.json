@@ -9,7 +9,8 @@
     "roomGone": "That room no longer exists — it may have ended, or the link is old.",
     "createNew": "Create a new room",
     "openRooms": "Open rooms: {{count}}",
-    "imagesToday": "Up to {{total}} cartoons per day. Resets daily at 00:00 UTC."
+    "imagesToday": "Up to {{total}} cartoons per day. Resets daily at 00:00 UTC.",
+    "uiLanguage": "Tap to change the interface language"
   },
   "lobby": {
     "roomCodeLabel": "Room code",
@@ -28,7 +29,8 @@
     "progress": "Round {{current}} of {{total}}",
     "placeholder": "Type your answer…",
     "submit": "Submit",
-    "submitted": "Submitted"
+    "submitted": "Submitted",
+    "storyLanguage": "Story language"
   },
   "waiting": {
     "title": "Waiting on others",

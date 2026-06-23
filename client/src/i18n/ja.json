@@ -10,7 +10,8 @@
     "roomGone": "このルームはもう存在しません — 終了したか、リンクが古い可能性があります。",
     "createNew": "新しいルームを作成",
     "openRooms": "公開中のルーム: {{count}}",
-    "imagesToday": "1日あたり最大{{total}}枚の画像。毎日00:00 UTCにリセットされます。"
+    "imagesToday": "1日あたり最大{{total}}枚の画像。毎日00:00 UTCにリセットされます。",
+    "uiLanguage": "タップして表示言語を変更"
   },
   "lobby": {
     "roomCodeLabel": "ルームコード",
@@ -29,7 +30,8 @@
     "progress": "ラウンド {{current}} / {{total}}",
     "placeholder": "答えを入力…",
     "submit": "送信",
-    "submitted": "送信済み"
+    "submitted": "送信済み",
+    "storyLanguage": "ストーリーの言語"
   },
   "waiting": {
     "title": "他の人を待っています",

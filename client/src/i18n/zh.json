@@ -10,7 +10,8 @@
     "roomGone": "该房间已不存在 — 可能已经结束，或链接已过期。",
     "createNew": "创建新房间",
     "openRooms": "开放房间: {{count}}",
-    "imagesToday": "每天最多 {{total}} 张漫画。每天 00:00 UTC 重置。"
+    "imagesToday": "每天最多 {{total}} 张漫画。每天 00:00 UTC 重置。",
+    "uiLanguage": "点击切换界面语言"
   },
   "lobby": {
     "roomCodeLabel": "房间代码",
@@ -29,7 +30,8 @@
     "progress": "第 {{current}} 轮 / 共 {{total}} 轮",
     "placeholder": "输入你的答案…",
     "submit": "提交",
-    "submitted": "已提交"
+    "submitted": "已提交",
+    "storyLanguage": "故事语言"
   },
   "waiting": {
     "title": "等待其他人",
