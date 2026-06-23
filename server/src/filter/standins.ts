@@ -24,7 +24,7 @@ export const STANDINS: Record<Language, Record<number, string[]>> = {
       'a haunted vending machine',
       'a retired superhero named Gerald',
       'a suspicious houseplant',
-      'three children in a trench coat',
+      'three cats in a trench coat',
     ],
     1: [
       'with a haunted toaster',

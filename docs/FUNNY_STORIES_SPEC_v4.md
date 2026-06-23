@@ -305,7 +305,7 @@ const standins: Record<Language, Record<number, string[]>> = {
         "an overconfident raccoon", "a time-traveling accountant",
         "the world's smallest dragon", "a haunted vending machine",
         "a retired superhero named Gerald", "a suspicious houseplant",
-        "three children in a trench coat"],
+        "three cats in a trench coat"],
     1: ["with a haunted toaster", "with three angry geese",
         "with a philosophical goldfish", "with someone who wouldn't stop humming",
         "with a cardboard cutout of a celebrity", "with an invisible best friend",
