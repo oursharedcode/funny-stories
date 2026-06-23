@@ -1,5 +1,14 @@
 {
   "_note": "needs-pt-br-review — machine-translated stub awaiting native Brazilian Portuguese review per CONTRIBUTING.md.",
+  "questions": [
+    "Quem?",
+    "Com quem?",
+    "Onde?",
+    "Quando?",
+    "O que eles fizeram?",
+    "Para quê?",
+    "Como terminou?"
+  ],
   "home": {
     "title": "Histórias Engraçadas",
     "subtitle": "Escrevam histórias absurdas juntos. Feito para celular.",

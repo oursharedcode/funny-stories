@@ -1,5 +1,14 @@
 {
   "_note": "needs-it-review — machine-translated stub awaiting native Italian review per CONTRIBUTING.md.",
+  "questions": [
+    "Chi?",
+    "Con chi?",
+    "Dove?",
+    "Quando?",
+    "Cosa hanno fatto?",
+    "Per quale motivo?",
+    "Com'è finita?"
+  ],
   "home": {
     "title": "Storie Divertenti",
     "subtitle": "Scrivete storie assurde insieme. Ottimizzato per cellulare.",

@@ -1,5 +1,14 @@
 {
   "_note": "needs-ja-review — machine-translated stub awaiting native Japanese review per CONTRIBUTING.md.",
+  "questions": [
+    "誰?",
+    "誰と?",
+    "どこで?",
+    "いつ?",
+    "何をした?",
+    "何のために?",
+    "最後はどうなった?"
+  ],
   "home": {
     "title": "おもしろストーリー",
     "subtitle": "みんなで馬鹿げた物語を書こう。スマホ向け。",

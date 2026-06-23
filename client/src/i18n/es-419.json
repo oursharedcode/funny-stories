@@ -1,5 +1,14 @@
 {
   "_note": "needs-es-419-review — machine-translated stub awaiting native Latin-American Spanish review per CONTRIBUTING.md.",
+  "questions": [
+    "¿Quién?",
+    "¿Con quién?",
+    "¿Dónde?",
+    "¿Cuándo?",
+    "¿Qué hicieron?",
+    "¿Para qué?",
+    "¿Cómo terminó?"
+  ],
   "home": {
     "title": "Historias Divertidas",
     "subtitle": "Escriban historias absurdas juntos. Pensado para celular.",

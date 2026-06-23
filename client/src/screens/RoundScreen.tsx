@@ -26,8 +26,22 @@ const ROUND_DURATION_MS = 60_000;
 const ANSWER_MAX_LENGTH = 70;
 
 export default function RoundScreen({ round, language, isHost }: Props) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const storyLang = LANGUAGES.find((opt) => opt.code === language);
+
+  // Dual-display gloss (spec §8/§9): when a joiner has set the UI language to
+  // something other than the room's content language, show the question in
+  // their UI language as a small secondary line beneath the primary
+  // (room-language) prompt. The primary stays in the room language because the
+  // answer must be written in it; the gloss only aids comprehension. The
+  // per-language question set mirrors the authoritative server copy (the only
+  // one ever sent in `round:start`); it lives in client i18n alongside the
+  // other UI strings and is keyed by round index.
+  const glossQuestions = i18n.getResource(i18n.language, 'translation', 'questions') as
+    | string[]
+    | undefined;
+  const questionGloss =
+    i18n.language !== language ? glossQuestions?.[round.roundNumber] : undefined;
   const [answer, setAnswer] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const taRef = useRef<HTMLTextAreaElement>(null);
@@ -60,6 +74,8 @@ export default function RoundScreen({ round, language, isHost }: Props) {
         {t('round.progress', { current: round.roundNumber + 1, total: 7 })}
       </p>
       <h2 className="font-display font-semibold text-3xl">{round.question}</h2>
+      {/* Secondary gloss in the joiner's UI language (spec §8/§9). */}
+      {questionGloss && <p className="text-base italic text-gray-500">{questionGloss}</p>}
       {/* Constant story-language indicator, joiners only (spec §8). The host
           picked this language so they already know it; the joiner gets a quiet
           reminder of which language to write their answer in. */}

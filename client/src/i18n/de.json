@@ -1,5 +1,14 @@
 {
   "_note": "needs-de-review — machine-translated stub awaiting native German review per CONTRIBUTING.md.",
+  "questions": [
+    "Wer?",
+    "Mit wem?",
+    "Wo?",
+    "Wann?",
+    "Was haben sie getan?",
+    "Wozu?",
+    "Wie endete es?"
+  ],
   "home": {
     "title": "Lustige Geschichten",
     "subtitle": "Schreibt zusammen absurde Geschichten. Handy-freundlich.",

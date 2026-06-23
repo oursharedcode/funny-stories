@@ -1,4 +1,13 @@
 {
+  "questions": [
+    "Who?",
+    "And who else?",
+    "Where?",
+    "When?",
+    "What did they do?",
+    "What for?",
+    "What happened in the end?"
+  ],
   "home": {
     "title": "Funny Stories",
     "subtitle": "Write absurd stories together. Phone-friendly.",

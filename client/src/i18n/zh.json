@@ -1,5 +1,14 @@
 {
   "_note": "needs-zh-review — machine-translated stub awaiting native Mandarin Chinese review per CONTRIBUTING.md.",
+  "questions": [
+    "谁?",
+    "还有谁?",
+    "在哪里?",
+    "什么时候?",
+    "他们做了什么?",
+    "为了什么?",
+    "最后怎么样了?"
+  ],
   "home": {
     "title": "搞笑故事",
     "subtitle": "一起写荒诞的故事。适合手机。",

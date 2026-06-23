@@ -1,5 +1,14 @@
 {
   "_note": "needs-fr-review — machine-translated stub awaiting native French review per CONTRIBUTING.md.",
+  "questions": [
+    "Qui ?",
+    "Avec qui ?",
+    "Où ?",
+    "Quand ?",
+    "Qu'ont-ils fait ?",
+    "Pourquoi ?",
+    "Comment ça s'est terminé ?"
+  ],
   "home": {
     "title": "Histoires Drôles",
     "subtitle": "Écrivez des histoires absurdes ensemble. Optimisé pour mobile.",
