@@ -13,6 +13,8 @@
     "title": "Historias Divertidas",
     "subtitle": "Escribid historias absurdas juntos. Optimizado para móvil.",
     "nicknamePlaceholder": "Elige un apodo",
+    "gameRules": "Reglas del juego",
+    "rules": "En cada ronda, responde a algunas consignas divertidas. Tus respuestas se mezclan con las de los demás en historias absurdas. Luego cada historia se convierte en un dibujo y las mostramos todas.",
     "create": "Crear sala",
     "join": "Unirse",
     "joining": "Entrando a la sala",

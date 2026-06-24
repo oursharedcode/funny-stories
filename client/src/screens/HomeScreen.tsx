@@ -62,19 +62,14 @@ export default function HomeScreen({ onJoined }: Props) {
     void i18n.changeLanguage(lang);
   }
 
-  // Joiner-only UI-language control (spec §8): a small button that cycles the
-  // interface language to the next registry entry on each press, independent of
-  // the room's content language — the host fixed that and the joiner can't
-  // change it. This only touches i18n display, never the `language` content
-  // state used by the host's room:create payload.
-  function cycleUiLanguage(): void {
+  // Joiner-only UI-language control (spec §8): picking a flag switches the
+  // interface language, independent of the room's content language — the host
+  // fixed that and the joiner can't change it. This only touches i18n display,
+  // never the `language` content state used by the host's room:create payload.
+  function selectUiLanguage(lang: Language): void {
     setUiLangTouched(true);
-    const idx = LANGUAGES.findIndex((opt) => opt.code === i18n.language);
-    const next = LANGUAGES[(idx + 1) % LANGUAGES.length];
-    void i18n.changeLanguage(next.code);
+    void i18n.changeLanguage(lang);
   }
-
-  const uiLang = LANGUAGES.find((opt) => opt.code === i18n.language) ?? LANGUAGES[0];
 
   function create(): void {
     setError(null);
@@ -144,33 +139,48 @@ export default function HomeScreen({ onJoined }: Props) {
 
       {mode === 'create' && (
         <>
-          {/* Scrollable language list. With 11+ options the static list ran the
-              page off-screen on a phone; clamp the visible height so 2.5 rows
-              show at once and the cut-off third row hints at more below. Each
-              row is ~64px (px-4 + py-3 around a text-base label + text-2xl
-              flag), so max-h-40 (160px) lands the third row at ~50%. */}
-          <div
-            className="w-full flex flex-col gap-2 max-h-40 overflow-y-auto pr-1"
-            role="group"
-            aria-label="Language"
-          >
-            {LANGUAGES.map((opt) => (
-              <button
-                key={opt.code}
-                aria-pressed={language === opt.code}
-                className={`flex items-center gap-3 rounded px-4 py-3 font-semibold flex-shrink-0 ${
-                  language === opt.code
-                    ? 'bg-pink-500 text-white'
-                    : 'bg-white border border-amber-300 text-gray-800'
-                }`}
-                onClick={() => switchLanguage(opt.code)}
-              >
-                <span className="text-2xl" aria-hidden="true">
-                  {opt.flag}
-                </span>
-                <span>{opt.name}</span>
-              </button>
-            ))}
+          {/* Two-column row under the subtitle: a free-form "game rules" text
+              box on the left, and the language picker on the right. They share
+              the same vertical slot and height (max-h-40). */}
+          <div className="w-full flex gap-3 items-start">
+            {/* Game rules — left. Read-only blurb shown in the currently
+                selected language (it follows switchLanguage below). Three
+                visible lines; scrolls if the translation runs longer. */}
+            <textarea
+              className="flex-1 max-h-40 p-3 rounded border border-amber-300 text-base resize-none bg-white text-gray-800"
+              rows={3}
+              readOnly
+              aria-label={t('home.gameRules')}
+              value={t('home.rules')}
+            />
+
+            {/* Scrollable language list — right, narrower. With 11+ options the
+                static list ran the page off-screen on a phone; clamp the visible
+                height so 2.5 rows show at once and the cut-off third row hints at
+                more below. Flags only (no country names) keep it compact. */}
+            <div
+              className="w-28 flex flex-col gap-2 max-h-40 overflow-y-auto pr-1"
+              role="group"
+              aria-label="Language"
+            >
+              {LANGUAGES.map((opt) => (
+                <button
+                  key={opt.code}
+                  aria-pressed={language === opt.code}
+                  title={opt.name}
+                  className={`flex items-center justify-end rounded px-4 py-3 font-semibold flex-shrink-0 ${
+                    language === opt.code
+                      ? 'bg-pink-500 text-white'
+                      : 'bg-white border border-amber-300 text-gray-800'
+                  }`}
+                  onClick={() => switchLanguage(opt.code)}
+                >
+                  <span className="text-2xl" aria-hidden="true">
+                    {opt.flag}
+                  </span>
+                </button>
+              ))}
+            </div>
           </div>
 
           <input
@@ -216,21 +226,43 @@ export default function HomeScreen({ onJoined }: Props) {
 
       {mode === 'join' && !roomGone && (
         <>
-          {/* Joiner-only UI-language toggle (spec §8). Small, self-contained
-              button: each tap advances to the next language; the joiner stops
-              pressing when the interface reads the way they want. */}
-          <button
-            type="button"
-            className="self-end flex items-center gap-2 rounded-full border border-amber-300 bg-white px-3 py-1.5 text-sm font-semibold text-gray-700"
-            onClick={cycleUiLanguage}
-            aria-label={t('home.uiLanguage')}
-            title={t('home.uiLanguage')}
-          >
-            <span className="text-lg" aria-hidden="true">
-              {uiLang.flag}
-            </span>
-            <span>{uiLang.name}</span>
-          </button>
+          {/* Same two-column row as the host screen: free-form "game rules"
+              box on the left, language picker on the right. Here the flags
+              switch the interface language only (spec §8) — the room's content
+              language is fixed by the host. */}
+          <div className="w-full flex gap-3 items-start">
+            <textarea
+              className="flex-1 max-h-40 p-3 rounded border border-amber-300 text-base resize-none bg-white text-gray-800"
+              rows={3}
+              readOnly
+              aria-label={t('home.gameRules')}
+              value={t('home.rules')}
+            />
+
+            <div
+              className="w-28 flex flex-col gap-2 max-h-40 overflow-y-auto pr-1"
+              role="group"
+              aria-label={t('home.uiLanguage')}
+            >
+              {LANGUAGES.map((opt) => (
+                <button
+                  key={opt.code}
+                  aria-pressed={i18n.language === opt.code}
+                  title={opt.name}
+                  className={`flex items-center justify-end rounded px-4 py-3 font-semibold flex-shrink-0 ${
+                    i18n.language === opt.code
+                      ? 'bg-pink-500 text-white'
+                      : 'bg-white border border-amber-300 text-gray-800'
+                  }`}
+                  onClick={() => selectUiLanguage(opt.code)}
+                >
+                  <span className="text-2xl" aria-hidden="true">
+                    {opt.flag}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
 
           <div className="w-full text-center">
             <p className="text-sm text-gray-600">{t('home.joining')}</p>
