@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Game rules on the home screen, localised for every language.** The host and
+  joiner start screens now show a short read-only "game rules" blurb next to the
+  language picker, translated into all 12 supported languages and following the
+  selected language live. The picker itself now uses bundled PNG flag images
+  (with two-letter labels) instead of emoji flags, which don't render on Windows
+  and some other devices.
 - **Native profanity matchers for all 12 languages.** Italian, Indonesian,
   Japanese, Korean, and Portuguese previously had no native prose matcher
   (`bad-words-next` ships no dictionary for them), so own-language profanity in
