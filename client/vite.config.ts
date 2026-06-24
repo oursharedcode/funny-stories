@@ -25,7 +25,7 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       // Public assets to add to the precache (spec §13 names monkeys-on-bus.png).
-      includeAssets: ['monkeys-on-bus.png', 'icon-192.png', 'icon-512.png'],
+      includeAssets: ['monkeys-on-bus.png', 'icon-192.png', 'icon-512.png', 'flags/*.png'],
       manifest: {
         name: 'Funny Stories',
         short_name: 'FunnyStories',

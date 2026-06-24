@@ -17,6 +17,12 @@ export interface LanguageOption {
   name: string;
   /** Unicode flag emoji. Renders on iOS/Android phones the game targets. */
   flag: string;
+  /**
+   * Short two-letter label shown next to the flag image in the picker
+   * (e.g. "GB", "FR"). Not always an ISO country code — "LA" stands in for
+   * Latin-American Spanish, which has no single country flag.
+   */
+  country: string;
 }
 
 // `as const` is load-bearing: it preserves the literal codes so `Language`
@@ -30,18 +36,18 @@ export interface LanguageOption {
 // each language at machine-translation quality with a `needs-<code>-review`
 // header in every file, awaiting native-speaker review per CONTRIBUTING.md.
 export const LANGUAGES = [
-  { code: 'en', name: 'English (United Kingdom)', flag: '🇬🇧' },
-  { code: 'fr', name: 'Français (France)', flag: '🇫🇷' },
-  { code: 'de', name: 'Deutsch (Deutschland)', flag: '🇩🇪' },
-  { code: 'ru', name: 'Русский (Россия)', flag: '🇷🇺' },
-  { code: 'id', name: 'Indonesia (Indonesia)', flag: '🇮🇩' },
-  { code: 'it', name: 'Italiano (Italia)', flag: '🇮🇹' },
-  { code: 'zh', name: '中文 (普通话)', flag: '🇨🇳' },
-  { code: 'ja', name: '日本語 (日本)', flag: '🇯🇵' },
-  { code: 'ko', name: '한국어 (대한민국)', flag: '🇰🇷' },
-  { code: 'pt-br', name: 'Português (Brasil)', flag: '🇧🇷' },
-  { code: 'es-419', name: 'Español (Latinoamérica)', flag: '🌎' },
-  { code: 'es-es', name: 'Español (España)', flag: '🇪🇸' },
+  { code: 'en', name: 'English (United Kingdom)', flag: '🇬🇧', country: 'GB' },
+  { code: 'fr', name: 'Français (France)', flag: '🇫🇷', country: 'FR' },
+  { code: 'de', name: 'Deutsch (Deutschland)', flag: '🇩🇪', country: 'DE' },
+  { code: 'ru', name: 'Русский (Россия)', flag: '🇷🇺', country: 'RU' },
+  { code: 'id', name: 'Indonesia (Indonesia)', flag: '🇮🇩', country: 'ID' },
+  { code: 'it', name: 'Italiano (Italia)', flag: '🇮🇹', country: 'IT' },
+  { code: 'zh', name: '中文 (普通话)', flag: '🇨🇳', country: 'CN' },
+  { code: 'ja', name: '日本語 (日本)', flag: '🇯🇵', country: 'JP' },
+  { code: 'ko', name: '한국어 (대한민국)', flag: '🇰🇷', country: 'KR' },
+  { code: 'pt-br', name: 'Português (Brasil)', flag: '🇧🇷', country: 'BR' },
+  { code: 'es-419', name: 'Español (Latinoamérica)', flag: '🌎', country: 'LA' },
+  { code: 'es-es', name: 'Español (España)', flag: '🇪🇸', country: 'ES' },
 ] as const satisfies readonly LanguageOption[];
 
 export type Language = (typeof LANGUAGES)[number]['code'];

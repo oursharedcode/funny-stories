@@ -139,27 +139,26 @@ export default function HomeScreen({ onJoined }: Props) {
 
       {mode === 'create' && (
         <>
-          {/* Two-column row under the subtitle: a free-form "game rules" text
-              box on the left, and the language picker on the right. They share
-              the same vertical slot and height (max-h-40). */}
+          {/* Two-column row under the subtitle: a read-only "game rules" text
+              box on the left, and the language picker on the right. Both are
+              h-40 (160px) so the box matches the language list's height. */}
           <div className="w-full flex gap-3 items-start">
             {/* Game rules — left. Read-only blurb shown in the currently
-                selected language (it follows switchLanguage below). Three
-                visible lines; scrolls if the translation runs longer. */}
+                selected language (it follows switchLanguage below). Scrolls if
+                the translation runs taller than the box. */}
             <textarea
-              className="flex-1 max-h-40 p-3 rounded border border-amber-300 text-base resize-none bg-white text-gray-800"
-              rows={3}
+              className="flex-1 h-40 p-3 rounded border border-amber-300 text-base resize-none bg-white text-gray-800"
               readOnly
               aria-label={t('home.gameRules')}
               value={t('home.rules')}
             />
 
-            {/* Scrollable language list — right, narrower. With 11+ options the
-                static list ran the page off-screen on a phone; clamp the visible
-                height so 2.5 rows show at once and the cut-off third row hints at
-                more below. Flags only (no country names) keep it compact. */}
+            {/* Scrollable language list — right, narrower. Each row is a PNG
+                flag (works on every device, unlike emoji flags) followed by a
+                two-letter label. The static list ran the page off-screen on a
+                phone; clamp to h-40 so it scrolls within the same slot. */}
             <div
-              className="w-28 flex flex-col gap-2 max-h-40 overflow-y-auto pr-1"
+              className="w-28 flex flex-col gap-2 h-40 overflow-y-auto pr-1"
               role="group"
               aria-label="Language"
             >
@@ -168,16 +167,20 @@ export default function HomeScreen({ onJoined }: Props) {
                   key={opt.code}
                   aria-pressed={language === opt.code}
                   title={opt.name}
-                  className={`flex items-center justify-end rounded px-4 py-3 font-semibold flex-shrink-0 ${
+                  className={`flex items-center gap-2 rounded px-3 py-3 font-semibold flex-shrink-0 ${
                     language === opt.code
                       ? 'bg-pink-500 text-white'
                       : 'bg-white border border-amber-300 text-gray-800'
                   }`}
                   onClick={() => switchLanguage(opt.code)}
                 >
-                  <span className="text-2xl" aria-hidden="true">
-                    {opt.flag}
-                  </span>
+                  <img
+                    src={`/flags/${opt.code}.png`}
+                    alt=""
+                    aria-hidden="true"
+                    className="w-6 h-6 object-contain flex-shrink-0"
+                  />
+                  <span>{opt.country}</span>
                 </button>
               ))}
             </div>
@@ -232,15 +235,14 @@ export default function HomeScreen({ onJoined }: Props) {
               language is fixed by the host. */}
           <div className="w-full flex gap-3 items-start">
             <textarea
-              className="flex-1 max-h-40 p-3 rounded border border-amber-300 text-base resize-none bg-white text-gray-800"
-              rows={3}
+              className="flex-1 h-40 p-3 rounded border border-amber-300 text-base resize-none bg-white text-gray-800"
               readOnly
               aria-label={t('home.gameRules')}
               value={t('home.rules')}
             />
 
             <div
-              className="w-28 flex flex-col gap-2 max-h-40 overflow-y-auto pr-1"
+              className="w-28 flex flex-col gap-2 h-40 overflow-y-auto pr-1"
               role="group"
               aria-label={t('home.uiLanguage')}
             >
@@ -249,16 +251,20 @@ export default function HomeScreen({ onJoined }: Props) {
                   key={opt.code}
                   aria-pressed={i18n.language === opt.code}
                   title={opt.name}
-                  className={`flex items-center justify-end rounded px-4 py-3 font-semibold flex-shrink-0 ${
+                  className={`flex items-center gap-2 rounded px-3 py-3 font-semibold flex-shrink-0 ${
                     i18n.language === opt.code
                       ? 'bg-pink-500 text-white'
                       : 'bg-white border border-amber-300 text-gray-800'
                   }`}
                   onClick={() => selectUiLanguage(opt.code)}
                 >
-                  <span className="text-2xl" aria-hidden="true">
-                    {opt.flag}
-                  </span>
+                  <img
+                    src={`/flags/${opt.code}.png`}
+                    alt=""
+                    aria-hidden="true"
+                    className="w-6 h-6 object-contain flex-shrink-0"
+                  />
+                  <span>{opt.country}</span>
                 </button>
               ))}
             </div>
