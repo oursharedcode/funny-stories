@@ -72,10 +72,12 @@ So a host who generated 20 cartoons, went idle, and came back later finds the co
 
 The Node service (`server/src/image.ts`) keeps two numbers and surfaces the **max** of them:
 
-- `imagesToday` — the in-process counter, incremented synchronously inside `reserveImageSlot()` *before* the Worker call. Authoritative for reservation, so concurrent rooms can't overshoot the cap.
-- `workerCount` — the last value read from the Worker's KV-backed counter, refreshed lazily (30 s TTL) via `/stats`. Survives the cold start that resets `imagesToday` to 0.
+- `imagesToday` — the in-process counter, incremented synchronously inside `reserveImageSlot()` *before* the Worker call. Authoritative for reservation, so concurrent rooms can't overshoot the cap. It counts **attempts**: a slot is reserved before the generation is awaited and is never refunded on failure (a failed generation may still have burned Neurons).
+- `workerCount` — the last value read from the Worker's KV-backed counter, refreshed lazily (30 s TTL) via `/stats` and eagerly once on server startup. Survives the cold start that resets `imagesToday` to 0. It counts **successes**: the Worker only bumps KV *after* a generation succeeds.
 
 Within a live session the local counter dominates (correct and immediate); after a Render restart the KV counter dominates (recovered). The cap check uses the same `max`, so a cold-started process whose KV count already exceeds the limit correctly refuses new reservations.
+
+> **The two layers count different things, so the recovered total is a lower bound — not an exact tally.** Because `imagesToday` counts attempts and `workerCount` counts successes, `max(local, kv)` equals the attempt count only while the local counter is live. After a spin-down `imagesToday` is 0, so the recovered figure is successes-only: any failed-but-Neuron-consuming attempts from before the restart are silently forgiven. This is deliberate — it errs toward letting the host keep playing rather than locking them out — but it means the post-restart count can undercount real Neuron usage. For a soft free-tier guard that's fine; don't treat it as an exact per-day total.
 
 #### Step 1 — create your namespace and enable it
 
@@ -159,7 +161,7 @@ export async function syncImageCounterFromWorker() {
 }
 ```
 
-The full, production version (timeouts via `AbortController`, the 30 s sync TTL, startup eager-sync, and silent network-failure absorption) is in `server/src/image.ts`. With this in place the host's cap is a real per-UTC-day total that survives Render's spin-downs.
+The full, production version (timeouts via `AbortController`, the 30 s sync TTL, startup eager-sync, and silent network-failure absorption) is in `server/src/image.ts`. With this in place the host's cap survives Render's spin-downs — recovered as the successful-generation count (see the lower-bound note above), which is what keeps the daily ceiling meaningful across cold starts.
 
 ---
 
