@@ -74,6 +74,7 @@
   },
   "gallery": {
     "share": "Partager les images de la salle",
+    "shareButton": "Partager",
     "title": "Galerie de la salle",
     "storyBy": "Histoire de {{nickname}}",
     "noPicture": "Pas d'image pour cette histoire",
@@ -83,7 +84,7 @@
     "next": "Histoire suivante",
     "download": "Télécharger l'histoire et l'image fixe",
     "downloadStoryOnly": "Télécharger l'histoire",
-    "shareVideo": "Partager en vidéo de 5 s",
+    "downloadVideo": "Télécharger la vidéo de 5 s",
     "recording": "Enregistrement…"
   },
   "playerLost": {

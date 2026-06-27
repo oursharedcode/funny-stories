@@ -13,6 +13,7 @@
 
 import i18n from './i18n/index.js';
 import { SOURCE_URL } from './sourceUrl.js';
+import { downloadFile } from './share.js';
 
 const WIDTH = 512;
 const PAD = 28;
@@ -65,17 +66,6 @@ function safeFileName(nickname: string): string {
   return `funny-stories-${slug || 'story'}.png`;
 }
 
-function triggerDownload(blob: Blob, fileName: string): void {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = fileName;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
 // Renders a QR for `value` onto an offscreen canvas and returns it. Lazy
 // `import('qrcode')` keeps the QR library out of the main bundle — it loads
 // only when a player taps Download.
@@ -90,11 +80,11 @@ async function renderQrCanvas(value: string): Promise<HTMLCanvasElement> {
   return qrCanvas;
 }
 
-export async function downloadStoryImage(opts: {
+export async function buildStoryImageFile(opts: {
   nickname: string;
   prose: string;
   pictureUrl: string | null;
-}): Promise<void> {
+}): Promise<File> {
   const { nickname, prose, pictureUrl } = opts;
 
   // Translated content-responsibility notice — must accompany the image
@@ -203,10 +193,20 @@ export async function downloadStoryImage(opts: {
   ctx.font = URL_FONT;
   ctx.fillText(SOURCE_URL, rightColX, sourceLabelY + URL_LINE_HEIGHT + 4);
 
-  await new Promise<void>((resolve) => {
-    canvas.toBlob((blob) => {
-      if (blob) triggerDownload(blob, safeFileName(nickname));
-      resolve();
-    }, 'image/png');
+  const blob = await new Promise<Blob | null>((resolve) => {
+    canvas.toBlob((b) => resolve(b), 'image/png');
   });
+  if (!blob) throw new Error('Failed to render story image');
+  return new File([blob], safeFileName(nickname), { type: 'image/png' });
+}
+
+// Composites the story into a PNG and triggers a browser download
+// (spec §24 — item 14). Thin wrapper over buildStoryImageFile so the same
+// composite can instead be handed to the native share sheet (see share.ts).
+export async function downloadStoryImage(opts: {
+  nickname: string;
+  prose: string;
+  pictureUrl: string | null;
+}): Promise<void> {
+  downloadFile(await buildStoryImageFile(opts));
 }

@@ -74,6 +74,7 @@
   },
   "gallery": {
     "share": "分享房间的图片",
+    "shareButton": "分享",
     "title": "房间图库",
     "storyBy": "{{nickname}} 的故事",
     "noPicture": "这个故事没有图片",
@@ -83,7 +84,7 @@
     "next": "下一个故事",
     "download": "下载故事和静态图片",
     "downloadStoryOnly": "下载故事",
-    "shareVideo": "分享为 5 秒视频",
+    "downloadVideo": "下载 5 秒视频",
     "recording": "录制中…"
   },
   "playerLost": {

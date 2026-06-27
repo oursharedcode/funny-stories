@@ -4,8 +4,10 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ProseText from './ProseText';
 import LogoStamp from './LogoStamp';
-import { downloadStoryImage } from '../downloadStory';
-import { isVideoRecordingSupported, recordWobbleVideo } from '../recordWobble';
+import ShareButton from './ShareButton';
+import { buildStoryImageFile, downloadStoryImage } from '../downloadStory';
+import { buildWobbleVideoFile, isVideoRecordingSupported } from '../recordWobble';
+import { canShareFiles, downloadFile, shareFiles } from '../share';
 import type { GalleryEntry, WobbleEngine } from 'shared';
 
 interface Props {
@@ -23,6 +25,10 @@ export default function RoomGallery({ entries, wobbleEngine }: Props) {
   const [index, setIndex] = useState(0);
   const [recording, setRecording] = useState(false);
   const videoSupported = isVideoRecordingSupported();
+  // Whether to offer the native-share buttons. Web Share with files is present
+  // on mobile + Chromium desktop and absent on desktop Firefox; there the
+  // download buttons alone remain. It's a static browser capability.
+  const shareSupported = canShareFiles();
 
   if (entries.length === 0) return null;
   // entries can be re-broadcast as late pictures arrive; keep the index valid.
@@ -33,27 +39,61 @@ export default function RoomGallery({ entries, wobbleEngine }: Props) {
     setIndex((safeIndex + delta + entries.length) % entries.length);
   }
 
+  // Short title/text that ride along with the shared file where the platform
+  // surfaces them (e.g. the suggested message). The file is the real payload.
+  function shareMeta(): { title: string; text: string } {
+    return {
+      title: t('home.title'),
+      text: t('gallery.storyBy', { nickname: entry.nickname }),
+    };
+  }
+
+  // Native-share the still image; fall back to a download if the platform
+  // declines the file (so the button is never a dead end).
+  async function shareImage(): Promise<void> {
+    const file = await buildStoryImageFile({
+      nickname: entry.nickname,
+      prose: entry.prose,
+      pictureUrl: entry.pictureUrl,
+    });
+    if ((await shareFiles([file], shareMeta())) === 'unsupported') downloadFile(file);
+  }
+
+  // Records the 5-second clip with the room's engine and returns the file.
+  // Lottie stays a lazy import — its ~250 KB only loads when a player with that
+  // engine actually records, whether they download or share.
+  async function buildVideoFile(pictureUrl: string): Promise<File> {
+    if (wobbleEngine === 'lottie') {
+      const { buildWobbleVideoFileLottie } = await import('../recordWobbleLottie');
+      return buildWobbleVideoFileLottie({
+        nickname: entry.nickname,
+        prose: entry.prose,
+        pictureUrl,
+      });
+    }
+    return buildWobbleVideoFile({
+      nickname: entry.nickname,
+      prose: entry.prose,
+      pictureUrl,
+    });
+  }
+
+  async function downloadVideo(): Promise<void> {
+    if (!entry.pictureUrl || recording) return;
+    setRecording(true);
+    try {
+      downloadFile(await buildVideoFile(entry.pictureUrl));
+    } finally {
+      setRecording(false);
+    }
+  }
+
   async function shareVideo(): Promise<void> {
     if (!entry.pictureUrl || recording) return;
     setRecording(true);
     try {
-      // Lottie is the opt-in path — its ~250 KB stays out of the main bundle
-      // until a user with `engine === 'lottie'` actually taps share. CSS is
-      // the default and incurs no extra import.
-      if (wobbleEngine === 'lottie') {
-        const { recordWobbleVideoLottie } = await import('../recordWobbleLottie');
-        await recordWobbleVideoLottie({
-          nickname: entry.nickname,
-          prose: entry.prose,
-          pictureUrl: entry.pictureUrl,
-        });
-      } else {
-        await recordWobbleVideo({
-          nickname: entry.nickname,
-          prose: entry.prose,
-          pictureUrl: entry.pictureUrl,
-        });
-      }
+      const file = await buildVideoFile(entry.pictureUrl);
+      if ((await shareFiles([file], shareMeta())) === 'unsupported') downloadFile(file);
     } finally {
       setRecording(false);
     }
@@ -95,27 +135,45 @@ export default function RoomGallery({ entries, wobbleEngine }: Props) {
 
       <ProseText prose={entry.prose} answers={entry.answers} className="text-lg" />
 
-      <button
-        className="w-full rounded border border-amber-300 bg-white px-4 py-3 font-semibold text-pink-500"
-        onClick={() =>
-          void downloadStoryImage({
-            nickname: entry.nickname,
-            prose: entry.prose,
-            pictureUrl: entry.pictureUrl,
-          })
-        }
-      >
-        {entry.pictureUrl ? t('gallery.download') : t('gallery.downloadStoryOnly')}
-      </button>
+      {/* Download the still image, with a native Share button on its right
+          (supported browsers only). */}
+      <div className="flex gap-2">
+        <button
+          className="flex-1 rounded border border-amber-300 bg-white px-4 py-3 font-semibold text-pink-500"
+          onClick={() =>
+            void downloadStoryImage({
+              nickname: entry.nickname,
+              prose: entry.prose,
+              pictureUrl: entry.pictureUrl,
+            })
+          }
+        >
+          {entry.pictureUrl ? t('gallery.download') : t('gallery.downloadStoryOnly')}
+        </button>
+        {shareSupported && (
+          <ShareButton label={t('gallery.shareButton')} onClick={() => void shareImage()} />
+        )}
+      </div>
 
       {entry.pictureUrl && videoSupported && (
-        <button
-          className="w-full rounded border border-amber-300 bg-white px-4 py-3 font-semibold text-pink-500 disabled:cursor-wait disabled:opacity-60"
-          disabled={recording}
-          onClick={() => void shareVideo()}
-        >
-          {recording ? t('gallery.recording') : t('gallery.shareVideo')}
-        </button>
+        // Download the 5-second video, with a native Share button on its right
+        // (supported browsers only).
+        <div className="flex gap-2">
+          <button
+            className="flex-1 rounded border border-amber-300 bg-white px-4 py-3 font-semibold text-pink-500 disabled:cursor-wait disabled:opacity-60"
+            disabled={recording}
+            onClick={() => void downloadVideo()}
+          >
+            {recording ? t('gallery.recording') : t('gallery.downloadVideo')}
+          </button>
+          {shareSupported && (
+            <ShareButton
+              label={t('gallery.shareButton')}
+              disabled={recording}
+              onClick={() => void shareVideo()}
+            />
+          )}
+        </div>
       )}
 
       <div className="flex items-center justify-between pt-1">

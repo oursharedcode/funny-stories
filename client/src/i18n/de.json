@@ -74,6 +74,7 @@
   },
   "gallery": {
     "share": "Die Bilder des Raums teilen",
+    "shareButton": "Teilen",
     "title": "Raum-Galerie",
     "storyBy": "Geschichte von {{nickname}}",
     "noPicture": "Kein Bild für diese Geschichte",
@@ -83,7 +84,7 @@
     "next": "Nächste Geschichte",
     "download": "Geschichte und Standbild herunterladen",
     "downloadStoryOnly": "Geschichte herunterladen",
-    "shareVideo": "Als 5-Sek-Video teilen",
+    "downloadVideo": "5-Sek-Video herunterladen",
     "recording": "Aufnahme läuft…"
   },
   "playerLost": {

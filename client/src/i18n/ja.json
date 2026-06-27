@@ -74,6 +74,7 @@
   },
   "gallery": {
     "share": "ルームの絵を共有",
+    "shareButton": "共有",
     "title": "ルームギャラリー",
     "storyBy": "{{nickname}}の物語",
     "noPicture": "この物語の絵はありません",
@@ -83,7 +84,7 @@
     "next": "次の物語",
     "download": "物語と静止画をダウンロード",
     "downloadStoryOnly": "物語をダウンロード",
-    "shareVideo": "5秒動画として共有",
+    "downloadVideo": "5秒動画をダウンロード",
     "recording": "録画中…"
   },
   "playerLost": {

@@ -74,6 +74,7 @@
   },
   "gallery": {
     "share": "Condividi le immagini della stanza",
+    "shareButton": "Condividi",
     "title": "Galleria della stanza",
     "storyBy": "Storia di {{nickname}}",
     "noPicture": "Nessuna immagine per questa storia",
@@ -83,7 +84,7 @@
     "next": "Storia successiva",
     "download": "Scarica storia e immagine fissa",
     "downloadStoryOnly": "Scarica la storia",
-    "shareVideo": "Condividi come video di 5 s",
+    "downloadVideo": "Scarica video di 5 s",
     "recording": "Registrazione…"
   },
   "playerLost": {

@@ -16,6 +16,7 @@
 // + monkey, CSS engine = cartoon only) stays the same.
 
 import { SOURCE_URL } from './sourceUrl.js';
+import { downloadFile } from './share.js';
 import {
   drawAttribution,
   drawStoryText,
@@ -326,17 +327,6 @@ function safeFileName(nickname: string, ext: string): string {
   return `funny-stories-${slug || 'story'}.${ext}`;
 }
 
-function triggerDownload(blob: Blob, fileName: string): void {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = fileName;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
 async function loadImage(src: string): Promise<HTMLImageElement> {
   const img = new Image();
   // Only set crossOrigin for true cross-origin URLs. Setting it for
@@ -364,11 +354,11 @@ async function loadMonkeySprites(): Promise<MonkeySprites> {
   return { torso, head, arm, leg };
 }
 
-export async function recordWobbleVideoLottie(opts: {
+export async function buildWobbleVideoFileLottie(opts: {
   nickname: string;
   prose: string;
   pictureUrl: string;
-}): Promise<void> {
+}): Promise<File> {
   const { nickname, prose, pictureUrl } = opts;
   const mime = pickMime();
   if (!mime) throw new Error('MediaRecorder not supported in this browser');
@@ -405,11 +395,10 @@ export async function recordWobbleVideoLottie(opts: {
     if (e.data && e.data.size > 0) chunks.push(e.data);
   };
 
-  const done = new Promise<void>((resolve) => {
+  const done = new Promise<File>((resolve) => {
     recorder.onstop = (): void => {
       const blob = new Blob(chunks, { type: mime.mime });
-      triggerDownload(blob, safeFileName(nickname, mime.ext));
-      resolve();
+      resolve(new File([blob], safeFileName(nickname, mime.ext), { type: mime.mime }));
     };
   });
 
@@ -489,9 +478,20 @@ export async function recordWobbleVideoLottie(opts: {
   raf = requestAnimationFrame(drawFrame);
 
   try {
-    await done;
+    return await done;
   } finally {
     cancelAnimationFrame(raf);
     canvas.remove();
   }
+}
+
+// Records the monkey-overlay wobble clip and saves it to disk. Thin wrapper
+// over buildWobbleVideoFileLottie so the same recording can instead be handed
+// to the native share sheet (see share.ts).
+export async function recordWobbleVideoLottie(opts: {
+  nickname: string;
+  prose: string;
+  pictureUrl: string;
+}): Promise<void> {
+  downloadFile(await buildWobbleVideoFileLottie(opts));
 }

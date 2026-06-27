@@ -74,6 +74,7 @@
   },
   "gallery": {
     "share": "방의 그림 공유",
+    "shareButton": "공유",
     "title": "방 갤러리",
     "storyBy": "{{nickname}}의 이야기",
     "noPicture": "이 이야기에는 그림이 없습니다",
@@ -83,7 +84,7 @@
     "next": "다음 이야기",
     "download": "이야기와 정지 이미지 다운로드",
     "downloadStoryOnly": "이야기 다운로드",
-    "shareVideo": "5초 동영상으로 공유",
+    "downloadVideo": "5초 동영상 다운로드",
     "recording": "녹화 중…"
   },
   "playerLost": {

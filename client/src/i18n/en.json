@@ -73,6 +73,7 @@
   },
   "gallery": {
     "share": "Share the room's pictures",
+    "shareButton": "Share",
     "title": "Room gallery",
     "storyBy": "{{nickname}}'s story",
     "noPicture": "No picture for this story",
@@ -82,7 +83,7 @@
     "next": "Next story",
     "download": "Download story and still picture",
     "downloadStoryOnly": "Download story",
-    "shareVideo": "Share as 5s video",
+    "downloadVideo": "Download 5s video",
     "recording": "Recording…"
   },
   "playerLost": {

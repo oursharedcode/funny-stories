@@ -74,6 +74,7 @@
   },
   "gallery": {
     "share": "Bagikan gambar-gambar ruangan",
+    "shareButton": "Bagikan",
     "title": "Galeri ruangan",
     "storyBy": "Cerita {{nickname}}",
     "noPicture": "Tidak ada gambar untuk cerita ini",
@@ -83,7 +84,7 @@
     "next": "Cerita berikutnya",
     "download": "Unduh cerita dan gambar diam",
     "downloadStoryOnly": "Unduh cerita",
-    "shareVideo": "Bagikan sebagai video 5 detik",
+    "downloadVideo": "Unduh video 5 detik",
     "recording": "Merekam…"
   },
   "playerLost": {
