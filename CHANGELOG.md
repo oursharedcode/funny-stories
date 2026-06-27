@@ -28,6 +28,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   has conservative per-language lists for FR, DE, ES, IT, PT, ID, ZH, JA, and
   KO as well. This backs up the translate-then-check path for text the
   translator passes through untranslated or mixed-language input.
+- **Native share buttons in the room gallery.** Each download button in the
+  gallery now has a "Share" button beside it that opens the device's native
+  share sheet (Web Share API) with the composited still image or the 5-second
+  video attached, so players can post straight to a chat app instead of
+  downloading first. The buttons appear only where the browser can share files
+  (mobile and Chromium-based desktop); elsewhere the download buttons stand
+  alone, and a share the platform declines falls back to a download.
 
 ### Changed
 
@@ -39,6 +46,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the picture is refused (`buildPrompt` → `translationFailed` →
   `generateStoryPicture` blocks) rather than sent unscreened. See
   [docs/MODERATION.md](docs/MODERATION.md).
+- **Home-screen rules box and language picker polish.** The "game rules" box and
+  the language list now keep their scrollbar visible at all times instead of only
+  while scrolling — which on mobile hid that they scroll — and the rules box
+  gains a centred "Game rules" heading, localised in every language.
+- **Gallery video button relabelled "Download 5s video".** The button always
+  downloaded the clip; the label now says so, leaving the adjacent Share button
+  as the one that actually shares.
 
 ## [0.1.0] - 2026-06-06
 
