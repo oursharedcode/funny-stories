@@ -13,7 +13,9 @@ import { pickStandin } from './filter/standins.js';
 // default to a generic painterly look (see /?test=image RU result).
 export const STYLE_SUFFIX =
   ', in a goofy cartoon style, googly eyes, exaggerated expressions, ' +
-  'bright colors, hand-drawn doodle illustration';
+  'bright colors, hand-drawn doodle illustration, ' +
+  'distinct and clearly separated subjects, no merged or fused bodies, ' +
+  'well-composed';
 
 // Single English image-prompt template used for every language. The
 // per-language `imagePrompt` strings in server/src/i18n/<lang>.json are
