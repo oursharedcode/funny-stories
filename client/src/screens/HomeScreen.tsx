@@ -143,22 +143,25 @@ export default function HomeScreen({ onJoined }: Props) {
               box on the left, and the language picker on the right. Both are
               h-40 (160px) so the box matches the language list's height. */}
           <div className="w-full flex gap-3 items-start">
-            {/* Game rules — left. Read-only blurb shown in the currently
-                selected language (it follows switchLanguage below). Scrolls if
-                the translation runs taller than the box. */}
-            <textarea
-              className="flex-1 h-40 p-3 rounded border border-amber-300 text-base resize-none bg-white text-gray-800"
-              readOnly
-              aria-label={t('home.gameRules')}
-              value={t('home.rules')}
-            />
+            {/* Game rules — left. A centered "Game rules" title sits above a
+                scrollable blurb shown in the currently selected language (it
+                follows switchLanguage below). The body keeps a visible scrollbar
+                (.always-scrollbar) so it reads as scrollable even on mobile. */}
+            <div className="flex-1 h-40 rounded border border-amber-300 bg-white text-gray-800 flex flex-col overflow-hidden">
+              <div className="text-center font-semibold py-2 border-b border-amber-200">
+                {t('home.gameRules')}
+              </div>
+              <div className="always-scrollbar flex-1 overflow-y-scroll p-3 text-base">
+                {t('home.rules')}
+              </div>
+            </div>
 
             {/* Scrollable language list — right, narrower. Each row is a PNG
                 flag (works on every device, unlike emoji flags) followed by a
                 two-letter label. The static list ran the page off-screen on a
                 phone; clamp to h-40 so it scrolls within the same slot. */}
             <div
-              className="w-28 flex flex-col gap-2 h-40 overflow-y-auto pr-1"
+              className="w-28 flex flex-col gap-2 h-40 overflow-y-scroll always-scrollbar pr-1"
               role="group"
               aria-label="Language"
             >
@@ -229,20 +232,22 @@ export default function HomeScreen({ onJoined }: Props) {
 
       {mode === 'join' && !roomGone && (
         <>
-          {/* Same two-column row as the host screen: free-form "game rules"
-              box on the left, language picker on the right. Here the flags
-              switch the interface language only (spec §8) — the room's content
-              language is fixed by the host. */}
+          {/* Same two-column row as the host screen: the "game rules" box on
+              the left (centered title above a scrollable blurb), language picker
+              on the right. Here the flags switch the interface language only
+              (spec §8) — the room's content language is fixed by the host. */}
           <div className="w-full flex gap-3 items-start">
-            <textarea
-              className="flex-1 h-40 p-3 rounded border border-amber-300 text-base resize-none bg-white text-gray-800"
-              readOnly
-              aria-label={t('home.gameRules')}
-              value={t('home.rules')}
-            />
+            <div className="flex-1 h-40 rounded border border-amber-300 bg-white text-gray-800 flex flex-col overflow-hidden">
+              <div className="text-center font-semibold py-2 border-b border-amber-200">
+                {t('home.gameRules')}
+              </div>
+              <div className="always-scrollbar flex-1 overflow-y-scroll p-3 text-base">
+                {t('home.rules')}
+              </div>
+            </div>
 
             <div
-              className="w-28 flex flex-col gap-2 h-40 overflow-y-auto pr-1"
+              className="w-28 flex flex-col gap-2 h-40 overflow-y-scroll always-scrollbar pr-1"
               role="group"
               aria-label={t('home.uiLanguage')}
             >

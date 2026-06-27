@@ -108,3 +108,25 @@ body {
     animation: none;
   }
 }
+
+/* ── Always-visible scrollbars (home-screen rules box + language list) ───
+   Default overlay scrollbars on mobile/macOS stay hidden until the user
+   scrolls, so the rules blurb and language list don't look scrollable.
+   Force a persistent pink-on-amber track + thumb so it's obvious there's
+   more to see. */
+.always-scrollbar {
+  scrollbar-width: thin;                /* Firefox */
+  scrollbar-color: #ec4899 #fde68a;     /* thumb (pink-500) / track (amber-200) */
+}
+.always-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  -webkit-appearance: none;             /* iOS Safari: opt out of overlay scrollbars */
+}
+.always-scrollbar::-webkit-scrollbar-track {
+  background: #fde68a;                   /* amber-200 */
+  border-radius: 9999px;
+}
+.always-scrollbar::-webkit-scrollbar-thumb {
+  background: #ec4899;                   /* pink-500 */
+  border-radius: 9999px;
+}
