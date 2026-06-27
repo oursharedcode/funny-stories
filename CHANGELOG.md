@@ -54,6 +54,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   downloaded the clip; the label now says so, leaving the adjacent Share button
   as the one that actually shares.
 
+### Fixed
+
+- **Home-screen scrollbars now show on mobile.** The always-visible scrollbars on
+  the rules box and language picker relied on native scrollbar styling that
+  Android (Samsung Internet, Chrome) and iOS ignore, so they stayed hidden there;
+  they are now drawn as a custom thumb that renders on every browser.
+
 ## [0.1.0] - 2026-06-06
 
 First public release of **Funny Stories** — a party game where 3–7 friends, on

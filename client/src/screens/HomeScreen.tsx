@@ -6,6 +6,7 @@ import { socket } from '../socket';
 import Wordmark from '../components/art/Wordmark';
 import QRCode from '../components/QRCode';
 import SourceFooter from '../components/SourceFooter';
+import ScrollBox from '../components/ScrollBox';
 import { LANGUAGES, isLanguage } from '../languages';
 import type { LobbyState } from '../App';
 import type { Language, StatsPayload } from 'shared';
@@ -145,23 +146,24 @@ export default function HomeScreen({ onJoined }: Props) {
           <div className="w-full flex gap-3 items-start">
             {/* Game rules — left. A centered "Game rules" title sits above a
                 scrollable blurb shown in the currently selected language (it
-                follows switchLanguage below). The body keeps a visible scrollbar
-                (.always-scrollbar) so it reads as scrollable even on mobile. */}
+                follows switchLanguage below). ScrollBox paints an always-visible
+                scrollbar so it reads as scrollable even on mobile. */}
             <div className="flex-1 h-40 rounded border border-amber-300 bg-white text-gray-800 flex flex-col overflow-hidden">
               <div className="text-center font-semibold py-2 border-b border-amber-200">
                 {t('home.gameRules')}
               </div>
-              <div className="always-scrollbar flex-1 overflow-y-scroll p-3 text-base">
+              <ScrollBox className="flex-1" contentClassName="p-3 text-base">
                 {t('home.rules')}
-              </div>
+              </ScrollBox>
             </div>
 
             {/* Scrollable language list — right, narrower. Each row is a PNG
                 flag (works on every device, unlike emoji flags) followed by a
                 two-letter label. The static list ran the page off-screen on a
                 phone; clamp to h-40 so it scrolls within the same slot. */}
-            <div
-              className="w-28 flex flex-col gap-2 h-40 overflow-y-scroll always-scrollbar pr-1"
+            <ScrollBox
+              className="w-28 h-40"
+              contentClassName="flex flex-col gap-2 pr-2"
               role="group"
               aria-label="Language"
             >
@@ -186,7 +188,7 @@ export default function HomeScreen({ onJoined }: Props) {
                   <span>{opt.country}</span>
                 </button>
               ))}
-            </div>
+            </ScrollBox>
           </div>
 
           <input
@@ -241,13 +243,14 @@ export default function HomeScreen({ onJoined }: Props) {
               <div className="text-center font-semibold py-2 border-b border-amber-200">
                 {t('home.gameRules')}
               </div>
-              <div className="always-scrollbar flex-1 overflow-y-scroll p-3 text-base">
+              <ScrollBox className="flex-1" contentClassName="p-3 text-base">
                 {t('home.rules')}
-              </div>
+              </ScrollBox>
             </div>
 
-            <div
-              className="w-28 flex flex-col gap-2 h-40 overflow-y-scroll always-scrollbar pr-1"
+            <ScrollBox
+              className="w-28 h-40"
+              contentClassName="flex flex-col gap-2 pr-2"
               role="group"
               aria-label={t('home.uiLanguage')}
             >
@@ -272,7 +275,7 @@ export default function HomeScreen({ onJoined }: Props) {
                   <span>{opt.country}</span>
                 </button>
               ))}
-            </div>
+            </ScrollBox>
           </div>
 
           <div className="w-full text-center">
