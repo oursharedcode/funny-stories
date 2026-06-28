@@ -88,17 +88,6 @@ export default function RoomGallery({ entries, wobbleEngine }: Props) {
     }
   }
 
-  async function shareVideo(): Promise<void> {
-    if (!entry.pictureUrl || recording) return;
-    setRecording(true);
-    try {
-      const file = await buildVideoFile(entry.pictureUrl);
-      if ((await shareFiles([file], shareMeta())) === 'unsupported') downloadFile(file);
-    } finally {
-      setRecording(false);
-    }
-  }
-
   return (
     <section className="flex w-full flex-col gap-3 rounded-xl border border-amber-200 bg-white p-4">
       <h3 className="font-display text-xl font-semibold text-pink-500">
@@ -156,24 +145,14 @@ export default function RoomGallery({ entries, wobbleEngine }: Props) {
       </div>
 
       {entry.pictureUrl && videoSupported && (
-        // Download the 5-second video, with a native Share button on its right
-        // (supported browsers only).
-        <div className="flex gap-2">
-          <button
-            className="flex-1 rounded border border-amber-300 bg-white px-4 py-3 font-semibold text-pink-500 disabled:cursor-wait disabled:opacity-60"
-            disabled={recording}
-            onClick={() => void downloadVideo()}
-          >
-            {recording ? t('gallery.recording') : t('gallery.downloadVideo')}
-          </button>
-          {shareSupported && (
-            <ShareButton
-              label={t('gallery.shareButton')}
-              disabled={recording}
-              onClick={() => void shareVideo()}
-            />
-          )}
-        </div>
+        // Download the 5-second video.
+        <button
+          className="w-full rounded border border-amber-300 bg-white px-4 py-3 font-semibold text-pink-500 disabled:cursor-wait disabled:opacity-60"
+          disabled={recording}
+          onClick={() => void downloadVideo()}
+        >
+          {recording ? t('gallery.recording') : t('gallery.downloadVideo')}
+        </button>
       )}
 
       <div className="flex items-center justify-between pt-1">
