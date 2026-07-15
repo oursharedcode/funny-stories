@@ -89,9 +89,11 @@ export default function RoundScreen({ round, language, isHost }: Props) {
           </span>
         </div>
       )}
+      {/* Answer font bumped 70% from text-lg (1.125rem → 1.9125rem) so typed
+          words are large and legible across every language. */}
       <textarea
         ref={taRef}
-        className="w-full p-3 rounded border border-amber-300 text-lg h-40 resize-none"
+        className="w-full p-3 rounded border border-amber-300 text-[1.9125rem] h-40 resize-none"
         placeholder={t('round.placeholder')}
         value={answer}
         maxLength={ANSWER_MAX_LENGTH}

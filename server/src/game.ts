@@ -10,6 +10,7 @@ import type {
   Story,
 } from './types.js';
 import { QUESTIONS, renderProse } from './i18n/index.js';
+import { polishRussianProse } from './grammar.js';
 import { filterAnswer } from './filter/index.js';
 import { containsCsamCombination } from './filter/csam.js';
 import { containsHardBlock } from './filter/hardBlocks.js';
@@ -139,22 +140,47 @@ function advanceRound(room: Room, io: IO): void {
 
   room.currentRound++;
   if (room.currentRound >= ROUNDS) {
-    enterRevealPhase(room, io);
+    // Fire-and-forget: the reveal emit awaits the per-slot grammar pass
+    // internally, and failures fall back to the plain render (grammar.ts is
+    // fail-open), so advanceRound has nothing to await or handle here.
+    void enterRevealPhase(room, io);
     return;
   }
   startRound(room, io);
 }
 
+// Renders a story's prose and, for Russian rooms, runs it through the
+// grammar/punctuation pass (grammar.ts) so the on-screen story and the
+// downloadable image/video all carry the corrected text (commas, capitalised
+// opening, terminal period). Non-Russian rooms return the plain render with no
+// network round-trip.
+async function renderStoryProse(room: Room, answers: readonly string[]): Promise<string> {
+  const prose = renderProse(room.language, answers);
+  if (room.language !== 'ru') return prose;
+  return polishRussianProse(prose);
+}
+
 // stories[i] belongs to players[i] (spec §4): each non-bot player receives
 // their own assembled story as private prose. Bots have no client to send to.
-function enterRevealPhase(room: Room, io: IO): void {
+async function enterRevealPhase(room: Room, io: IO): Promise<void> {
   room.phase = 'reveal';
+  // Render (and, for Russian, grammar-polish) each slot's prose once, caching
+  // it on the story. The reveal screen, the gallery, and the downloadable
+  // image/video then all read this identical string. Bots' stories are polished
+  // too — they appear in the shared gallery. Parallel; each distinct prose costs
+  // at most one LanguageTool call (cached thereafter).
+  await Promise.all(
+    room.stories.map(async (story) => {
+      const answers = (story.answers ?? []).map((a) => a ?? '');
+      story.prose = await renderStoryProse(room, answers);
+    }),
+  );
   room.players.forEach((player, i) => {
     if (player.isBot) return;
     const answers = (room.stories[i]?.answers ?? []).map((a) => a ?? '');
     io.to(player.id).emit('reveal:start', {
       answers,
-      prose: renderProse(room.language, answers),
+      prose: room.stories[i]?.prose ?? renderProse(room.language, answers),
     });
   });
   // Bot-owned stories have no client to fire reveal:requestPicture, so
@@ -339,7 +365,9 @@ export function buildGallery(room: Room): GalleryReadyPayload {
         nickname: player.nickname,
         isBot: player.isBot,
         answers,
-        prose: renderProse(room.language, answers),
+        // Prefer the polished prose cached at reveal (enterRevealPhase); the
+        // plain render is a fallback for the brief window before it lands.
+        prose: room.stories[i]?.prose ?? renderProse(room.language, answers),
         pictureUrl: room.stories[i]?.pictureUrl ?? null,
       };
     }),
