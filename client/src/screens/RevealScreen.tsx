@@ -125,13 +125,14 @@ export default function RevealScreen({ reveal, onContinue }: Props) {
         </div>
       ) : null}
 
-      {/* Continue link ("ДАЛЬШЕ" etc). Pinned to the bottom of the scroll
+      {/* Continue link ("ДАЛЬШЕ" etc). Pinned near the bottom of the scroll
           viewport (sticky) so it stays visible without scrolling past a tall
-          picture; the cream backdrop (brand-cream = amber-100) keeps it legible
-          when it floats over the cartoon. Size bumped 90% from the 1rem base
-          (→ 1.9rem). Applies to every language. */}
+          picture, raised 20% of the screen height off the bottom edge
+          (bottom-[20vh]); the cream backdrop (brand-cream = amber-100) keeps it
+          legible when it floats over the cartoon. Size bumped 90% from the 1rem
+          base (→ 1.9rem). Applies to every language. */}
       <button
-        className="sticky bottom-4 z-10 mt-auto self-center rounded-full bg-amber-100 px-6 py-2 font-display text-[1.9rem] font-semibold text-pink-500 underline shadow-md"
+        className="sticky bottom-[20vh] z-10 mt-auto self-center rounded-full bg-amber-100 px-6 py-2 font-display text-[1.9rem] font-semibold text-pink-500 underline shadow-md"
         onClick={onContinue}
       >
         {t('reveal.continue')}
