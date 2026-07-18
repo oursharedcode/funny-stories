@@ -26,14 +26,6 @@ export interface Story {
   answers: (string | null)[];
   // Base64 data URL; set once, never overwritten.
   pictureUrl: string | null;
-  // Server-only cache of the rendered, locale-polished prose (renderProse
-  // plus, for Russian rooms, the grammar/punctuation pass in
-  // server/src/grammar.ts). Populated once when the room enters the reveal
-  // phase and read by both the reveal:start emit and buildGallery, so the
-  // on-screen story and the downloadable image/video all carry identical text.
-  // Reaches clients only via RevealStartPayload.prose / GalleryEntry.prose —
-  // the raw Story is never sent.
-  prose?: string;
 }
 
 // Opaque server-side timer handle. Treat as unknown on the client;

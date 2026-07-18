@@ -1,78 +1,96 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
-// Post-processes assembled Russian story prose through LanguageTool's free
-// public grammar API (https://languagetool.org) so the story reads as proper
-// Russian: it inserts the commas Russian clause structure needs, tidies
-// punctuation and spacing, capitalises the opening word, and guarantees a
-// sentence-final period. The corrected string is what the reveal screen shows
-// and what the downloadable picture and video render (they all read the same
-// `prose` — see server/src/game.ts).
+// Offline, dependency-free Russian punctuation pass for assembled story prose.
+// The story is a run of player-typed answers dropped into a fixed template
+// (server/src/i18n/ru.json), so it frequently arrives without the commas
+// Russian clause structure needs, without a capitalised opening, and without a
+// final period. This module adds them deterministically — no network, no
+// external engine. It runs synchronously and instantly, so it never blocks or
+// delays the reveal or the image (Worker AI) request: the image generation is
+// kicked off from the same tick, and this pass only shapes the *text* that the
+// reveal screen shows and that the downloadable image/video embed.
 //
-// Mirrors the design of translate.ts: a free, no-key public endpoint, an
-// in-memory cache, a short timeout, and fail-open — any network/parse failure
-// falls back to a deterministically tidied version (capitalised, period-
-// terminated) so a story always renders.
+// Scope is deliberately conservative. We insert a comma *before* a small set of
+// high-confidence clause-boundary words (adversative/subordinating conjunctions
+// and relative pronouns) where a comma is almost always required and rarely
+// wrong. We do NOT attempt participial/adverbial phrases (причастные /
+// деепричастные обороты) or introductory words: those need real syntactic
+// analysis, and a wrong comma reads worse than a missing one — especially on
+// chaotic player input. The bias is to under-punctuate, never to mis-punctuate.
 //
-// Verbatim-answer invariant: player answers are highlighted in the prose by
-// matching them as substrings (client/src/prose.ts), and the game's humour
-// comes from the players' exact words. So we only apply a LanguageTool
-// suggestion when it leaves the *letters* unchanged — it may add/move
-// punctuation and whitespace or change letter case, but never rewrite a word
-// (spelling, agreement). The one letter-touching change we do make —
-// capitalising the first word — is tolerated on the client by a
-// case-insensitive highlight fallback (client/src/prose.ts).
+// Verbatim-answer note: player answers are highlighted by matching them in the
+// prose (client/src/prose.ts). Inserted commas land between words, so an answer
+// substring stays intact unless a trigger word sits *inside* a multi-word
+// answer (rare, accepted). The opening-word capitalisation is tolerated by a
+// case-insensitive highlight fallback on the client.
 
-const ENDPOINT = 'https://api.languagetool.org/v2/check';
-const TIMEOUT_MS = 4000;
-const CACHE_LIMIT = 2000;
+// Words that take a comma immediately before them when they join clauses
+// mid-sentence. Chosen for a low false-positive rate on free-form input:
+//   но / а / зато / однако  — adversative coordinating conjunctions
+//   чтобы / хотя / словно    — subordinators (comma before is near-universal)
+//   если / когда            — subordinators (guarded below against "даже …")
+//   который…                — relative pronoun, every inflected form
+// Deliberately excluded as too ambiguous on raw input: что, как, так, пока,
+// будто, и, да.
+const COMMA_BEFORE = new Set<string>([
+  'но',
+  'а',
+  'зато',
+  'однако',
+  'чтобы',
+  'хотя',
+  'словно',
+  'если',
+  'когда',
+  'который',
+  'которая',
+  'которое',
+  'которые',
+  'которого',
+  'которому',
+  'которым',
+  'котором',
+  'которую',
+  'которой',
+  'которых',
+  'которыми',
+]);
 
-const cache = new Map<string, string>();
+// Previous-word forms that cancel the comma: "даже если" / "даже когда" put
+// the comma before "даже", not before the conjunction, so we skip it rather
+// than produce the wrong "даже, если".
+const CANCEL_PREV = new Set<string>(['даже']);
 
-function cacheGet(key: string): string | undefined {
-  const hit = cache.get(key);
-  if (hit !== undefined) {
-    cache.delete(key);
-    cache.set(key, hit);
+// Lowercased, punctuation-stripped form of a token, for matching against the
+// trigger sets. Cyrillic is not a \w character, so \b word boundaries are
+// unreliable — we tokenise on spaces and normalise here instead.
+function wordKey(token: string): string {
+  return token.replace(/[^\p{L}]/gu, '').toLowerCase();
+}
+
+// True when the token already ends in punctuation that makes a preceding comma
+// redundant or wrong (existing comma, sentence end, colon, dash, …).
+function endsWithPunctuation(token: string): boolean {
+  return /[,.!?:;—–-]$/.test(token);
+}
+
+// Inserts a comma before each high-confidence clause-boundary word by appending
+// it to the *previous* token, so "спать но" → "спать, но". "потому" only
+// triggers as part of "потому что" (a one-token lookahead) so a bare "потому"
+// is left alone.
+function insertClauseCommas(text: string): string {
+  const tokens = text.split(' ');
+  for (let i = 1; i < tokens.length; i++) {
+    const key = wordKey(tokens[i]!);
+    const isTrigger =
+      COMMA_BEFORE.has(key) || (key === 'потому' && wordKey(tokens[i + 1] ?? '') === 'что');
+    if (!isTrigger) continue;
+    const prev = tokens[i - 1]!;
+    if (prev === '' || endsWithPunctuation(prev)) continue;
+    if (CANCEL_PREV.has(wordKey(prev))) continue;
+    tokens[i - 1] = prev + ',';
   }
-  return hit;
-}
-
-function cacheSet(key: string, value: string): void {
-  if (cache.size >= CACHE_LIMIT) {
-    const oldest = cache.keys().next().value;
-    if (oldest !== undefined) cache.delete(oldest);
-  }
-  cache.set(key, value);
-}
-
-interface LtMatch {
-  offset: number;
-  length: number;
-  replacements: { value: string }[];
-}
-
-// Same letters/digits ignoring case, spacing, and punctuation. Guards the
-// verbatim-answer invariant: a suggestion that changes letters (a real word
-// rewrite) is rejected; one that only adjusts punctuation/whitespace/case is
-// applied.
-function sameLetters(a: string, b: string): boolean {
-  const strip = (s: string): string => s.replace(/[^\p{L}\p{N}]/gu, '').toLowerCase();
-  return strip(a) === strip(b);
-}
-
-// Applies the accepted LanguageTool replacements right-to-left so each match's
-// offset stays valid as earlier ones are spliced in.
-function applyMatches(text: string, matches: LtMatch[]): string {
-  const sorted = [...matches].sort((a, b) => b.offset - a.offset);
-  let out = text;
-  for (const m of sorted) {
-    const replacement = m.replacements[0]?.value;
-    if (replacement == null) continue;
-    const original = out.slice(m.offset, m.offset + m.length);
-    if (!sameLetters(original, replacement)) continue;
-    out = out.slice(0, m.offset) + replacement + out.slice(m.offset + m.length);
-  }
-  return out;
+  return tokens.join(' ');
 }
 
 function capitalizeFirst(text: string): string {
@@ -91,44 +109,11 @@ function ensureTerminalPeriod(text: string): string {
   return /[.!?…]$/.test(trimmed) ? trimmed : `${trimmed}.`;
 }
 
-async function fetchMatches(text: string): Promise<LtMatch[] | null> {
-  const params = new URLSearchParams({ text, language: 'ru-RU' });
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
-  try {
-    const res = await fetch(ENDPOINT, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: params.toString(),
-      signal: controller.signal,
-    });
-    if (!res.ok) return null;
-    const data = (await res.json()) as { matches?: LtMatch[] };
-    return data.matches ?? [];
-  } catch {
-    return null;
-  } finally {
-    clearTimeout(timer);
-  }
-}
-
-// Deterministic tidy applied on every path (with or without LanguageTool):
-// collapse the runs of spaces that empty answer slots leave behind, trim,
-// capitalise the opening word, and guarantee a terminal period.
-function tidy(text: string): string {
-  return ensureTerminalPeriod(capitalizeFirst(text.replace(/ {2,}/g, ' ').trim()));
-}
-
-// Polishes Russian prose. Fail-open: when LanguageTool is unreachable the
-// prose is still capitalised and period-terminated by `tidy`.
-export async function polishRussianProse(prose: string): Promise<string> {
-  const cached = cacheGet(prose);
-  if (cached !== undefined) return cached;
-
-  const matches = await fetchMatches(prose);
-  const corrected = matches ? applyMatches(prose, matches) : prose;
-  const result = tidy(corrected);
-
-  cacheSet(prose, result);
-  return result;
+// Full offline pass: collapse the space runs empty answer slots leave behind,
+// insert clause commas, capitalise the opening word, and guarantee a terminal
+// period. Pure and synchronous.
+export function polishRussianProse(prose: string): string {
+  const collapsed = prose.replace(/ {2,}/g, ' ').trim();
+  const withCommas = insertClauseCommas(collapsed);
+  return ensureTerminalPeriod(capitalizeFirst(withCommas));
 }
