@@ -36,7 +36,7 @@ function normalize(s: string): string {
   return s.toLowerCase();
 }
 
-// Coverage spans all 12 shipped languages, not only EN/RU. The picture prompt
+// Coverage spans all 15 shipped languages, not only EN/RU. The picture prompt
 // is translated to English before this guard runs, so the English list already
 // catches most non-English input; these per-language lists are the fallback for
 // the cases translation can't fully clean — a slot the provider passed through
@@ -105,6 +105,20 @@ const MINOR_INDICATORS: readonly string[] = [
 
   // Korean. Bare 아이 omitted — collides with 아이폰/아이디 (iPhone/ID).
   '어린이', '아동', '소녀', '소년', '유아', '아기', '미성년', '청소년', '로리',
+
+  // Ukrainian. ('дитин' covers дитина/дитини/дитину; 'діти' is distinct from
+  // Russian 'дети' — Ukrainian spells it with 'і'. 'неповнолітн' covers the
+  // "underage" adjective in all genders.)
+  'дитин', 'діти', 'дітей', 'дівчинк', 'дівчат', 'хлопчик',
+  'малюк', 'немовля', 'підліт', 'школяр', 'неповнолітн',
+
+  // Hebrew. ('ילד' also covers ילדה/ילדים as substrings. Bare 'נער' omitted —
+  // it sits inside unrelated words like נערץ; the gendered/plural forms don't.)
+  'ילד', 'תינוק', 'פעוט', 'קטין', 'קטינה', 'נערה', 'נערים', 'לוליטה',
+
+  // Tamil. ('குழந்தை' child, also inside கைக்குழந்தை infant; 'சிறுவ' covers
+  // சிறுவன்/சிறுவர் boy(s); 'சிறுமி' girl; 'பள்ளி மாணவ' school student.)
+  'குழந்தை', 'சிறுவ', 'சிறுமி', 'பள்ளி மாணவ',
 ];
 
 const SEXUAL_INDICATORS: readonly string[] = [
@@ -157,6 +171,22 @@ const SEXUAL_INDICATORS: readonly string[] = [
 
   // Korean. Bare 질 (vagina) omitted — it collides with 질 = "quality".
   '섹스', '성교', '나체', '알몸', '포르노', '에로', '음경', '자위', '성기', '유방',
+
+  // Ukrainian. ('секс'/'порно'/'мастурбац'/'оргазм' are shared with the
+  // Russian list above; 'еротик' is the Ukrainian spelling of Russian
+  // 'эротик'. 'голий/гола/голі' are listed as full forms — the stem 'гол'
+  // sits inside голос/голова.)
+  'голий', 'гола', 'голі', 'оголен', 'еротик', 'цицьк', 'їбат', 'трахат',
+
+  // Hebrew. (Final-form letters make עירום (standalone) and עירומ (inflected
+  // stem, regular mem) distinct strings — both are listed, mirroring the
+  // accented/de-accented convention above. Bare חזה omitted — everyday word
+  // for "chest".)
+  'עירום', 'עירומ', 'סקס', 'פורנו', 'ארוטי', 'זיון', 'להזדיין', 'אוננות', 'ציצים',
+
+  // Tamil. ('பாலியல்' sexual; 'நிர்வாண' nude; 'ஆபாச' obscene/porn; 'செக்ஸ்'
+  // is the "sex" transliteration; 'சுயஇன்பம்' masturbation.)
+  'பாலியல்', 'நிர்வாண', 'ஆபாச', 'செக்ஸ்', 'முலை', 'சுயஇன்பம்',
 ];
 
 function containsAny(haystack: string, needles: readonly string[]): boolean {

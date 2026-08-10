@@ -1,0 +1,14 @@
+{
+  "_note": "needs-ta-review — machine-translated stub awaiting native Tamil review per CONTRIBUTING.md. Tamil is verb-final, so the action slot {4} closes the first sentence; slot-1 stand-ins carry the '-உடன்' (with) suffix.",
+  "questions": [
+    "யார்?",
+    "வேறு யார்?",
+    "எங்கே?",
+    "எப்போது?",
+    "அவர்கள் என்ன செய்தார்கள்?",
+    "எதற்காக?",
+    "கடைசியில் என்ன ஆனது?"
+  ],
+  "prose": "{3} {2} {0} {1} {5} {4}. கடைசியில் {6}.",
+  "imagePrompt": "இடதுபுறம் {0}, வலதுபுறம் {1}, {2}, {3}, {4}"
+}

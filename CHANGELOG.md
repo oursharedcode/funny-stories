@@ -9,6 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Three new languages: Ukrainian, Hebrew, Tamil (12 → 15).** Each ships the
+  full per-language set: registry entry, client UI translation, server story
+  templates with language-appropriate word order (Ukrainian mirrors the Russian
+  time-before-place order; Tamil is verb-final, so the action slot closes the
+  sentence), stand-in pools, a native profanity matcher (Ukrainian via the
+  bundled `bad-words-next` `ua` dictionary; Hebrew and Tamil as hand-built
+  conservative datasets — Tamil re-composes to NFC and matches stems through
+  agglutinative suffixes), CSAM indicator terms, and a MyMemory translation
+  mapping. All three are machine-translated stubs marked `needs-<code>-review`
+  for native-speaker tightening. Hebrew is the first right-to-left language:
+  the client now syncs the document direction to the active UI language, so
+  the layout mirrors automatically when Hebrew is selected.
+
 - **Game rules on the home screen, localised for every language.** The host and
   joiner start screens now show a short read-only "game rules" blurb next to the
   language picker, translated into all 12 supported languages and following the

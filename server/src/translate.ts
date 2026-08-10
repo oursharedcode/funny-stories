@@ -68,6 +68,9 @@ function toMyMemorySource(language: Language): string | null {
     'pt-br': 'pt-BR',
     'es-419': 'es',
     'es-es': 'es',
+    uk: 'uk',
+    he: 'he',
+    ta: 'ta',
   };
   return map[language] ?? null;
 }
@@ -141,7 +144,7 @@ export async function translateToEnglish(
   const sourceCode = toMyMemorySource(sourceLanguage);
   // No MyMemory mapping for this language: we cannot translate, so we cannot
   // screen it. Fail closed (untranslated) rather than ship it unverified. All
-  // 12 shipped languages are mapped, so this only trips if a new language code
+  // 15 shipped languages are mapped, so this only trips if a new language code
   // is added without a mapping — a loud, immediate signal to add one.
   if (!sourceCode) return { texts, untranslated: true };
 

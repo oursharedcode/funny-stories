@@ -12,6 +12,9 @@ import { isIndonesianProfane } from './id.js';
 import { isJapaneseProfane } from './ja.js';
 import { isKoreanProfane } from './ko.js';
 import { isPortugueseProfane } from './pt.js';
+import { isUkrainianProfane } from './uk.js';
+import { isHebrewProfane } from './he.js';
+import { isTamilProfane } from './ta.js';
 import { pickStandin } from './standins.js';
 
 // Language → profanity matcher map. Adding a new language with profanity
@@ -20,12 +23,13 @@ import { pickStandin } from './standins.js';
 // load-bearing for the silent-stand-in brand asset: an English-room player
 // typing Russian profanity is still caught, and vice-versa.
 //
-// All 12 shipped languages now have a native matcher. The first six are backed
-// by bundled dictionaries (en via `obscenity`; ru/fr/de/zh/es via
-// `bad-words-next`). The last five (it/id/ja/pt-br via `bad-words-next` with a
-// hand-built dataset, plus ja/ko which also re-compose NFC) had no bundled
-// dictionary and ship conservative starter stubs pending native review — see
-// each `<code>.ts` header and docs/LANGUAGES.md.
+// All 15 shipped languages now have a native matcher. Seven are backed by
+// bundled dictionaries (en via `obscenity`; ru/fr/de/zh/es/uk via
+// `bad-words-next` — Ukrainian under its legacy `ua` code). The rest
+// (it/id/ja/ko/pt-br/he/ta via `bad-words-next` with a hand-built dataset;
+// ja/ko/ta also re-compose NFC) had no bundled dictionary and ship
+// conservative starter stubs pending native review — see each `<code>.ts`
+// header and docs/LANGUAGES.md.
 //
 // Type stays `Partial<Record<Language, …>>` so a future stub language can
 // register in shared/ before its matcher lands here.
@@ -44,6 +48,9 @@ const MATCHERS: Partial<Record<Language, ProfanityMatcher>> = {
   ja: isJapaneseProfane,
   ko: isKoreanProfane,
   'pt-br': isPortugueseProfane,
+  uk: isUkrainianProfane,
+  he: isHebrewProfane,
+  ta: isTamilProfane,
 };
 
 // Light pre-normalisation (spec §6):

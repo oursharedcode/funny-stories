@@ -1,0 +1,109 @@
+{
+  "_note": "needs-he-review — machine-translated stub awaiting native Hebrew review per CONTRIBUTING.md.",
+  "questions": [
+    "מי?",
+    "ועם מי?",
+    "איפה?",
+    "מתי?",
+    "מה הם עשו?",
+    "בשביל מה?",
+    "איך זה נגמר?"
+  ],
+  "home": {
+    "title": "סיפורים מצחיקים",
+    "subtitle": "כותבים יחד סיפורים מטורפים. נוח מהטלפון.",
+    "nicknamePlaceholder": "בחרו כינוי",
+    "gameRules": "חוקי המשחק",
+    "rules": "בכל סיבוב עונים על שאלה משעשעת אחת. התשובות שלכם מתערבבות עם תשובות של כולם לסיפורים מטורפים. אחר כך כל סיפור הופך לציור, ומציגים את כולם.",
+    "create": "יצירת חדר",
+    "join": "הצטרפות לחדר",
+    "joining": "מצטרפים לחדר",
+    "roomGone": "החדר הזה כבר לא קיים — אולי המשחק הסתיים, או שהקישור ישן.",
+    "createNew": "יצירת חדר חדש",
+    "openRooms": "חדרים פתוחים: {{count}}",
+    "imagesToday": "עד {{total}} ציורים ביום. מתאפס כל יום ב-00:00 UTC.",
+    "uiLanguage": "הקישו כדי להחליף את שפת הממשק"
+  },
+  "lobby": {
+    "roomCodeLabel": "קוד חדר",
+    "copyLink": "העתקת קישור",
+    "copied": "הועתק!",
+    "qrCaption": "סרקו כדי להצטרף",
+    "waitingForHost": "מחכים שהמארח יתחיל…",
+    "startGame": "התחל משחק",
+    "startDisabled": "צריך לפחות 3 שחקנים כדי להתחיל",
+    "leave": "יציאה",
+    "host": "מארח",
+    "capReached": "יצירת ציורים לא תהיה זמינה עוד ~{{hours}} שעות בערך. עדיין אפשר לשחק — במקום ציורים השחקנים יראו רק את טקסט הסיפור.",
+    "capReachedHost": "הקישו על «התחל משחק» כשאתם מוכנים, או חכו שמכסת הציורים היומית תתאפס."
+  },
+  "round": {
+    "progress": "סיבוב {{current}} מתוך {{total}}",
+    "placeholder": "כתבו תשובה…",
+    "submit": "שליחה",
+    "submitted": "נשלח",
+    "storyLanguage": "שפת הסיפור"
+  },
+  "waiting": {
+    "title": "מחכים לאחרים",
+    "progress": "{{submitted}} / {{total}} שלחו",
+    "ellipsis": "עוד רגע."
+  },
+  "reveal": {
+    "title": "הנה הסיפור שלך",
+    "spinner": "מזמנים כאוס…",
+    "retry": "לנסות שוב",
+    "error": "היצירה נכשלה. נסו שוב.",
+    "capReached": "תנור הציורים מלא. ציורים חדשים בעוד ~{{hours}} שעות.",
+    "pictureAlt": "ציור שנוצר על ידי AI לפי הסיפור שלך",
+    "continue": "המשך"
+  },
+  "end": {
+    "title": "המשחק נגמר",
+    "roundsOver": "הסיבובים נגמרו",
+    "oneMoreGame": "עוד משחק אחד",
+    "finishGame": "סיום המשחק",
+    "ready": "אני מוכן למשחק חדש",
+    "readyActive": "מוכן ✓",
+    "waitingForHost": "מחכים למארח…",
+    "needPlayers": "צריך לפחות 3 שחקנים למשחק נוסף",
+    "waitingForReady": "מחכים שכולם יהיו מוכנים"
+  },
+  "endScreen": {
+    "supportServer": "לתמוך בשרת הזה"
+  },
+  "gallery": {
+    "share": "שיתוף הציורים של החדר",
+    "shareButton": "שיתוף",
+    "title": "גלריית החדר",
+    "storyBy": "הסיפור של {{nickname}}",
+    "noPicture": "אין ציור לסיפור הזה",
+    "pictureAlt": "ציור לסיפור של {{nickname}}",
+    "counter": "{{index}} / {{total}}",
+    "prev": "הסיפור הקודם",
+    "next": "הסיפור הבא",
+    "download": "הורדת הסיפור והציור",
+    "downloadStoryOnly": "הורדת הסיפור",
+    "downloadVideo": "הורדת סרטון 5 שניות",
+    "recording": "מקליט…"
+  },
+  "playerLost": {
+    "label": "{{nickname}} יצא מהמשחק",
+    "ignore": "להתעלם ולהמשיך במשחק",
+    "newRoom": "יצירת חדר חדש"
+  },
+  "footer": {
+    "source": "קוד המקור ב-GitHub",
+    "contentNotice": "תשובות השחקנים והציורים שנוצרו על ידי AI הם באחריות מפעיל השרת הזה, ולא של פרויקט המקור."
+  },
+  "errors": {
+    "ROOM_NOT_FOUND": "החדר לא נמצא",
+    "ROOM_LOCKED": "המשחק כבר התחיל",
+    "ROOM_FULL": "החדר מלא",
+    "NOT_HOST": "רק המארח יכול לעשות זאת",
+    "NOT_ENOUGH_PLAYERS": "צריך לפחות 3 שחקנים",
+    "INVALID_NICKNAME": "כינוי לא תקין",
+    "RATE_LIMITED": "רגע, לאט יותר",
+    "SERVER_BUSY": "השרת עמוס"
+  }
+}

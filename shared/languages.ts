@@ -32,7 +32,7 @@ export interface LanguageOption {
 // Ordering follows the standard native-script + region pattern used by
 // Google/Apple/Netflix language pickers. English is the upstream default
 // (#1); Russian sits at #4 as the second first-class shipped language.
-// Slots 2-3 and 5-11 are stubs: registry + i18n JSON + stand-ins ship in
+// Slots 2-3 and 5-14 are stubs: registry + i18n JSON + stand-ins ship in
 // each language at machine-translation quality with a `needs-<code>-review`
 // header in every file, awaiting native-speaker review per CONTRIBUTING.md.
 export const LANGUAGES = [
@@ -48,6 +48,9 @@ export const LANGUAGES = [
   { code: 'pt-br', name: 'Português (Brasil)', flag: '🇧🇷', country: 'BR' },
   { code: 'es-419', name: 'Español (Latinoamérica)', flag: '🌎', country: 'LA' },
   { code: 'es-es', name: 'Español (España)', flag: '🇪🇸', country: 'ES' },
+  { code: 'uk', name: 'Українська (Україна)', flag: '🇺🇦', country: 'UA' },
+  { code: 'he', name: 'עברית (ישראל)', flag: '🇮🇱', country: 'IL' },
+  { code: 'ta', name: 'தமிழ் (இந்தியா)', flag: '🇮🇳', country: 'IN' },
 ] as const satisfies readonly LanguageOption[];
 
 export type Language = (typeof LANGUAGES)[number]['code'];

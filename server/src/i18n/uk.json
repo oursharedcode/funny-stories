@@ -1,0 +1,14 @@
+{
+  "_note": "needs-uk-review — machine-translated stub awaiting native Ukrainian review per CONTRIBUTING.md. Slot order mirrors Russian (time before place); slot-1 stand-ins carry their own 'з/зі' connective.",
+  "questions": [
+    "Хто?",
+    "Хто ще?",
+    "Де?",
+    "Коли?",
+    "Що вони робили?",
+    "Навіщо?",
+    "Чим усе закінчилося?"
+  ],
+  "prose": "{0} {1} {3} {2} {4} {5}. Зрештою {6}.",
+  "imagePrompt": "ліворуч {0}, праворуч {1}, у {2}, {3}, {4}"
+}

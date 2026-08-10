@@ -15,12 +15,15 @@ const FR_BAD = 'merde'; // present in bad-words-next/lib/fr
 const DE_BAD = 'ficken'; // present in bad-words-next/lib/de
 const ES_BAD = 'puta'; // present in bad-words-next/lib/es
 const ZH_BAD = '鸡巴'; // present in bad-words-next/lib/ch
+const UK_BAD = 'курва'; // present in bad-words-next/lib/ua
 // Hand-built stub dictionaries (no bundled bad-words-next dict for these).
 const IT_BAD = 'cazzo';
 const ID_BAD = 'kontol';
 const JA_BAD = 'ちんぽ'; // voiced kana (ぽ) — exercises the NFC re-composition path
 const KO_BAD = '씨발'; // Hangul — exercises the NFC re-composition path
 const PT_BAD = 'caralho';
+const HE_BAD = 'שרמוטה';
+const TA_BAD = 'ஓத்தா'; // two-part vowel sign (ோ) — exercises the NFC re-composition path
 
 const STANDIN_POOL_EN_Q0 = STANDINS.en[0]!;
 const STANDIN_POOL_RU_Q0 = STANDINS.ru[0]!;
@@ -72,6 +75,7 @@ describe('profanity filter — spec §6', () => {
       [ES_BAD, 'es-419'],
       [ES_BAD, 'es-es'],
       [ZH_BAD, 'zh'],
+      [UK_BAD, 'uk'],
     ];
     for (const [bad, lang] of cases) {
       const result = filterAnswer(bad, lang, 0);
@@ -85,15 +89,18 @@ describe('profanity filter — spec §6', () => {
     expect(filterAnswer('hallo katze', 'de', 0)).toBe('hallo katze');
     expect(filterAnswer('un gato dormido', 'es-419', 0)).toBe('un gato dormido');
     expect(filterAnswer('你好小猫', 'zh', 0)).toBe('你好小猫');
+    expect(filterAnswer('кіт спить на дивані', 'uk', 0)).toBe('кіт спить на дивані');
   });
 
-  it('matches native profanity for the hand-built stub languages (it/id/ja/ko/pt-br)', () => {
+  it('matches native profanity for the hand-built stub languages (it/id/ja/ko/pt-br/he/ta)', () => {
     const cases: Array<[string, Parameters<typeof filterAnswer>[1]]> = [
       [IT_BAD, 'it'],
       [ID_BAD, 'id'],
       [JA_BAD, 'ja'],
       [KO_BAD, 'ko'],
       [PT_BAD, 'pt-br'],
+      [HE_BAD, 'he'],
+      [TA_BAD, 'ta'],
     ];
     for (const [bad, lang] of cases) {
       const result = filterAnswer(bad, lang, 0);
@@ -108,6 +115,8 @@ describe('profanity filter — spec §6', () => {
     expect(filterAnswer('眠っている猫', 'ja', 0)).toBe('眠っている猫');
     expect(filterAnswer('잠자는 고양이', 'ko', 0)).toBe('잠자는 고양이');
     expect(filterAnswer('um gato dormindo', 'pt-br', 0)).toBe('um gato dormindo');
+    expect(filterAnswer('חתול ישן על הספה', 'he', 0)).toBe('חתול ישן על הספה');
+    expect(filterAnswer('தூங்கும் பூனை', 'ta', 0)).toBe('தூங்கும் பூனை');
   });
 
   it('replaces with a stand-in from the *room language* even if the bad word was in the other language', () => {

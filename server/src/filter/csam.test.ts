@@ -105,6 +105,21 @@ describe('containsCsamCombination — spec §6', () => {
     expect(containsCsamCombination('미성년 포르노 옥상에서')).toBe(true);
   });
 
+  it('returns true when both categories co-occur (Ukrainian)', () => {
+    expect(containsCsamCombination('гола дитина в бібліотеці')).toBe(true);
+    expect(containsCsamCombination('дівчинка, порно, на даху')).toBe(true);
+  });
+
+  it('returns true when both categories co-occur (Hebrew)', () => {
+    expect(containsCsamCombination('ילד עירום בספרייה')).toBe(true);
+    expect(containsCsamCombination('נערה, פורנו, על הגג')).toBe(true);
+  });
+
+  it('returns true when both categories co-occur (Tamil)', () => {
+    expect(containsCsamCombination('நிர்வாண குழந்தை நூலகத்தில்')).toBe(true);
+    expect(containsCsamCombination('சிறுமி, ஆபாச, பேருந்தில்')).toBe(true);
+  });
+
   it('returns false for single-category prompts in other languages', () => {
     // Minor-only.
     expect(containsCsamCombination('un enfant avec un canard, dans une bibliothèque')).toBe(false);
@@ -113,6 +128,17 @@ describe('containsCsamCombination — spec §6', () => {
     // Sexual-only.
     expect(containsCsamCombination('un chapeau érotique sur un canard')).toBe(false);
     expect(containsCsamCombination('色情的鸭子在图书馆')).toBe(false);
+  });
+
+  it('returns false for single-category prompts in the newest languages (uk/he/ta)', () => {
+    // Minor-only.
+    expect(containsCsamCombination('дитина з качкою в бібліотеці')).toBe(false);
+    expect(containsCsamCombination('ילד עם ברווז בספרייה')).toBe(false);
+    expect(containsCsamCombination('குழந்தை ஒரு வாத்துடன் நூலகத்தில்')).toBe(false);
+    // Sexual-only.
+    expect(containsCsamCombination('гола качка в бібліотеці')).toBe(false);
+    expect(containsCsamCombination('ברווז עירום בספרייה')).toBe(false);
+    expect(containsCsamCombination('நிர்வாண வாத்து நூலகத்தில்')).toBe(false);
   });
 
   it('does not trip on the existing stand-ins (smoke check)', () => {

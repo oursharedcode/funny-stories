@@ -405,7 +405,7 @@ const standins: Record<Language, Record<number, string[]>> = {
 
 ### Image-prompt profanity check (translated layer)
 
-The per-answer check above runs in the room's language. All 12 languages now have a native matcher (six from bundled dictionaries, five — IT/ID/JA/KO/PT — from hand-built starter stubs fed to `bad-words-next`; see §6 above and [LANGUAGES.md](./LANGUAGES.md)), but the stubs are deliberately conservative and the player-facing prose is never translated, so own-language profanity the stub misses still reaches its prose. The **picture** is guarded independently of native-matcher coverage by a second layer that lives in the prompt builder (§10): `buildPrompt` translates every answer to English, then runs the English `obscenity` matcher (`filter/en.ts`) over the translated slots and swaps any hit for an English stand-in (`pickStandin('en', i)`) **before** the prompt is assembled. Because every source language funnels through English translation first, this single check catches profanity from any language without needing a per-language matcher. It runs inside `buildPrompt`, i.e. ahead of the CSAM-pattern guard and hard-block list below. It guards only the image — the prose layer above is the only thing that can clean the room-language prose.
+The per-answer check above runs in the room's language. All 15 languages now have a native matcher (seven from bundled dictionaries, the rest — IT/ID/JA/KO/PT/HE/TA — from hand-built starter stubs fed to `bad-words-next`; see §6 above and [LANGUAGES.md](./LANGUAGES.md)), but the stubs are deliberately conservative and the player-facing prose is never translated, so own-language profanity the stub misses still reaches its prose. The **picture** is guarded independently of native-matcher coverage by a second layer that lives in the prompt builder (§10): `buildPrompt` translates every answer to English, then runs the English `obscenity` matcher (`filter/en.ts`) over the translated slots and swaps any hit for an English stand-in (`pickStandin('en', i)`) **before** the prompt is assembled. Because every source language funnels through English translation first, this single check catches profanity from any language without needing a per-language matcher. It runs inside `buildPrompt`, i.e. ahead of the CSAM-pattern guard and hard-block list below. It guards only the image — the prose layer above is the only thing that can clean the room-language prose.
 
 ### CSAM-pattern guard
 
@@ -436,7 +436,7 @@ product; NCMEC's term holdings are restricted to law-enforcement
 partners — neither publishes a freely-usable wordlist). It is a
 deliberately conservative combinatorial heuristic in the spirit of what
 open-source content-handling projects ship: small minor-indicator and
-sexual-indicator lists covering all 12 shipped languages, substring-matched
+sexual-indicator lists covering all 15 shipped languages, substring-matched
 against the lower-cased prompt. False positives ("a sexy hat for the kid's
 birthday") and false negatives (obfuscated inputs) are both possible
 and accepted; the guard is calibrated to err toward over-blocking
@@ -452,7 +452,7 @@ be translated (after one retry) leaves the prompt carrying source-language
 text the English list can't read, so `buildPrompt` flags it
 (`translationFailed`) and `generateStoryPicture` refuses the picture rather
 than ship an unscreened prompt to the model. (2) The indicator lists carry
-terms for **all 12 languages**, so text the translator passes through
+terms for **all 15 languages**, so text the translator passes through
 untranslated — or mixed-language input — is still screened in its own
 language. The refusal uses the same generic `reveal:pictureError` path and
 costs no daily-cap slot. See [MODERATION.md](./MODERATION.md) and

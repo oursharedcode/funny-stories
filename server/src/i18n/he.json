@@ -1,0 +1,14 @@
+{
+  "_note": "needs-he-review — machine-translated stub awaiting native Hebrew review per CONTRIBUTING.md. Slot-1 stand-ins carry their own 'עם' connective, so the template joins slots 0 and 1 with a plain space.",
+  "questions": [
+    "מי?",
+    "ועם מי?",
+    "איפה?",
+    "מתי?",
+    "מה הם עשו?",
+    "בשביל מה?",
+    "איך זה נגמר?"
+  ],
+  "prose": "{0} {1} היו {2} {3}. הם {4} {5}. בסוף {6}.",
+  "imagePrompt": "משמאל {0}, מימין {1}, ב{2}, {3}, {4}"
+}
