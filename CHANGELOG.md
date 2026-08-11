@@ -10,8 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Three new languages: Ukrainian, Hebrew, Tamil (12 → 15).** Each ships the
-  full per-language set: registry entry, client UI translation, server story
-  templates with language-appropriate word order (Ukrainian mirrors the Russian
+  full per-language set: registry entry, language-picker flag asset, client UI
+  translation, server story templates with language-appropriate word order (Ukrainian mirrors the Russian
   time-before-place order; Tamil is verb-final, so the action slot closes the
   sentence), stand-in pools, a native profanity matcher (Ukrainian via the
   bundled `bad-words-next` `ua` dictionary; Hebrew and Tamil as hand-built
